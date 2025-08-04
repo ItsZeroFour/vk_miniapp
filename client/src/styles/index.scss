@@ -1,0 +1,79 @@
+@use "./reset";
+@use "./vars";
+
+/* BASIC SETTINGS */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-display: swap;
+
+  background: var(--color-white);
+  color: var(--color-dark);
+
+  overflow-x: hidden !important;
+  padding: 20px;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-block-start: 75px;
+  min-height: 100vh;
+  // font-size: calc(6px + (20 - 6) * ((100vw - 600px) / (1920 - 600)));
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+footer {
+  margin-top: auto;
+}
+
+::-webkit-scrollbar {
+  background: none;
+  display: none;
+  width: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: none;
+  display: none;
+}
+
+.container {
+  max-width: 1800px;
+  padding: 0 10px;
+  margin: 0 auto;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a {
+  color: inherit;
+  font-family: inherit;
+  line-height: 140%;
+}
+
+ul,
+li {
+  list-style-type: none;
+}
