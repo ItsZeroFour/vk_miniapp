@@ -14,10 +14,7 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
   useEffect(() => {
     if (!accessToken || !userId) return;
 
-    const alreadySubscribedInDB = userData?.targeted_actions?.subscribe === true;
-    if (alreadySubscribedInDB) return;
-
-    async function checkSubscriptionAndUpdate() {
+    async function checkSubscription() {
       try {
         const res = await bridge.send("VKWebAppCallAPIMethod", {
           method: "groups.isMember",
@@ -32,26 +29,29 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
 
         const subscribed = res.response === 1;
 
-        if (subscribed) {
-          try {
-            const update = await axios.post("/user/update-target", {
-              user_id: userId,
-              target_name: "subscribe",
-              target_value: true,
-            });
-            console.log(update.data);
-            setIsSubscribe(true);
-          } catch (err) {
-            console.error("Ошибка обновления subscribe в БД:", err);
+        if (subscribed && !isSubscribe) {
+          setIsSubscribe(true);
+
+          if (userData?.targeted_actions?.subscribe === false) {
+            try {
+              const update = await axios.post("/user/update-target", {
+                user_id: userId,
+                target_name: "subscribe",
+                target_value: true,
+              });
+              console.log(update.data);
+            } catch (err) {
+              console.error("Ошибка обновления subscribe:", err);
+            }
           }
         }
       } catch (err) {
-        console.error("Ошибка проверки подписки через VK API:", err);
+        console.error("Ошибка проверки подписки:", err);
       }
     }
 
-    checkSubscriptionAndUpdate();
-  }, [accessToken, userId, userData]);
+    checkSubscription();
+  }, [accessToken, userId, userData, isSubscribe]);
 
   return isSubscribe;
 }
