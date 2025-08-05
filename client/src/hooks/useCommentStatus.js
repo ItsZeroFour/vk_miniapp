@@ -6,13 +6,16 @@ export default function useCommentStatus(accessToken, userId, userData) {
   const [commentStatus, setCommentStatus] = useState(false);
 
   useEffect(() => {
-    if (userData?.targeted_actions?.comment) {
+    if (userData?.targeted_actions?.comment === true) {
       setCommentStatus(true);
     }
   }, [userData]);
 
   useEffect(() => {
     if (!accessToken || !userId) return;
+
+    const alreadyCommentedInDB = userData?.targeted_actions?.comment === true;
+    if (alreadyCommentedInDB) return;
 
     const loadAllComments = async (offset = 0, allComments = []) => {
       try {
@@ -44,36 +47,32 @@ export default function useCommentStatus(accessToken, userId, userData) {
 
         return acc;
       } catch (error) {
-        console.error("Ошибка запроса:", error);
+        console.error("Ошибка загрузки комментариев:", error);
         return [];
       }
     };
 
-    loadAllComments().then((comments) => {
+    async function checkAndUpdateCommentStatus() {
+      const comments = await loadAllComments();
       const userHasCommented = comments.some((c) => c.from_id === userId);
 
-      if (userHasCommented && !commentStatus) {
-        setCommentStatus(true);
-
-        if (userData?.targeted_actions?.comment === false) {
-          async function updateCommentTargetStatus() {
-            try {
-              const res = await axios.post("/user/update-target", {
-                user_id: userId,
-                target_name: "comment",
-                target_value: true,
-              });
-              console.log(res.data);
-            } catch (err) {
-              console.error(err);
-            }
-          }
-
-          updateCommentTargetStatus();
+      if (userHasCommented) {
+        try {
+          const res = await axios.post("/user/update-target", {
+            user_id: userId,
+            target_name: "comment",
+            target_value: true,
+          });
+          console.log(res.data);
+          setCommentStatus(true);
+        } catch (err) {
+          console.error("Ошибка обновления comment в БД:", err);
         }
       }
-    });
-  }, [accessToken, userId, userData, commentStatus]);
+    }
+
+    checkAndUpdateCommentStatus();
+  }, [accessToken, userId, userData]);
 
   return commentStatus;
 }

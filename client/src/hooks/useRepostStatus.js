@@ -12,7 +12,12 @@ export default function useRepostStatus(userId, userData) {
   }, [userData]);
 
   useEffect(() => {
-    async function checkRepost() {
+    if (!userId) return;
+
+    const alreadySharedInDB = userData?.targeted_actions?.share === true;
+    if (alreadySharedInDB) return;
+
+    async function checkRepostAndUpdate() {
       try {
         const userInfo = await bridge.send("VKWebAppGetUserInfo", {});
         const auth = await bridge.send("VKWebAppGetAuthToken", {
@@ -41,30 +46,26 @@ export default function useRepostStatus(userId, userData) {
           );
         });
 
-        if (reposted && !isShared) {
-          setIsShared(true);
-
-          if (userData?.targeted_actions?.share === false) {
-            try {
-              const res = await axios.post("/user/update-target", {
-                user_id: userId,
-                target_name: "share",
-                target_value: true,
-              });
-              console.log(res.data);
-            } catch (err) {
-              console.error("Ошибка при обновлении share:", err);
-            }
+        if (reposted) {
+          try {
+            const res = await axios.post("/user/update-target", {
+              user_id: userId,
+              target_name: "share",
+              target_value: true,
+            });
+            console.log(res.data);
+            setIsShared(true);
+          } catch (err) {
+            console.error("Ошибка обновления share в БД:", err);
           }
         }
       } catch (e) {
         console.error("Ошибка при проверке репоста:", e);
-        setIsShared(false);
       }
     }
 
-    checkRepost();
-  }, [userId, userData, isShared]);
+    checkRepostAndUpdate();
+  }, [userId, userData]);
 
   return isShared;
 }
