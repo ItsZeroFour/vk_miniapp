@@ -1,5 +1,6 @@
 @use "./reset";
 @use "./vars";
+@use "./fonts";
 
 /* BASIC SETTINGS */
 *,
@@ -7,7 +8,7 @@
 *::after {
   margin: 0;
   padding: 0;
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 html {
@@ -15,12 +16,12 @@ html {
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Roboto-flex", sans-serif;
   font-weight: 400;
   font-display: swap;
 
-  background: var(--color-white);
-  color: var(--color-dark);
+  background: var(--color-dark);
+  color: var(--color-white);
 
   overflow-x: hidden !important;
   padding: 20px;
@@ -58,6 +59,23 @@ footer {
   max-width: 1800px;
   padding: 0 10px;
   margin: 0 auto;
+}
+
+.wrapper-container {
+  max-width: 445px;
+  min-height: 100vh;
+  padding: 10px;
+  margin: 0 auto;
+  border: 1px solid #2e2e2e;
+  border-radius: 2px;
+
+  @media (max-width: 425px) {
+    border: 0;
+    max-width: 100%;
+    height: 100%;
+    padding: 0;
+    border-radius: 0;
+  }
 }
 
 p,

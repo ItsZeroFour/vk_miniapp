@@ -6,6 +6,8 @@ import useVKAuth from "./hooks/useVKAuth";
 import useCommentStatus from "./hooks/useCommentStatus";
 import useSubscriptionStatus from "./hooks/useSubscriptionStatus";
 import useRepostStatus from "./hooks/useRepostStatus";
+import FaceRecognition from "./pages/face-recognition/FaceRecognition";
+import Header from "./components/header/Header";
 
 function App() {
   const { userId, userData } = useUser();
@@ -16,20 +18,26 @@ function App() {
 
   return (
     <div className="App">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              isCommented={isCommented}
-              isSubscribe={isSubscribe}
-              isShared={isShared}
-            />
-          }
-        />
-      </Routes>
+      <div className="wrapper-container">
+        <Header />
 
-      {userData && JSON.stringify(userData?.targeted_actions)}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                isCommented={isCommented}
+                isSubscribe={isSubscribe}
+                isShared={isShared}
+              />
+            }
+          />
+
+          <Route path="/face-recognition/game" element={<FaceRecognition />} />
+        </Routes>
+      </div>
+
+      {/* {userData && JSON.stringify(userData?.targeted_actions)} */}
     </div>
   );
 }

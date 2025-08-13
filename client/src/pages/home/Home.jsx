@@ -7,6 +7,9 @@ const Home = ({ isCommented, isSubscribe, isShared }) => {
     <section className={style.home}>
       <div className="container">
         <div className={style.home__wrapper}>
+          <Link to="/face-recognition/game">Игра 1</Link>
+        </div>
+        {/* <div className={style.home__wrapper}>
           <Link
             style={
               isCommented ? { background: "red" } : { background: "#0084ff" }
@@ -38,7 +41,7 @@ const Home = ({ isCommented, isSubscribe, isShared }) => {
           >
             Репост поста
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   );

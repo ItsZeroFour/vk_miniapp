@@ -1,0 +1,115 @@
+.face_recognition__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 25px;
+  height: 100%;
+
+  h1 {
+    font-size: 32px;
+    color: var(--color-orange);
+    font-weight: 500;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  p {
+    margin-top: 15px;
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+  }
+}
+
+.face_recognition__container {
+  width: 100%;
+  height: 350px;
+  margin-top: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.face_recognition__images {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  margin: 0 auto;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    filter: sepia(50%) contrast(110%) brightness(90%);
+    position: relative;
+    z-index: 0;
+  }
+}
+
+.face_recognition__button {
+  padding: 15px;
+  background: none;
+  border: 2px solid var(--color-gray);
+  border-radius: 4px;
+
+  font-weight: 500;
+  font-family: "Roboto-flex", sans-serif;
+  font-size: 20px;
+
+  color: var(--color-gray);
+
+  margin-top: 20px;
+  transition: all 0.2s ease;
+}
+
+.face_recognition__button.active {
+  background: var(--color-white);
+  border: 2px solid var(--color-white);
+  color: #000;
+  transition: all 0.2s ease;
+}
+
+.face_recognition__faces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 280px;
+
+  .face_recognition__faces__img {
+    width: 64px;
+    height: 96px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+}
+
+.face_recognition__selected {
+  border-radius: 4px;
+
+  outline: 2px solid var(--color-orange);
+  outline-offset: -2px;
+
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+
+    top: 40%;
+    left: 0;
+
+    width: 100%;
+    height: 70%;
+
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(175, 125, 44, 1) 100%
+    );
+  }
+}
