@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import style from "./faceRecognition.module.scss";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const shuffleArray = (array) => {
   const arr = [...array];
@@ -15,6 +16,8 @@ const FaceRecognition = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showImage, setShowImage] = useState(true);
   const [chosenFaces, setChosenFaces] = useState([]);
+
+  const navigate = useNavigate();
 
   const allImages = useMemo(() => {
     return Array.from(
@@ -178,6 +181,16 @@ const FaceRecognition = () => {
                 : `${style.face_recognition__button} ${style.active}`
             }
             disabled={chosenFaces.length < 3}
+            onClick={() =>
+              navigate("/face-recognition/final", {
+                state: {
+                  isWon: selected3.every((item) => chosenFaces.includes(item)),
+                  correct_item_count: selected3.filter((item) =>
+                    chosenFaces.includes(item)
+                  ).length,
+                },
+              })
+            }
           >
             Проверить
           </button>

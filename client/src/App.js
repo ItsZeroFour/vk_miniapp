@@ -8,6 +8,8 @@ import useSubscriptionStatus from "./hooks/useSubscriptionStatus";
 import useRepostStatus from "./hooks/useRepostStatus";
 import FaceRecognition from "./pages/face-recognition/FaceRecognition";
 import Header from "./components/header/Header";
+import FaceRecognitionHome from "./pages/face-recognition/FaceRecognitionHome";
+import FaceRecognitionFinal from "./pages/face-recognition/FaceRecognitionFinal";
 
 function App() {
   const { userId, userData } = useUser();
@@ -33,7 +35,9 @@ function App() {
             }
           />
 
+          <Route path="/face-recognition" element={<FaceRecognitionHome />} />
           <Route path="/face-recognition/game" element={<FaceRecognition />} />
+          <Route path="/face-recognition/final" element={<FaceRecognitionFinal />} />
         </Routes>
       </div>
 
