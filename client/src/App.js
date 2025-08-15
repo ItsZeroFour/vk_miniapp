@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/home/Home";
-
 import useUser from "./hooks/useUser";
 import useVKAuth from "./hooks/useVKAuth";
 import useCommentStatus from "./hooks/useCommentStatus";
@@ -10,6 +9,7 @@ import FaceRecognition from "./pages/face-recognition/FaceRecognition";
 import Header from "./components/header/Header";
 import FaceRecognitionHome from "./pages/face-recognition/FaceRecognitionHome";
 import FaceRecognitionFinal from "./pages/face-recognition/FaceRecognitionFinal";
+import Main from "./pages/main/Main";
 
 function App() {
   const { userId, userData } = useUser();
@@ -20,28 +20,42 @@ function App() {
 
   return (
     <div className="App">
-      <div className="wrapper-container">
-        <Header />
+      <Routes>
+        <Route
+          path="/*"
+          element={
+            <div className="wrapper-container">
+              <Header />
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <Home
+                      isCommented={isCommented}
+                      isSubscribe={isSubscribe}
+                      isShared={isShared}
+                    />
+                  }
+                />
+                <Route
+                  path="/face-recognition"
+                  element={<FaceRecognitionHome />}
+                />
+                <Route
+                  path="/face-recognition/game"
+                  element={<FaceRecognition />}
+                />
+                <Route
+                  path="/face-recognition/final"
+                  element={<FaceRecognitionFinal />}
+                />
+              </Routes>
+            </div>
+          }
+        />
 
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                isCommented={isCommented}
-                isSubscribe={isSubscribe}
-                isShared={isShared}
-              />
-            }
-          />
-
-          <Route path="/face-recognition" element={<FaceRecognitionHome />} />
-          <Route path="/face-recognition/game" element={<FaceRecognition />} />
-          <Route path="/face-recognition/final" element={<FaceRecognitionFinal />} />
-        </Routes>
-      </div>
-
-      {/* {userData && JSON.stringify(userData?.targeted_actions)} */}
+        <Route path="/main" element={<Main />} />
+      </Routes>
     </div>
   );
 }
