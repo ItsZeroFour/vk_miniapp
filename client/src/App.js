@@ -13,6 +13,7 @@ import Main from "./pages/main/Main";
 import FriendOrFoe from "./pages/friend-or-foe/FriendOrFoe";
 import FriendOrFoeGame from "./pages/friend-or-foe/FriendOrFoeGame";
 import FriendOrFoeEnd from "./pages/friend-or-foe/FriendOrFoeEnd";
+import ContactDots from "./pages/contact-dots/ContactDots";
 
 function App() {
   const { userId, userData } = useUser();
@@ -40,6 +41,8 @@ function App() {
                     />
                   }
                 />
+
+                {/* РАСПОЗНАВАНИЕ ЛИЦ */}
                 <Route
                   path="/face-recognition"
                   element={<FaceRecognitionHome />}
@@ -52,12 +55,17 @@ function App() {
                   path="/face-recognition/final"
                   element={<FaceRecognitionFinal />}
                 />
+
+                {/* СВОЙ-ЧУЖОЙ */}
                 <Route path="/friend-or-foe" element={<FriendOrFoe />} />
                 <Route
                   path="/friend-or-foe/start"
                   element={<FriendOrFoeGame />}
                 />
                 <Route path="/friend-or-foe/end" element={<FriendOrFoeEnd />} />
+
+                {/* ТОЧКИ КОНТАКТА */}
+                <Route path="/contact-dots" element={<ContactDots />} />
               </Routes>
             </div>
           }

@@ -74,6 +74,7 @@ footer {
   margin: 0 auto;
   border: 1px solid #2e2e2e;
   border-radius: 2px;
+  position: relative;
 
   @media (max-width: 425px) {
     border: 0;
