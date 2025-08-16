@@ -9,6 +9,7 @@ const Home = ({ isCommented, isSubscribe, isShared }) => {
         <div className={style.home__wrapper}>
           <Link to="/face-recognition">Игра 1</Link>
           <Link to="/main">Сайт</Link>
+          <Link to="/friend-or-foe">Игра 2</Link>
         </div>
         {/* <div className={style.home__wrapper}>
           <Link

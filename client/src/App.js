@@ -10,6 +10,9 @@ import Header from "./components/header/Header";
 import FaceRecognitionHome from "./pages/face-recognition/FaceRecognitionHome";
 import FaceRecognitionFinal from "./pages/face-recognition/FaceRecognitionFinal";
 import Main from "./pages/main/Main";
+import FriendOrFoe from "./pages/friend-or-foe/FriendOrFoe";
+import FriendOrFoeGame from "./pages/friend-or-foe/FriendOrFoeGame";
+import FriendOrFoeEnd from "./pages/friend-or-foe/FriendOrFoeEnd";
 
 function App() {
   const { userId, userData } = useUser();
@@ -49,6 +52,12 @@ function App() {
                   path="/face-recognition/final"
                   element={<FaceRecognitionFinal />}
                 />
+                <Route path="/friend-or-foe" element={<FriendOrFoe />} />
+                <Route
+                  path="/friend-or-foe/start"
+                  element={<FriendOrFoeGame />}
+                />
+                <Route path="/friend-or-foe/end" element={<FriendOrFoeEnd />} />
               </Routes>
             </div>
           }
