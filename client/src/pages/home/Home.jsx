@@ -11,6 +11,7 @@ const Home = ({ isCommented, isSubscribe, isShared }) => {
           <Link to="/main">Сайт</Link>
           <Link to="/friend-or-foe">Игра 2</Link>
           <Link to="/contact-dots">Игра 3</Link>
+          <Link to="/main/face-recognition">Тест</Link>
         </div>
         {/* <div className={style.home__wrapper}>
           <Link
