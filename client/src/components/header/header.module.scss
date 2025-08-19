@@ -63,7 +63,7 @@
   padding: 2px;
   background: var(--color-white);
   border-radius: 20px;
-  width: 65px;
+  width: 69px;
   height: 35px;
   display: flex;
   flex-direction: column;
@@ -103,9 +103,12 @@
   }
 }
 
-.header__menu,
-.header__volume {
+.header__menu {
   width: 17%;
+  margin-top: 10px;
+}
+
+.header__volume {
   margin-top: 10px;
 }
 
