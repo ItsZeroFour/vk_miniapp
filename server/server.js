@@ -5,9 +5,18 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import mongoose from "mongoose";
+import session from "express-session";
 
 /* ROUTES */
 import UserRoutes from "./routes/UserRoutes.js";
+import MongoStore from "connect-mongo";
+import {
+  getAuthUrl,
+  exchangeCodeForToken,
+  getUserInfo,
+  logout,
+  isAuthenticated,
+} from "./components/VKAuthControllers.js";
 
 dotenv.config({ path: "./.env" });
 const app = express();
@@ -29,6 +38,112 @@ app.use(
     parameterLimit: 1000000,
   })
 );
+
+/* VK AUTH */
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      ttl: 14 * 24 * 60 * 60,
+    }),
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 14 * 24 * 60 * 60,
+    },
+  })
+);
+
+app.get("/auth/vk", async (req, res) => {
+  try {
+    const authUrl = await getAuthUrl();
+    res.redirect(authUrl);
+  } catch (error) {
+    console.error("Auth initiation error:", error);
+    res.status(500).send("Authentication initiation failed");
+  }
+});
+
+app.get("/auth/vk/callback", async (req, res) => {
+  try {
+    const { code, state, device_id, error, error_description } = req.query; // Добавлен device_id
+
+    console.log("Callback received:", { code, state, device_id, error });
+
+    if (error) {
+      console.error("VK ID error:", error, error_description);
+      return res
+        .status(400)
+        .send(`Authentication failed: ${error_description || error}`);
+    }
+
+    if (!code || !state) {
+      return res
+        .status(400)
+        .send("Missing required parameters: code and state");
+    }
+
+    const tokens = await exchangeCodeForToken(code, state, device_id);
+
+    req.session.userId = tokens.userId;
+    req.session.accessToken = tokens.accessToken;
+
+    console.log("Successfully authenticated user:", tokens.userId);
+
+    res.redirect("/profile");
+  } catch (error) {
+    console.error("Auth callback error:", error.message);
+
+    if (error.message.includes("state parameter")) {
+      res.status(400).send("Session expired. Please try logging in again.");
+    } else if (error.response?.data) {
+      res
+        .status(500)
+        .send(`VK ID error: ${JSON.stringify(error.response.data)}`);
+    } else {
+      res.status(500).send("Authentication failed. Please try again.");
+    }
+  }
+});
+
+app.get("/profile", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/auth/vk");
+  }
+
+  try {
+    const authenticated = await isAuthenticated(req.session.userId);
+    if (!authenticated) {
+      return res.redirect("/auth/vk");
+    }
+
+    const user = await getUserInfo(req.session.userId);
+    res.json(user);
+  } catch (error) {
+    console.error("Profile error:", error);
+    res.status(500).send("Error loading profile");
+  }
+});
+
+app.get("/logout", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/");
+  }
+
+  try {
+    await logout(req.session.userId);
+    req.session.destroy();
+    res.redirect("/");
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).send("Logout failed");
+  }
+});
 
 /* ROUTES */
 app.use("/user", UserRoutes);

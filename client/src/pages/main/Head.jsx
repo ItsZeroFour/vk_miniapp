@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from "./head.module.scss";
 import { motion } from "framer-motion";
 import vklogo from "../../assets/icons/vk.svg";
+import bridge from "@vkontakte/vk-bridge";
 
 const Head = () => {
   const titleVariants = {
@@ -21,6 +22,10 @@ const Head = () => {
     //   transition: { duration: 0.1 },
     // },
     tap: { scale: 0.95 },
+  };
+
+  const handleRedirect = () => {
+    window.location.href = `${process.env.REACT_APP_SERVER_URL}/auth/vk`;
   };
 
   return (
@@ -53,6 +58,7 @@ const Head = () => {
             variants={buttonVariants}
             whileHover="hover"
             whileTap="tap"
+            onClick={handleRedirect}
           >
             <img src={vklogo} alt="vklogo" />
             Войти через VK
