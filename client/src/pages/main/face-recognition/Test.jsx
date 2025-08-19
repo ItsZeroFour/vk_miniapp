@@ -11,13 +11,15 @@ const Test = () => {
             <p>Смотрите и запоминайте</p>
           </div>
 
-          <div className={style.test__img}>
-            <div className={style.test__img__top}>
-              <p>2 / 3</p>
-              <p>00:03</p>
-            </div>
+          <div className={style.test__img__container}>
+            <div className={style.test__img}>
+              <div className={style.test__img__top}>
+                <p>2 / 3</p>
+                <p>00:03</p>
+              </div>
 
-            <img src="/images/face-recognition/1.jpg" alt="face" />
+              <img src="/images/face-recognition/1.jpg" alt="face" />
+            </div>
           </div>
         </div>
       </div>
