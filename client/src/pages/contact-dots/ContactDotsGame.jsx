@@ -52,14 +52,16 @@ const ContactDotsGame = () => {
   const draggingIdxRef = useRef(-1);
 
   function svgClientPoint(svgEl, clientX, clientY) {
-    const pt = svgEl.createSVGPoint();
-    pt.x = clientX;
-    pt.y = clientY;
-    const inv = svgEl.getScreenCTM().inverse();
-    const sp = pt.matrixTransform(inv);
+    const rect = svgEl.getBoundingClientRect();
+
+    const x =
+      ((clientX - rect.left) / rect.width) * svgEl.viewBox.baseVal.width;
+    const y =
+      ((clientY - rect.top) / rect.height) * svgEl.viewBox.baseVal.height;
+
     return {
-      x: clamp(sp.x, 0, current.svg_params.proportions.width),
-      y: clamp(sp.y, 0, current.svg_params.proportions.height),
+      x: clamp(x, 0, current.svg_params.proportions.width),
+      y: clamp(y, 0, current.svg_params.proportions.height),
     };
   }
 
