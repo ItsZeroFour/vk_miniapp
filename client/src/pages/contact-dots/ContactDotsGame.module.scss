@@ -12,6 +12,7 @@
 
 .game__canvas {
   overflow: hidden;
+  touch-action: none;
 }
 
 .game__top {

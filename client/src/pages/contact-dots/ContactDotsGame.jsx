@@ -112,14 +112,17 @@ const ContactDotsGame = () => {
     }
 
     // подключаем слушатели на документ
-    document.addEventListener("pointermove", onPointerMove);
+    document.addEventListener("pointermove", onPointerMove, { passive: false });
     document.addEventListener("pointerup", onPointerUp);
-    document.addEventListener("touchmove", onPointerMove);
+    document.addEventListener("touchmove", onPointerMove, { passive: false });
     document.addEventListener("touchend", onPointerUp);
   };
 
   const onPointerMove = (e) => {
     if (!isDraggingRef.current) return;
+
+    e.preventDefault(); // ❗ блокируем скролл/свайп
+    e.stopPropagation();
 
     const idx = draggingIdxRef.current;
     if (idx < 0 || !svgRef.current) return;
