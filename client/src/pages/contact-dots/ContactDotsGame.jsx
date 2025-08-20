@@ -7,7 +7,6 @@ import { OBJECTS } from "../../data/contact-dots";
 gsap.registerPlugin(Draggable);
 
 // ---------- Вспомогательные функции ----------
-const lerp = (a, b, t) => a + (b - a) * t;
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
 function getRandomObject(excludeId = null) {
@@ -17,16 +16,6 @@ function getRandomObject(excludeId = null) {
 
 function polyPath(pts) {
   return pts.length ? `M ${pts.map((p) => `${p.x},${p.y}`).join(" L ")} Z` : "";
-}
-
-function bboxCenter(pts) {
-  const xs = pts.map((p) => p.x);
-  const ys = pts.map((p) => p.y);
-  const minX = Math.min(...xs);
-  const maxX = Math.max(...xs);
-  const minY = Math.min(...ys);
-  const maxY = Math.max(...ys);
-  return { cx: (minX + maxX) / 2, cy: (minY + maxY) / 2 };
 }
 
 const MIN_SNAP = 15;
@@ -57,6 +46,7 @@ const ContactDotsGame = () => {
   const [locks, setLocks] = useState(() => Array(N).fill(-1));
   const [showFill, setShowFill] = useState(false); // 2
   const [zoomed, setZoomed] = useState(true); // 3
+  const isDraggingRef = useRef(false);
 
   const svgRef = useRef(null);
   const draggingIdxRef = useRef(-1);
@@ -73,6 +63,13 @@ const ContactDotsGame = () => {
     };
   }
 
+  function getTouchPoint(e) {
+    if (e.touches && e.touches[0]) {
+      return { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY };
+    }
+    return { clientX: e.clientX, clientY: e.clientY };
+  }
+
   useEffect(() => {
     const nextContacts = current.points.map((target) => {
       const angle = Math.random() * Math.PI * 2;
@@ -87,27 +84,52 @@ const ContactDotsGame = () => {
     setShowFill(false);
     setZoomed(true);
     draggingIdxRef.current = -1;
+    isDraggingRef.current = false;
   }, [current]);
 
   const onPointerDown = (idx) => (e) => {
+    // Предотвращаем срабатывание для правой кнопки мыши
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+
     e.preventDefault();
+    e.stopPropagation();
+
     draggingIdxRef.current = idx;
+    isDraggingRef.current = true; // Используем ref
+
     // снимаем «замок» чтобы можно было перетаскивать от прилипа
     setLocks((prev) => {
       const next = [...prev];
       next[idx] = -1;
       return next;
     });
-    // подключаем слушатели на документ (надёжный драг вне SVG)
+
+    // Обрабатываем первое перемещение сразу
+    const point = getTouchPoint(e);
+    if (svgRef.current) {
+      const p = svgClientPoint(svgRef.current, point.clientX, point.clientY);
+      handlePointMove(idx, p);
+    }
+
+    // подключаем слушатели на документ
     document.addEventListener("pointermove", onPointerMove);
-    document.addEventListener("pointerup", onPointerUp, { once: true });
+    document.addEventListener("pointerup", onPointerUp);
+    document.addEventListener("touchmove", onPointerMove);
+    document.addEventListener("touchend", onPointerUp);
   };
 
   const onPointerMove = (e) => {
+    if (!isDraggingRef.current) return;
+
     const idx = draggingIdxRef.current;
     if (idx < 0 || !svgRef.current) return;
-    const p = svgClientPoint(svgRef.current, e.clientX, e.clientY);
 
+    const point = getTouchPoint(e);
+    const p = svgClientPoint(svgRef.current, point.clientX, point.clientY);
+    handlePointMove(idx, p);
+  };
+
+  const handlePointMove = (idx, p) => {
     const SNAP_R = 10; // радиус прилипания
     let snapTo = null;
 
@@ -121,7 +143,7 @@ const ContactDotsGame = () => {
       const dist = Math.hypot(dx, dy);
       if (dist <= SNAP_R) {
         snapTo = t;
-        break; // прилипли к первой попавшейся свободной точке
+        break;
       }
     }
 
@@ -143,13 +165,20 @@ const ContactDotsGame = () => {
   };
 
   const onPointerUp = (e) => {
+    if (!isDraggingRef.current) return;
+
     const idx = draggingIdxRef.current;
     draggingIdxRef.current = -1;
+    isDraggingRef.current = false;
+
+    // Убираем все слушатели
     document.removeEventListener("pointermove", onPointerMove);
+    document.removeEventListener("pointerup", onPointerUp);
+    document.removeEventListener("touchmove", onPointerMove);
+    document.removeEventListener("touchend", onPointerUp);
 
     if (!svgRef.current || idx < 0) return;
 
-    const SNAP_R = 18;
     const p = contactPoints[idx];
 
     const occupied = new Set(locks.filter((t, j) => j !== idx && t >= 0));
@@ -224,8 +253,6 @@ const ContactDotsGame = () => {
     return arr;
   }, [locks, N]);
 
-  console.log(completed);
-
   return (
     <section className={style.game}>
       <div className="container">
@@ -293,6 +320,7 @@ const ContactDotsGame = () => {
                   `,
                     transformOrigin: "center center",
                     transition: "all 0.6s ease",
+                    touchAction: "none",
                   }}
                 >
                   {/* Мелкие фоновые точки (цели) */}
@@ -320,7 +348,6 @@ const ContactDotsGame = () => {
 
                   {/* Контактные точки (перетаскиваемые) */}
                   {contactPoints.map((p, i) => {
-                    // декоративная «подтягивающаяся» линия к таргету
                     const bg = bgPoints[i];
                     const dx = bg.x - p.x;
                     const dy = bg.y - p.y;
