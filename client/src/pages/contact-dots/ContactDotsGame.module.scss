@@ -1,3 +1,7 @@
+.game {
+  user-select: none;
+}
+
 .game__main {
   width: 100%;
   user-select: none;
@@ -66,6 +70,7 @@
     font-size: 20px;
     color: var(--color-white);
     font-weight: 500;
+    user-select: none;
   }
 }
 
