@@ -274,29 +274,30 @@ const ContactDotsGame = () => {
               //   height: current.svg_params.proportions.height,
               // }}
             >
-              <div className={style.game__img__container}>
-                <img
-                  className={style.game__image}
-                  src={current.img}
-                  alt={`Объект ${current.id}`}
-                  style={{
-                    transformOrigin: `${cx}px ${cy}px`,
-                    transform: zoomed ? `scale(${current.zoom})` : "scale(1)",
-                  }}
-                />
-              </div>
+              <div className={style.responsiveWrapper}>
+                <div className={style.game__img__container}>
+                  <img
+                    className={style.game__image}
+                    src={current.img}
+                    alt={`Объект ${current.id}`}
+                    style={{
+                      transformOrigin: `${cx}px ${cy}px`,
+                      transform: zoomed ? `scale(${current.zoom})` : "scale(1)",
+                    }}
+                  />
+                </div>
 
-              {current && current.points && (
-                <svg
-                  ref={svgRef}
-                  className={style.svg}
-                  viewBox={`0 0 ${current.svg_params.proportions.width} ${current.svg_params.proportions.height}`}
-                  preserveAspectRatio="xMidYMid meet"
-                  style={{
-                    position: "absolute",
-                    width: current.svg_params.proportions.width,
-                    height: current.svg_params.proportions.height,
-                    transform: `
+                {current && current.points && (
+                  <svg
+                    ref={svgRef}
+                    className={style.svg}
+                    viewBox={`0 0 ${current.svg_params.proportions.width} ${current.svg_params.proportions.height}`}
+                    preserveAspectRatio="xMidYMid meet"
+                    style={{
+                      position: "absolute",
+                      width: current.svg_params.proportions.width,
+                      height: current.svg_params.proportions.height,
+                      transform: `
                     translate(${
                       completed
                         ? current.svg_params.final.position.left
@@ -318,88 +319,89 @@ const ContactDotsGame = () => {
                         : current.svg_params.rotate
                     }deg)
                   `,
-                    transformOrigin: "center center",
-                    transition: "all 0.6s ease",
-                    touchAction: "none",
-                  }}
-                >
-                  {/* Мелкие фоновые точки (цели) */}
-                  {bgPoints.map((p, i) => (
-                    <circle
-                      key={`bg-${i}`}
-                      cx={p.x}
-                      cy={p.y}
-                      r={2}
-                      fill="#ffffff"
-                      opacity="0.9"
-                    />
-                  ))}
+                      transformOrigin: "center center",
+                      transition: "all 0.6s ease",
+                      touchAction: "none",
+                    }}
+                  >
+                    {/* Мелкие фоновые точки (цели) */}
+                    {bgPoints.map((p, i) => (
+                      <circle
+                        key={`bg-${i}`}
+                        cx={p.x}
+                        cy={p.y}
+                        r={2}
+                        fill="#ffffff"
+                        opacity="0.9"
+                      />
+                    ))}
 
-                  {/* Текущая «нить» между контактными точками */}
-                  <path
-                    d={pathString}
-                    fill="none"
-                    stroke="#f4a623"
-                    strokeWidth="1.8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    opacity="0.95"
-                  />
-
-                  {/* Контактные точки (перетаскиваемые) */}
-                  {contactPoints.map((p, i) => {
-                    const bg = bgPoints[i];
-                    const dx = bg.x - p.x;
-                    const dy = bg.y - p.y;
-                    const len = Math.hypot(dx, dy) || 1;
-                    const dashOffset = len * (1 - (drawProgress[i] ?? 0));
-
-                    return (
-                      <g key={`c-${i}`}>
-                        <line
-                          x1={p.x}
-                          y1={p.y}
-                          x2={bg.x}
-                          y2={bg.y}
-                          stroke="#f4a623"
-                          strokeWidth="1.2"
-                          strokeDasharray={len}
-                          strokeDashoffset={dashOffset}
-                          strokeLinecap="round"
-                          className={style.spring}
-                        />
-                        <circle
-                          cx={p.x}
-                          cy={p.y}
-                          r={7}
-                          fill="#f4a623"
-                          stroke="#111"
-                          strokeWidth="1"
-                          className={style.handle}
-                          onPointerDown={onPointerDown(i)}
-                        />
-                      </g>
-                    );
-                  })}
-
-                  {/* Итоговая заливка (как в StarAnimation) */}
-                  <defs>
-                    <linearGradient id="starGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="30%" stopColor="rgba(39,39,39,0)" />
-                      <stop offset="200%" stopColor="rgba(175,125,44,1)" />
-                    </linearGradient>
-                  </defs>
-
-                  {showFill && (
+                    {/* Текущая «нить» между контактными точками */}
                     <path
-                      d={polyPath(bgPoints)}
-                      fill="url(#starGrad)"
-                      stroke="none"
-                      className={style.fillFadeIn}
+                      d={pathString}
+                      fill="none"
+                      stroke="#f4a623"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      opacity="0.95"
                     />
-                  )}
-                </svg>
-              )}
+
+                    {/* Контактные точки (перетаскиваемые) */}
+                    {contactPoints.map((p, i) => {
+                      const bg = bgPoints[i];
+                      const dx = bg.x - p.x;
+                      const dy = bg.y - p.y;
+                      const len = Math.hypot(dx, dy) || 1;
+                      const dashOffset = len * (1 - (drawProgress[i] ?? 0));
+
+                      return (
+                        <g key={`c-${i}`}>
+                          <line
+                            x1={p.x}
+                            y1={p.y}
+                            x2={bg.x}
+                            y2={bg.y}
+                            stroke="#f4a623"
+                            strokeWidth="1.2"
+                            strokeDasharray={len}
+                            strokeDashoffset={dashOffset}
+                            strokeLinecap="round"
+                            className={style.spring}
+                          />
+                          <circle
+                            cx={p.x}
+                            cy={p.y}
+                            r={7}
+                            fill="#f4a623"
+                            stroke="#111"
+                            strokeWidth="1"
+                            className={style.handle}
+                            onPointerDown={onPointerDown(i)}
+                          />
+                        </g>
+                      );
+                    })}
+
+                    {/* Итоговая заливка (как в StarAnimation) */}
+                    <defs>
+                      <linearGradient id="starGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="30%" stopColor="rgba(39,39,39,0)" />
+                        <stop offset="200%" stopColor="rgba(175,125,44,1)" />
+                      </linearGradient>
+                    </defs>
+
+                    {showFill && (
+                      <path
+                        d={polyPath(bgPoints)}
+                        fill="url(#starGrad)"
+                        stroke="none"
+                        className={style.fillFadeIn}
+                      />
+                    )}
+                  </svg>
+                )}
+              </div>
             </div>
           </div>
 
