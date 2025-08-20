@@ -45,8 +45,8 @@ const ContactDotsGame = () => {
 
   const [contactPoints, setContactPoints] = useState(() =>
     bgPoints.map((target) => {
-      const angle = Math.random() * Math.PI * 2;
-      const r = 35 + Math.random() * 35;
+      const angle = Math.random() * Math.PI * 0.5;
+      const r = 1;
       return {
         x: target.x + Math.cos(angle) * r,
         y: target.y + Math.sin(angle) * r,
