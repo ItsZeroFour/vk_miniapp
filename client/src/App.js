@@ -15,6 +15,7 @@ import FriendOrFoeGame from "./pages/friend-or-foe/FriendOrFoeGame";
 import FriendOrFoeEnd from "./pages/friend-or-foe/FriendOrFoeEnd";
 import ContactDots from "./pages/contact-dots/ContactDots";
 import Test from "./pages/main/face-recognition/Test";
+import ContactDotsGame from "./pages/contact-dots/ContactDotsGame";
 
 function App() {
   const { userId, userData } = useUser();
@@ -67,6 +68,10 @@ function App() {
 
                 {/* ТОЧКИ КОНТАКТА */}
                 <Route path="/contact-dots" element={<ContactDots />} />
+                <Route
+                  path="/contact-dots/game"
+                  element={<ContactDotsGame />}
+                />
               </Routes>
             </div>
           }

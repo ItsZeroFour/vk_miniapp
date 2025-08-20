@@ -24,7 +24,7 @@ const ContactDots = () => {
             И только тогда вам откроется полная картина.
           </p>
 
-          <Link className={style.contact_dots__link} to="/">
+          <Link className={style.contact_dots__link} to="/contact-dots/game">
             Начать игру
           </Link>
         </div>
