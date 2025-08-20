@@ -88,40 +88,34 @@ const ContactDotsGame = () => {
   }, [current]);
 
   const onPointerDown = (idx) => (e) => {
-    // Предотвращаем срабатывание для правой кнопки мыши
     if (e.pointerType === "mouse" && e.button !== 0) return;
 
     e.preventDefault();
     e.stopPropagation();
 
     draggingIdxRef.current = idx;
-    isDraggingRef.current = true; // Используем ref
+    isDraggingRef.current = true;
 
-    // снимаем «замок» чтобы можно было перетаскивать от прилипа
     setLocks((prev) => {
       const next = [...prev];
       next[idx] = -1;
       return next;
     });
 
-    // Обрабатываем первое перемещение сразу
     const point = getTouchPoint(e);
     if (svgRef.current) {
       const p = svgClientPoint(svgRef.current, point.clientX, point.clientY);
       handlePointMove(idx, p);
     }
 
-    // подключаем слушатели на документ
-    document.addEventListener("pointermove", onPointerMove, { passive: false });
-    document.addEventListener("pointerup", onPointerUp);
-    document.addEventListener("touchmove", onPointerMove, { passive: false });
-    document.addEventListener("touchend", onPointerUp);
+    window.addEventListener("pointermove", onPointerMove, { passive: false });
+    window.addEventListener("pointerup", onPointerUp, { passive: true });
   };
 
   const onPointerMove = (e) => {
     if (!isDraggingRef.current) return;
 
-    e.preventDefault(); // ❗ блокируем скролл/свайп
+    e.preventDefault();
     e.stopPropagation();
 
     const idx = draggingIdxRef.current;
@@ -174,11 +168,8 @@ const ContactDotsGame = () => {
     draggingIdxRef.current = -1;
     isDraggingRef.current = false;
 
-    // Убираем все слушатели
-    document.removeEventListener("pointermove", onPointerMove);
-    document.removeEventListener("pointerup", onPointerUp);
-    document.removeEventListener("touchmove", onPointerMove);
-    document.removeEventListener("touchend", onPointerUp);
+    window.removeEventListener("pointermove", onPointerMove);
+    window.removeEventListener("pointerup", onPointerUp);
 
     if (!svgRef.current || idx < 0) return;
 
