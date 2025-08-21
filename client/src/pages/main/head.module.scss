@@ -23,54 +23,50 @@
   align-items: center;
 
   h1 {
-    font-size: 128px;
+    font-size: 96px;
     font-weight: 500;
     color: var(--color-orange);
 
     @media (max-width: 1020px) {
-      font-size: 96px;
+      font-size: 56px;
     }
 
     @media (max-width: 825px) {
-      font-size: 64px;
+      font-size: 42px;
     }
 
     @media (max-width: 520px) {
-      font-size: 48px;
+      font-size: 36px;
     }
 
     @media (max-width: 465px) {
-      font-size: 42px;
+      font-size: 32px;
     }
   }
 
   p {
-    font-size: 34px;
+    font-size: 28px;
     font-weight: 500;
     line-height: 56px;
     text-align: center;
     color: #bbbbbb;
 
     @media (max-width: 1020px) {
-      font-size: 32px;
+      font-size: 24px;
     }
 
     @media (max-width: 825px) {
-      font-size: 24px;
+      font-size: 20px;
       line-height: 40px;
     }
 
     @media (max-width: 520px) {
-      font-size: 20px;
+      font-size: 16px;
     }
 
     @media (max-width: 465px) {
-      font-size: 16px;
-      line-height: 30px;
-    }
-
-    @media (max-width: 390px) {
       font-size: 14px;
+      line-height: 30px;
     }
   }
 }
@@ -81,25 +77,27 @@
   justify-content: center;
   align-items: center;
 
+  width: 100%;
+
   h4 {
-    font-size: 36px;
+    font-size: 28px;
     text-transform: uppercase;
     font-weight: 500;
 
     @media (max-width: 1020px) {
-      font-size: 32px;
-    }
-
-    @media (max-width: 825px) {
       font-size: 24px;
     }
 
+    @media (max-width: 825px) {
+      font-size: 22px;
+    }
+
     @media (max-width: 465px) {
-      font-size: 16px;
+      font-size: 20px;
     }
 
     @media (max-width: 390px) {
-      font-size: 14px;
+      font-size: 16px;
     }
   }
 
@@ -111,7 +109,7 @@
     padding: 20px;
     border-radius: 10px;
 
-    font-size: 26px;
+    font-size: 24px;
     color: var(--color-white);
     font-weight: 500;
 
@@ -131,7 +129,7 @@
     }
 
     @media (max-width: 465px) {
-      font-size: 18px;
+      font-size: 20px;
       margin-top: 10px;
 
       img {
@@ -140,4 +138,11 @@
       }
     }
   }
+}
+
+.head__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

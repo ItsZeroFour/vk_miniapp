@@ -14,7 +14,6 @@ import FriendOrFoe from "./pages/friend-or-foe/FriendOrFoe";
 import FriendOrFoeGame from "./pages/friend-or-foe/FriendOrFoeGame";
 import FriendOrFoeEnd from "./pages/friend-or-foe/FriendOrFoeEnd";
 import ContactDots from "./pages/contact-dots/ContactDots";
-import Test from "./pages/main/face-recognition/Test";
 import ContactDotsGame from "./pages/contact-dots/ContactDotsGame";
 
 function App() {
@@ -78,7 +77,7 @@ function App() {
         />
 
         <Route path="/main" element={<Main />} />
-        <Route path="/main/face-recognition" element={<Test />} />
+        {/* <Route path="/tasks" /> */}
       </Routes>
     </div>
   );

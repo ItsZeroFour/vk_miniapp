@@ -3,6 +3,7 @@ import style from "./head.module.scss";
 import { motion } from "framer-motion";
 import vklogo from "../../assets/icons/vk.svg";
 import bridge from "@vkontakte/vk-bridge";
+import { Link } from "react-router-dom";
 
 const Head = () => {
   const titleVariants = {
