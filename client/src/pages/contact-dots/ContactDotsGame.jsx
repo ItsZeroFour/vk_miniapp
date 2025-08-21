@@ -22,7 +22,7 @@ const MIN_SNAP = 15;
 const MAX_SNAP = 20;
 
 // Радиус "ручки" точки — держим её ПОЛНОСТЬЮ в пределах вьюпорта
-const HANDLE_R = 7;
+const HANDLE_R = 10;
 
 const ContactDotsGame = () => {
   const [current, setCurrent] = useState(getRandomObject());
