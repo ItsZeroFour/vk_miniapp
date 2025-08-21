@@ -21,10 +21,10 @@ const Main = () => {
     setTimeout(() => {
       setShowVideo(false);
       setIsClosing(false);
-    }, 800); // Длительность анимации закрытия
+    }, 800);
   };
 
-  // Анимация появления видео-блока
+  // Анимация видео-блока
   const videoVariants = {
     initial: {
       opacity: 0,
@@ -78,7 +78,7 @@ const Main = () => {
     },
   };
 
-  // Анимация основного контента
+  // Анимация основного контейнера
   const contentVariants = {
     initial: {
       opacity: 0,
@@ -89,17 +89,113 @@ const Main = () => {
       y: 0,
       transition: {
         duration: 0.8,
-        staggerChildren: 0.1,
         ease: "easeOut",
       },
     },
   };
 
+  // Анимация переключения страниц
+  const pageVariants = {
+    initial: {
+      opacity: 0,
+      x: 50,
+      scale: 0.95,
+    },
+    animate: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+    exit: {
+      opacity: 0,
+      x: -50,
+      scale: 0.95,
+      transition: {
+        duration: 0.4,
+        ease: "easeIn",
+      },
+    },
+  };
+
+  // Анимация кнопок навигации
+  const navButtonVariants = {
+    initial: {
+      opacity: 0,
+      y: -20,
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+    hover: {
+      scale: 1.05,
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+      transition: {
+        duration: 0.2,
+      },
+    },
+    tap: {
+      scale: 0.95,
+    },
+  };
+
+  const renderPage = () => {
+    switch (showPage) {
+      case "main":
+        return (
+          <motion.div
+            key="main-page"
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <Head />
+            <Task />
+          </motion.div>
+        );
+      case "trailer":
+        return (
+          <motion.div
+            key="trailer-page"
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <Trailer />
+          </motion.div>
+        );
+      case "drawing":
+        return (
+          <motion.div
+            key="drawing-page"
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            <Drawing />
+          </motion.div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <main className={!showVideo ? style.main : ""}>
-      <AnimatePresence mode="wait">
-        <Header />
+      <Header />
 
+      <AnimatePresence mode="wait">
         {showVideo ? (
           <motion.div
             key="video-block"
@@ -134,35 +230,51 @@ const Main = () => {
             animate="animate"
           >
             <div className={style.main__wrapper}>
-              <nav>
-                <ul>
-                  <li>
-                    <button onClick={() => setShowPage("main")}>Задания</button>
-                  </li>
+              {/* Навигация */}
+              <motion.nav
+                className={style.navigation}
+                initial="initial"
+                animate="animate"
+                transition={{ staggerChildren: 0.1 }}
+              >
+                <motion.ul>
+                  <motion.li variants={navButtonVariants}>
+                    <motion.button
+                      onClick={() => setShowPage("main")}
+                      whileHover="hover"
+                      whileTap="tap"
+                      className={showPage === "main" ? style.active : ""}
+                    >
+                      Задания
+                    </motion.button>
+                  </motion.li>
 
-                  <li>
-                    <button onClick={() => setShowPage("trailer")}>
+                  <motion.li variants={navButtonVariants}>
+                    <motion.button
+                      onClick={() => setShowPage("trailer")}
+                      whileHover="hover"
+                      whileTap="tap"
+                      className={showPage === "trailer" ? style.active : ""}
+                    >
                       О фильме
-                    </button>
-                  </li>
+                    </motion.button>
+                  </motion.li>
 
-                  <li>
-                    <button onClick={() => setShowPage("drawing")}>
+                  <motion.li variants={navButtonVariants}>
+                    <motion.button
+                      onClick={() => setShowPage("drawing")}
+                      whileHover="hover"
+                      whileTap="tap"
+                      className={showPage === "drawing" ? style.active : ""}
+                    >
                       Розыгрыш
-                    </button>
-                  </li>
-                </ul>
-              </nav>
+                    </motion.button>
+                  </motion.li>
+                </motion.ul>
+              </motion.nav>
 
-              {showPage === "main" ? (
-                <>
-                  <Head /> <Task />
-                </>
-              ) : showPage === "trailer" ? (
-                <Trailer />
-              ) : (
-                <Drawing />
-              )}
+              {/* Контент страницы с анимацией */}
+              <AnimatePresence mode="wait">{renderPage()}</AnimatePresence>
             </div>
           </motion.div>
         )}
