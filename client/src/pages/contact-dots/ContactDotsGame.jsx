@@ -21,10 +21,13 @@ function polyPath(pts) {
 const MIN_SNAP = 15;
 const MAX_SNAP = 20;
 
+// Радиус "ручки" точки — держим её ПОЛНОСТЬЮ в пределах вьюпорта
+const HANDLE_R = 7;
+
 const ContactDotsGame = () => {
   const [current, setCurrent] = useState(getRandomObject());
   const [progress, setProgress] = useState(1);
-  const [completed, setCompleted] = useState(false); // 1
+  const [completed, setCompleted] = useState(false);
 
   const bgPoints = useMemo(
     () => current.points.map((p) => ({ ...p })),
@@ -44,26 +47,74 @@ const ContactDotsGame = () => {
   );
 
   const [locks, setLocks] = useState(() => Array(N).fill(-1));
-  const [showFill, setShowFill] = useState(false); // 2
-  const [zoomed, setZoomed] = useState(true); // 3
+  const [showFill, setShowFill] = useState(false);
+  const [zoomed, setZoomed] = useState(true);
   const isDraggingRef = useRef(false);
 
   const svgRef = useRef(null);
+  const gRef = useRef(null);
   const draggingIdxRef = useRef(-1);
 
-  function svgClientPoint(svgEl, clientX, clientY) {
-    const rect = svgEl.getBoundingClientRect();
+  // --- Геометрия: перевод координат между системами с учётом transform у <g> ---
+  const getGeom = () => {
+    const svg = svgRef.current;
+    const g = gRef.current;
+    if (!svg || !g) return null;
 
-    const x =
-      ((clientX - rect.left) / rect.width) * svgEl.viewBox.baseVal.width;
-    const y =
-      ((clientY - rect.top) / rect.height) * svgEl.viewBox.baseVal.height;
+    const svgCTM = svg.getScreenCTM(); // SVG -> screen
+    if (!svgCTM) return null;
 
-    return {
-      x: clamp(x, 0, current.svg_params.proportions.width),
-      y: clamp(y, 0, current.svg_params.proportions.height),
-    };
-  }
+    const ctm = g.getCTM(); // group-local -> SVG
+    if (!ctm) return null;
+
+    const invCTM = ctm.inverse(); // SVG -> group-local
+    const invSvgCTM = svgCTM.inverse(); // screen -> SVG
+    const vb = svg.viewBox.baseVal; // видимые границы в SVG-координатах
+
+    return { svg, g, ctm, invCTM, invSvgCTM, vb };
+  };
+
+  // Клиентские координаты -> локальные координаты группы <g>
+  const clientToLocal = (clientX, clientY) => {
+    const geom = getGeom();
+    if (!geom) return null;
+    const { svg, invSvgCTM, invCTM } = geom;
+
+    const pt = svg.createSVGPoint();
+    pt.x = clientX;
+    pt.y = clientY;
+
+    // client -> SVG
+    const svgPt = pt.matrixTransform(invSvgCTM);
+    // SVG -> group-local
+    const localPt = svgPt.matrixTransform(invCTM);
+    return { x: localPt.x, y: localPt.y };
+  };
+
+  // Кламп точки: берём локальную, переводим в SVG, зажимаем в видимом прямоугольнике,
+  // затем обратно в локальные координаты группы
+  const clampLocalWithCTM = (local) => {
+    const geom = getGeom();
+    if (!geom) return local;
+    const { svg, ctm, invCTM, vb } = geom;
+
+    // group-local -> SVG
+    const toSvgPt = svg.createSVGPoint();
+    toSvgPt.x = local.x;
+    toSvgPt.y = local.y;
+    const svgPt = toSvgPt.matrixTransform(ctm);
+
+    const clampedSvgX = clamp(svgPt.x, HANDLE_R, vb.width - HANDLE_R);
+    const clampedSvgY = clamp(svgPt.y, HANDLE_R, vb.height - HANDLE_R);
+
+    // SVG -> group-local
+    const backPt = svg.createSVGPoint();
+    backPt.x = clampedSvgX;
+    backPt.y = clampedSvgY;
+    const localPt = backPt.matrixTransform(invCTM);
+
+    return { x: localPt.x, y: localPt.y };
+  };
 
   function getTouchPoint(e) {
     if (e.touches && e.touches[0]) {
@@ -73,24 +124,29 @@ const ContactDotsGame = () => {
   }
 
   useEffect(() => {
+    // Новые стартовые точки + кламп через матрицы (на случай transform у <g>)
     const nextContacts = current.points.map((target) => {
       const angle = Math.random() * Math.PI * 2;
       const r = 35 + Math.random() * 35;
-      return {
+      const rawLocal = {
         x: target.x + Math.cos(angle) * r,
         y: target.y + Math.sin(angle) * r,
       };
+      return clampLocalWithCTM(rawLocal);
     });
+
     setContactPoints(nextContacts);
     setLocks(Array(current.points.length).fill(-1));
     setShowFill(false);
     setZoomed(true);
     draggingIdxRef.current = -1;
     isDraggingRef.current = false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current]);
 
   const onPointerDown = (idx) => (e) => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (locks.every((t) => t >= 0)) return; // ❌ блокируем, если все точки на месте
 
     e.preventDefault();
     e.stopPropagation();
@@ -104,12 +160,6 @@ const ContactDotsGame = () => {
       return next;
     });
 
-    const point = getTouchPoint(e);
-    if (svgRef.current) {
-      const p = svgClientPoint(svgRef.current, point.clientX, point.clientY);
-      handlePointMove(idx, p);
-    }
-
     window.addEventListener("pointermove", onPointerMove, { passive: false });
     window.addEventListener("pointerup", onPointerUp, { passive: true });
   };
@@ -120,16 +170,15 @@ const ContactDotsGame = () => {
     e.preventDefault();
     e.stopPropagation();
 
-    const idx = draggingIdxRef.current;
-    if (idx < 0 || !svgRef.current) return;
-
-    const point = getTouchPoint(e);
-    const p = svgClientPoint(svgRef.current, point.clientX, point.clientY);
-    handlePointMove(idx, p);
+    const { clientX, clientY } = getTouchPoint(e);
+    const local = clientToLocal(clientX, clientY);
+    if (local)
+      handlePointMove(draggingIdxRef.current, clampLocalWithCTM(local));
   };
 
-  const handlePointMove = (idx, p) => {
-    const SNAP_R = 10; // радиус прилипания
+  // Движение точки в ЛОКАЛЬНЫХ координатах группы <g>
+  const handlePointMove = (idx, pLocal) => {
+    const SNAP_R = 10;
     let snapTo = null;
 
     // список занятых таргетов другими точками
@@ -137,8 +186,8 @@ const ContactDotsGame = () => {
 
     for (let t = 0; t < N; t++) {
       if (occupied.has(t)) continue;
-      const dx = bgPoints[t].x - p.x;
-      const dy = bgPoints[t].y - p.y;
+      const dx = bgPoints[t].x - pLocal.x;
+      const dy = bgPoints[t].y - pLocal.y;
       const dist = Math.hypot(dx, dy);
       if (dist <= SNAP_R) {
         snapTo = t;
@@ -149,9 +198,13 @@ const ContactDotsGame = () => {
     setContactPoints((prev) => {
       const next = [...prev];
       if (snapTo !== null) {
-        next[idx] = { x: bgPoints[snapTo].x, y: bgPoints[snapTo].y };
+        // Дополнительно страхуемся и клампим таргет через матрицу
+        next[idx] = clampLocalWithCTM({
+          x: bgPoints[snapTo].x,
+          y: bgPoints[snapTo].y,
+        });
       } else {
-        next[idx] = { x: p.x, y: p.y };
+        next[idx] = clampLocalWithCTM(pLocal);
       }
       return next;
     });
@@ -163,7 +216,7 @@ const ContactDotsGame = () => {
     });
   };
 
-  const onPointerUp = (e) => {
+  const onPointerUp = () => {
     if (!isDraggingRef.current) return;
 
     const idx = draggingIdxRef.current;
@@ -173,43 +226,48 @@ const ContactDotsGame = () => {
     window.removeEventListener("pointermove", onPointerMove);
     window.removeEventListener("pointerup", onPointerUp);
 
-    if (!svgRef.current || idx < 0) return;
+    if (idx < 0) return;
 
-    const p = contactPoints[idx];
+    // финальная привязка точки
+    setContactPoints((prevPts) => {
+      const pLocal = clampLocalWithCTM(prevPts[idx]);
+      const occupied = new Set(locks.filter((t, j) => j !== idx && t >= 0));
 
-    const occupied = new Set(locks.filter((t, j) => j !== idx && t >= 0));
-
-    let bestTarget = -1;
-    let bestDist = Infinity;
-    for (let t = 0; t < N; t++) {
-      if (occupied.has(t)) continue;
-      const dx = bgPoints[t].x - p.x;
-      const dy = bgPoints[t].y - p.y;
-      const d = Math.hypot(dx, dy);
-      if (d < bestDist) {
-        bestDist = d;
-        bestTarget = t;
+      let bestTarget = -1;
+      let bestDist = Infinity;
+      for (let t = 0; t < N; t++) {
+        if (occupied.has(t)) continue;
+        const dx = bgPoints[t].x - pLocal.x;
+        const dy = bgPoints[t].y - pLocal.y;
+        const d = Math.hypot(dx, dy);
+        if (d < bestDist) {
+          bestDist = d;
+          bestTarget = t;
+        }
       }
-    }
 
-    if (bestTarget >= 0 && bestDist >= MIN_SNAP && bestDist <= MAX_SNAP) {
-      setContactPoints((prev) => {
-        const next = [...prev];
-        next[idx] = { x: bgPoints[bestTarget].x, y: bgPoints[bestTarget].y };
-        return next;
-      });
-      setLocks((prev) => {
-        const next = [...prev];
-        next[idx] = bestTarget;
-        return next;
-      });
-    }
+      const next = [...prevPts];
+      if (bestTarget >= 0 && bestDist >= MIN_SNAP && bestDist <= MAX_SNAP) {
+        next[idx] = clampLocalWithCTM(bgPoints[bestTarget]);
+        setLocks((prev) => {
+          const L = [...prev];
+          L[idx] = bestTarget;
+          return L;
+        });
+      } else {
+        next[idx] = pLocal;
+      }
 
-    setTimeout(checkCompletion, 0);
+      // 🔑 теперь проверяем завершение только здесь
+      setTimeout(checkCompletion, 0);
+
+      return next;
+    });
   };
 
   useEffect(() => {
     checkCompletion();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locks]);
 
   const checkCompletion = () => {
@@ -263,13 +321,7 @@ const ContactDotsGame = () => {
               {progress} / {OBJECTS.length}
             </p>
 
-            <div
-              className={style.game__canvas}
-              // style={{
-              //   width: current.svg_params.proportions.width,
-              //   height: current.svg_params.proportions.height,
-              // }}
-            >
+            <div className={style.game__canvas}>
               <div className={style.responsiveWrapper}>
                 <div className={style.game__img__container}>
                   <img
@@ -289,112 +341,122 @@ const ContactDotsGame = () => {
                     className={style.svg}
                     viewBox={`0 0 ${current.svg_params.proportions.width} ${current.svg_params.proportions.height}`}
                     preserveAspectRatio="xMidYMid meet"
-                    style={{
-                      position: "absolute",
-                      width: current.svg_params.proportions.width,
-                      height: current.svg_params.proportions.height,
-                      transform: `
-                    translate(${
-                      completed
-                        ? current.svg_params.final.position.left
-                        : current.svg_params.position.left
-                    }px,
-                               ${
-                                 completed
-                                   ? current.svg_params.final.position.top
-                                   : current.svg_params.position.top
-                               }px)
-                    scale(${
-                      completed
-                        ? current.svg_params.final.scale
-                        : current.svg_params.scale
-                    })
-                    rotate(${
-                      completed
-                        ? current.svg_params.final.rotate
-                        : current.svg_params.rotate
-                    }deg)
-                  `,
-                      transformOrigin: "center center",
-                      transition: "all 0.6s ease",
-                      touchAction: "none",
-                    }}
+                    style={{ position: "absolute", top: 0 }}
                   >
-                    {/* Мелкие фоновые точки (цели) */}
-                    {bgPoints.map((p, i) => (
-                      <circle
-                        key={`bg-${i}`}
-                        cx={p.x}
-                        cy={p.y}
-                        r={2}
-                        fill="#ffffff"
-                        opacity="0.9"
-                      />
-                    ))}
+                    <g
+                      ref={gRef}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        transform: `
+                          translate(${
+                            completed
+                              ? current.svg_params.final.position.left
+                              : current.svg_params.position.left
+                          }px,
+                                   ${
+                                     completed
+                                       ? current.svg_params.final.position.top
+                                       : current.svg_params.position.top
+                                   }px)
+                          scale(${
+                            completed
+                              ? current.svg_params.final.scale
+                              : current.svg_params.scale
+                          })
+                          rotate(${
+                            completed
+                              ? current.svg_params.final.rotate
+                              : current.svg_params.rotate
+                          }deg)
+                        `,
+                        transformOrigin: "center center",
+                        transition: "all 0.6s ease",
+                        touchAction: "none",
+                      }}
+                    >
+                      {/* Мелкие фоновые точки (цели) */}
+                      {bgPoints.map((p, i) => (
+                        <circle
+                          key={`bg-${i}`}
+                          cx={p.x}
+                          cy={p.y}
+                          r={2}
+                          fill="#ffffff"
+                          opacity="0.9"
+                        />
+                      ))}
 
-                    {/* Текущая «нить» между контактными точками */}
-                    <path
-                      d={pathString}
-                      fill="none"
-                      stroke="#f4a623"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      opacity="0.95"
-                    />
-
-                    {/* Контактные точки (перетаскиваемые) */}
-                    {contactPoints.map((p, i) => {
-                      const bg = bgPoints[i];
-                      const dx = bg.x - p.x;
-                      const dy = bg.y - p.y;
-                      const len = Math.hypot(dx, dy) || 1;
-                      const dashOffset = len * (1 - (drawProgress[i] ?? 0));
-
-                      return (
-                        <g key={`c-${i}`}>
-                          <line
-                            x1={p.x}
-                            y1={p.y}
-                            x2={bg.x}
-                            y2={bg.y}
-                            stroke="#f4a623"
-                            strokeWidth="1.2"
-                            strokeDasharray={len}
-                            strokeDashoffset={dashOffset}
-                            strokeLinecap="round"
-                            className={style.spring}
-                          />
-                          <circle
-                            cx={p.x}
-                            cy={p.y}
-                            r={7}
-                            fill="#f4a623"
-                            stroke="#111"
-                            strokeWidth="1"
-                            className={style.handle}
-                            onPointerDown={onPointerDown(i)}
-                          />
-                        </g>
-                      );
-                    })}
-
-                    {/* Итоговая заливка (как в StarAnimation) */}
-                    <defs>
-                      <linearGradient id="starGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="30%" stopColor="rgba(39,39,39,0)" />
-                        <stop offset="200%" stopColor="rgba(175,125,44,1)" />
-                      </linearGradient>
-                    </defs>
-
-                    {showFill && (
+                      {/* Текущая «нить» между контактными точками */}
                       <path
-                        d={polyPath(bgPoints)}
-                        fill="url(#starGrad)"
-                        stroke="none"
-                        className={style.fillFadeIn}
+                        d={pathString}
+                        fill="none"
+                        stroke="#f4a623"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        opacity="0.95"
                       />
-                    )}
+
+                      {/* Контактные точки (перетаскиваемые) */}
+                      {contactPoints.map((p, i) => {
+                        const bg = bgPoints[i];
+                        const dx = bg.x - p.x;
+                        const dy = bg.y - p.y;
+                        const len = Math.hypot(dx, dy) || 1;
+                        const dashOffset = len * (1 - (drawProgress[i] ?? 0));
+
+                        return (
+                          <g key={`c-${i}`}>
+                            <line
+                              x1={p.x}
+                              y1={p.y}
+                              x2={bg.x}
+                              y2={bg.y}
+                              stroke="#f4a623"
+                              strokeWidth="1.2"
+                              strokeDasharray={len}
+                              strokeDashoffset={dashOffset}
+                              strokeLinecap="round"
+                              className={style.spring}
+                            />
+                            <circle
+                              cx={p.x}
+                              cy={p.y}
+                              r={HANDLE_R}
+                              fill="#f4a623"
+                              stroke="#111"
+                              strokeWidth="1"
+                              className={style.handle}
+                              onPointerDown={onPointerDown(i)}
+                            />
+                          </g>
+                        );
+                      })}
+
+                      {/* Итоговая заливка (как в StarAnimation) */}
+                      <defs>
+                        <linearGradient
+                          id="starGrad"
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop offset="30%" stopColor="rgba(39,39,39,0)" />
+                          <stop offset="200%" stopColor="rgba(175,125,44,1)" />
+                        </linearGradient>
+                      </defs>
+
+                      {showFill && (
+                        <path
+                          d={polyPath(bgPoints)}
+                          fill="url(#starGrad)"
+                          stroke="none"
+                          className={style.fillFadeIn}
+                        />
+                      )}
+                    </g>
                   </svg>
                 )}
               </div>

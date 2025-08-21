@@ -1,3 +1,7 @@
+.header {
+  user-select: none;
+}
+
 .header__menu {
   button {
     background: var(--color-white);

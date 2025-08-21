@@ -92,3 +92,20 @@
   width: 100%;
   aspect-ratio: 1 / 1; // сохраняем пропорции квадрата
 }
+
+circle {
+  touch-action: none;
+}
+svg {
+  touch-action: none;
+}
+
+.handle {
+  touch-action: none; /* отключает жесты pinch/scroll */
+  user-select: none; /* отключает выделение текста */
+  -webkit-user-drag: none; /* отключает drag image в Safari */
+  cursor: grab;
+}
+.handle:active {
+  cursor: grabbing;
+}
