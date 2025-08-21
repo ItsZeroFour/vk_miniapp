@@ -18,11 +18,11 @@ function polyPath(pts) {
   return pts.length ? `M ${pts.map((p) => `${p.x},${p.y}`).join(" L ")} Z` : "";
 }
 
-const MIN_SNAP = 15;
+// const MIN_SNAP = 15;
 const MAX_SNAP = 20;
 
 // Радиус "ручки" точки — держим её ПОЛНОСТЬЮ в пределах вьюпорта
-const HANDLE_R = 10;
+const HANDLE_R = window.innerWidth <= 768 ? 15 : 10;
 
 const ContactDotsGame = () => {
   const [current, setCurrent] = useState(getRandomObject());
