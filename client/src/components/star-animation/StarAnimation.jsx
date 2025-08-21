@@ -113,7 +113,7 @@ const StarAnimation = () => {
 
       const newRandom = starPoints.map((target) => {
         const angle = Math.random() * 2 * Math.PI;
-        const radius = 30 + Math.random() * 30; // 30-60 пикселей
+        const radius = 30 + Math.random() * 30;
         return {
           x: target.x + Math.cos(angle) * radius,
           y: target.y + Math.sin(angle) * radius,
@@ -227,6 +227,11 @@ const StarAnimation = () => {
         )}
 
         <defs>
+          <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(0,0,0,0)" />
+            <stop offset="100%" stopColor="rgba(0,0,0,0)" />
+          </linearGradient>
+
           <linearGradient id="starGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="30%" stopColor="rgba(39, 39, 39, 0)" />
             <stop offset="200%" stopColor="rgba(175,125,44,1)" />

@@ -109,3 +109,44 @@ svg {
 .handle:active {
   cursor: grabbing;
 }
+
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.image-wrapper svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.game__img__container {
+  position: relative;
+  width: 100%;
+  max-width: 445px; /* твой максимум */
+  height: 100%; /* высота под img */
+}
+
+// .game__image {
+//   width: 100%;
+//   height: auto;
+//   display: block;
+// }
+
+.svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

@@ -14,9 +14,9 @@ export const OBJECTS = [
       { x: 110, y: 100 },
       { x: 175, y: 85 },
     ],
-    cx: 170,
-    cy: 30,
-    zoom: 4,
+    cx: 142,
+    cy: 35,
+    zoom: 4.5,
 
     svg_params: {
       position: {
@@ -33,10 +33,10 @@ export const OBJECTS = [
       rotate: 10,
 
       final: {
-        position: { top: -100, left: -29 },
+        position: { top: -450, left: -132 },
         proportions: { width: 100, height: 100 },
         rotate: 10,
-        scale: 0.24,
+        scale: 0.23,
       },
     },
   },

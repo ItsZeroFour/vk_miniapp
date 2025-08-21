@@ -145,8 +145,11 @@ const ContactDotsGame = () => {
   }, [current]);
 
   const onPointerDown = (idx) => (e) => {
+    if (completed) return;
     if (e.pointerType === "mouse" && e.button !== 0) return;
-    if (locks.every((t) => t >= 0)) return; // ❌ блокируем, если все точки на месте
+    const isCorrectlyAssembled = locks.every((t, i) => t === i);
+
+    if (isCorrectlyAssembled) return;
 
     e.preventDefault();
     e.stopPropagation();
@@ -228,13 +231,14 @@ const ContactDotsGame = () => {
 
     if (idx < 0) return;
 
-    // финальная привязка точки
+    // Берём текущую локальную позицию, клампим с учётом CTM и делаем снап
     setContactPoints((prevPts) => {
       const pLocal = clampLocalWithCTM(prevPts[idx]);
-      const occupied = new Set(locks.filter((t, j) => j !== idx && t >= 0));
 
+      const occupied = new Set(locks.filter((t, j) => j !== idx && t >= 0));
       let bestTarget = -1;
       let bestDist = Infinity;
+
       for (let t = 0; t < N; t++) {
         if (occupied.has(t)) continue;
         const dx = bgPoints[t].x - pLocal.x;
@@ -247,35 +251,46 @@ const ContactDotsGame = () => {
       }
 
       const next = [...prevPts];
-      if (bestTarget >= 0 && bestDist >= MIN_SNAP && bestDist <= MAX_SNAP) {
-        next[idx] = clampLocalWithCTM(bgPoints[bestTarget]);
+
+      if (bestTarget >= 0 && bestDist <= MAX_SNAP) {
+        next[idx] = clampLocalWithCTM({
+          x: bgPoints[bestTarget].x,
+          y: bgPoints[bestTarget].y,
+        });
         setLocks((prev) => {
           const L = [...prev];
           L[idx] = bestTarget;
+
+          const correct = L.every((t, i) => t === i);
+          if (correct) {
+            setShowFill(true);
+            setTimeout(() => {
+              setZoomed(false);
+              setCompleted(true);
+            }, 250);
+          }
+
           return L;
         });
       } else {
         next[idx] = pLocal;
+        setLocks((prev) => {
+          const L = [...prev];
+          L[idx] = -1;
+          return L;
+        });
       }
 
-      // 🔑 теперь проверяем завершение только здесь
+      // ✅ Только здесь вызываем проверку завершения
       setTimeout(checkCompletion, 0);
 
       return next;
     });
   };
 
-  useEffect(() => {
-    checkCompletion();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locks]);
-
   const checkCompletion = () => {
-    const allLocked = locks.every((t) => t >= 0);
-    if (!allLocked) return;
-
-    const setSize = new Set(locks).size;
-    if (setSize !== N) return;
+    const correct = locks.every((t, i) => t === i);
+    if (!correct) return;
 
     setShowFill(true);
     setTimeout(() => {
@@ -324,15 +339,32 @@ const ContactDotsGame = () => {
             <div className={style.game__canvas}>
               <div className={style.responsiveWrapper}>
                 <div className={style.game__img__container}>
-                  <img
-                    className={style.game__image}
-                    src={current.img}
-                    alt={`Объект ${current.id}`}
+                  <div
                     style={{
-                      transformOrigin: `${cx}px ${cy}px`,
-                      transform: zoomed ? `scale(${current.zoom})` : "scale(1)",
+                      position: "relative",
+                      width: "100%",
+                      height: "100%",
                     }}
-                  />
+                  >
+                    <img
+                      className={style.game__image}
+                      src={current.img}
+                      alt={`Объект ${current.id}`}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        display: "block",
+                        transform: zoomed
+                          ? `scale(${current.zoom})`
+                          : "scale(1)",
+                        transformOrigin: `${
+                          (cx / current.svg_params.proportions.width) * 100
+                        }% ${
+                          (cy / current.svg_params.proportions.height) * 100
+                        }%`,
+                      }}
+                    />
+                  </div>
                 </div>
 
                 {current && current.points && (
@@ -351,13 +383,19 @@ const ContactDotsGame = () => {
                         transform: `
                           translate(${
                             completed
-                              ? current.svg_params.final.position.left
-                              : current.svg_params.position.left
+                              ? (current.svg_params.final.position.left / 445) *
+                                100
+                              : (current.svg_params.position.left / 445) * 100
                           }px,
                                    ${
                                      completed
-                                       ? current.svg_params.final.position.top
-                                       : current.svg_params.position.top
+                                       ? (current.svg_params.final.position
+                                           .top /
+                                           445) *
+                                         100
+                                       : (current.svg_params.position.top /
+                                           445) *
+                                         100
                                    }px)
                           scale(${
                             completed
