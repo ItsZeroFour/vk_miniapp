@@ -17,6 +17,13 @@ export async function checkSubscribe(req, res) {
       }
     );
 
+    console.log({
+      group_id: process.env.VK_GROUP_ID,
+      user_id: userId,
+      access_token,
+      v: "5.131",
+    });
+
     res.json({ subscribed: response.data.response === 1 });
   } catch (err) {
     console.error("Ошибка проверки подписки:", err.message);
