@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import bridge from "@vkontakte/vk-bridge";
-import axios from "../utils/axios";
+import axios from "axios";
 import usePlatform from "./usePlatform";
 
 export default function useSubscriptionStatus(accessToken, userId, userData) {
@@ -14,17 +14,17 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
   }, [userData]);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId || !accessToken) return;
 
     async function checkSubscription() {
       try {
         if (isVKMiniApp) {
+          // внутри VK MiniApp через bridge
           const res = await bridge.send("VKWebAppCallAPIMethod", {
             method: "groups.isMember",
             params: {
               group_id: process.env.REACT_APP_GROUP_ID,
               user_id: userId,
-              extended: 0,
               v: "5.131",
               access_token: accessToken,
             },
@@ -32,9 +32,20 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
 
           if (res.response === 1) setIsSubscribe(true);
         } else {
-          // Проверка через API
-          const res = await axios.get(`/user/check-subscribe/${userId}`);
-          if (res.data.subscribed) setIsSubscribe(true);
+          // в браузере через VK API
+          const res = await axios.get(
+            "https://api.vk.com/method/groups.isMember",
+            {
+              params: {
+                group_id: process.env.REACT_APP_GROUP_ID,
+                user_id: userId,
+                v: "5.131",
+                access_token: accessToken,
+              },
+            }
+          );
+
+          if (res.data?.response === 1) setIsSubscribe(true);
         }
       } catch (err) {
         console.error("Ошибка проверки подписки:", err);

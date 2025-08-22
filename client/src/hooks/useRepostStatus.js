@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import bridge from "@vkontakte/vk-bridge";
-import axios from "../utils/axios";
+import axios from "axios";
 import usePlatform from "./usePlatform";
 
 export default function useRepostStatus(userId, userData) {
@@ -29,8 +29,8 @@ export default function useRepostStatus(userId, userData) {
               owner_id: userInfo.id,
               count: 100,
               filter: "owner",
-              access_token: auth.access_token,
               v: "5.131",
+              access_token: auth.access_token,
             },
           });
 
@@ -46,8 +46,32 @@ export default function useRepostStatus(userId, userData) {
 
           if (reposted) setIsShared(true);
         } else {
-          const res = await axios.get(`/user/check-share/${userId}`);
-          if (res.data.shared) setIsShared(true);
+          const token = localStorage.getItem("token");
+
+          const response = await axios.get(
+            "https://api.vk.com/method/wall.get",
+            {
+              params: {
+                owner_id: userId,
+                count: 100,
+                filter: "owner",
+                v: "5.131",
+                access_token: token,
+              },
+            }
+          );
+
+          const groupId = -Number(process.env.REACT_APP_GROUP_ID);
+          const postId = Number(process.env.REACT_APP_POST_ID);
+
+          const reposted = response.data.response.items.some((item) => {
+            const original = item.copy_history?.[0];
+            return (
+              original && original.from_id === groupId && original.id === postId
+            );
+          });
+
+          if (reposted) setIsShared(true);
         }
       } catch (e) {
         console.error("Ошибка при проверке репоста:", e);
