@@ -17,9 +17,9 @@ export async function checkSubscribe(req, res) {
       }
     );
 
-    console.log(access_token);
+    console.log(response);
 
-    res.json({ subscribed: response.data.response === 1 });
+    res.json({ isMember: response.data.response }); 
   } catch (err) {
     console.error("Ошибка проверки подписки:", err.message);
     res.status(500).json({ error: "Ошибка проверки подписки" });
