@@ -17,12 +17,7 @@ export async function checkSubscribe(req, res) {
       }
     );
 
-    console.log({
-      group_id: process.env.VK_GROUP_ID,
-      user_id: userId,
-      access_token,
-      v: "5.131",
-    });
+    console.log(access_token);
 
     res.json({ subscribed: response.data.response === 1 });
   } catch (err) {
@@ -49,6 +44,8 @@ export async function checkComment(req, res) {
       }
     );
 
+    console.log(access_token);
+
     const comments = response.data?.response?.items || [];
     const hasCommented = comments.some((c) => c.from_id === Number(userId));
 
@@ -73,6 +70,8 @@ export async function checkRepost(req, res) {
         access_token,
       },
     });
+
+    console.log(access_token);
 
     const posts = response.data?.response?.items || [];
     const groupId = -Number(process.env.VK_GROUP_ID);

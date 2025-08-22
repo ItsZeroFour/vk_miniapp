@@ -20,7 +20,6 @@ export default function useCommentStatus(accessToken, userId, userData) {
         let userHasCommented = false;
 
         if (isVkMiniApp()) {
-          // Проверка внутри VK Mini App
           const response = await bridge.send("VKWebAppCallAPIMethod", {
             method: "wall.getComments",
             params: {
@@ -36,8 +35,9 @@ export default function useCommentStatus(accessToken, userId, userData) {
             (c) => c.from_id === Number(userId)
           );
         } else {
-          // Проверка через сервер
-          const res = await axios.get(`/vk/check-comment/${userId}`);
+          const res = await axios.get(
+            `/vk/check-comment/${userId}?access_token=${accessToken}`
+          );
           userHasCommented = res.data.hasCommented;
         }
 

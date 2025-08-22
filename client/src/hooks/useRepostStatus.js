@@ -3,7 +3,7 @@ import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
 import { isVkMiniApp } from "../utils/isVkMiniApp";
 
-export default function useRepostStatus(userId, userData) {
+export default function useRepostStatus(accessToken, userId, userData) {
   const [isShared, setIsShared] = useState(false);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function useRepostStatus(userId, userData) {
             );
           });
         } else {
-          const res = await axios.get(`/vk/check-repost/${userId}`);
+          const res = await axios.get(`/vk/check-repost/${userId}?access_token=${accessToken}`);
           reposted = res.data.reposted;
         }
 

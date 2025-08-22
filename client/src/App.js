@@ -53,7 +53,7 @@ function App() {
     finalUserId,
     userData
   );
-  const isShared = useRepostStatus(finalUserId, userData);
+  const isShared = useRepostStatus(accessToken || token, finalUserId, userData);
 
   console.log(isSubscribe);
 
