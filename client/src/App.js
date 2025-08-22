@@ -16,6 +16,7 @@ import FriendOrFoeEnd from "./pages/friend-or-foe/FriendOrFoeEnd";
 import ContactDots from "./pages/contact-dots/ContactDots";
 import ContactDotsGame from "./pages/contact-dots/ContactDotsGame";
 import { useEffect } from "react";
+import bridge from "@vkontakte/vk-bridge";
 
 function App() {
   const { userId, userData } = useUser();
@@ -36,13 +37,43 @@ function App() {
   const finalUserId = user_id || userId;
 
   const { accessToken } = useVKAuth(finalUserId);
-  const isCommented = useCommentStatus(accessToken || token, finalUserId, userData);
-  const isSubscribe = useSubscriptionStatus(accessToken || token, finalUserId, userData);
+  const isCommented = useCommentStatus(
+    accessToken || token,
+    finalUserId,
+    userData
+  );
+  const isSubscribe = useSubscriptionStatus(
+    accessToken || token,
+    finalUserId,
+    userData
+  );
   const isShared = useRepostStatus(finalUserId, userData);
 
-  console.log(accessToken || token);
-  console.log(finalUserId);
-  console.log(isSubscribe, isCommented, isShared);
+  console.log(isSubscribe);
+
+  async function checkGroupMembership(userId, accessToken) {
+    try {
+      const res = await bridge.send("VKWebAppCallAPIMethod", {
+        method: "groups.isMember",
+        params: {
+          group_id: process.env.REACT_APP_GROUP_ID,
+          user_id: userId,
+          v: "5.131",
+          access_token: accessToken,
+        },
+      });
+
+      console.log(res.response);
+    } catch (err) {
+      if (err?.error_data?.error_code === 15) {
+        console.error("⚠️ У токена нет scope=groups");
+      } else {
+        console.error("Ошибка VK API:", err);
+      }
+    }
+  }
+
+  checkGroupMembership(user_id, token);
 
   return (
     <div className="App">

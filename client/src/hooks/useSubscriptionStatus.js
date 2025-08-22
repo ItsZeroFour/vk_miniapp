@@ -20,7 +20,7 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
           method: "groups.isMember",
           params: {
             group_id: process.env.REACT_APP_GROUP_ID,
-            user_id: 0,
+            user_id: userId,
             extended: 0,
             v: "5.131",
             access_token: accessToken,
