@@ -36,7 +36,7 @@ export default function useCommentStatus(accessToken, userId, userData) {
           );
         } else {
           const res = await axios.get(
-            `/vk/check-comment/${userId}?access_token=${accessToken}`
+            `/vk/check-comment/${userId}`
           );
           userHasCommented = res.data.hasCommented;
         }

@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from "./FaceRecognitionFinal.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "../../utils/axios";
 
-const FaceRecognitionFinal = () => {
+const FaceRecognitionFinal = ({ finalUserId }) => {
   const location = useLocation();
   const { isWon, correct_item_count } = location.state;
   const navigate = useNavigate();
 
-  if (typeof isWon !== "boolean") {
-    return navigate("/face-recognition");
-  }
+  useEffect(() => {
+    if (typeof isWon !== "boolean") {
+      navigate("/face-recognition");
+    }
+  }, [isWon, navigate]);
+
+  useEffect(() => {
+    const completeGame = async () => {
+      try {
+        await axios.post("/user/complete-game", {
+          userId: finalUserId,
+          gameName: "first_game",
+        });
+
+        return;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    completeGame();
+  }, []);
 
   return (
     <section className={style.final}>

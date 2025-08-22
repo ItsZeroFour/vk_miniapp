@@ -47,8 +47,8 @@ export default function useRepostStatus(accessToken, userId, userData) {
             );
           });
         } else {
-          const res = await axios.get(`/vk/check-repost/${userId}?access_token=${accessToken}`);
-          reposted = res.data.reposted;
+          const res = await axios.get(`/vk/check-repost/${userId}`);
+          reposted = res.data.shared;
         }
 
         if (reposted && !isShared) {

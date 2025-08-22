@@ -34,7 +34,7 @@ const User = new mongoose.Schema({
       default: false,
     },
 
-    last_game: {
+    second_game: {
       type: Boolean,
       default: false,
     },

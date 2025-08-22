@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import style from "./head.module.scss";
 import { motion } from "framer-motion";
 import vklogo from "../../assets/icons/vk.svg";
-import bridge from "@vkontakte/vk-bridge";
-import { Link } from "react-router-dom";
+import { isVkMiniApp } from "../../utils/isVkMiniApp";
 
 const Head = () => {
   const titleVariants = {
@@ -17,11 +16,6 @@ const Head = () => {
   };
 
   const buttonVariants = {
-    // hover: {
-    //   scale: 1.05,
-    //   boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
-    //   transition: { duration: 0.1 },
-    // },
     tap: { scale: 0.95 },
   };
 
@@ -47,24 +41,26 @@ const Head = () => {
           </motion.p>
         </div>
 
-        <div className={style.head__auth}>
-          <motion.h4
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            войДИТЕ для участия в конкурсе
-          </motion.h4>
-          <motion.button
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-            onClick={handleRedirect}
-          >
-            <img src={vklogo} alt="vklogo" />
-            Войти через VK
-          </motion.button>
-        </div>
+        {!isVkMiniApp() && (
+          <div className={style.head__auth}>
+            <motion.h4
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              войДИТЕ для участия в конкурсе
+            </motion.h4>
+            <motion.button
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              onClick={handleRedirect}
+            >
+              <img src={vklogo} alt="vklogo" />
+              Войти через VK
+            </motion.button>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -80,3 +80,58 @@ export const updateTargetStatus = async (req, res) => {
     });
   }
 };
+
+export const completeGame = async (req, res) => {
+  try {
+    const { userId, gameName } = req.body;
+
+    if (!["first_game", "second_game", "third_game"].includes(gameName)) {
+      return res.status(400).json({ message: "Некорректное название игры" });
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { user_id: userId },
+      { $set: { [`gamesComplete.${gameName}`]: true } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Пользователь не найден" });
+    }
+
+    res.json({
+      message: `Игра ${gameName} успешно завершена`,
+      gamesComplete: updatedUser.gamesComplete,
+    });
+  } catch (error) {
+    console.error("Ошибка при обновлении игры:", error);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+};
+
+export const getUser = async (req, res) => {
+  try {
+    const user_id = req.params.userId;
+
+    if (!user_id) {
+      return res.status(404).json({
+        message: "Поле user_id обязательно",
+      });
+    }
+
+    const user = await User.findOne({ user_id });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Не удалось получить пользователя",
+      });
+    }
+
+    return res.status(200).json(user);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      message: "Не удалось пролучить пользователя",
+    });
+  }
+};

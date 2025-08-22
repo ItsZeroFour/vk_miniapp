@@ -3,7 +3,6 @@ import axios from "axios";
 export async function checkSubscribe(req, res) {
   try {
     const { userId } = req.params;
-    const { access_token } = req.query;
 
     const response = await axios.get(
       "https://api.vk.com/method/groups.isMember",
@@ -11,7 +10,7 @@ export async function checkSubscribe(req, res) {
         params: {
           group_id: process.env.VK_GROUP_ID,
           user_id: userId,
-          access_token,
+          access_token: process.env.VK_SERVICE_TOKEN_AUTH,
           v: "5.131",
         },
       }
@@ -27,7 +26,6 @@ export async function checkSubscribe(req, res) {
 export async function checkComment(req, res) {
   try {
     const { userId } = req.params;
-    const { access_token } = req.query;
 
     const response = await axios.get(
       "https://api.vk.com/method/wall.getComments",
@@ -37,7 +35,7 @@ export async function checkComment(req, res) {
           post_id: Number(process.env.VK_POST_ID),
           count: 100,
           v: "5.131",
-          access_token,
+          access_token: process.env.VK_SERVICE_TOKEN_AUTH,
         },
       }
     );
@@ -55,7 +53,6 @@ export async function checkComment(req, res) {
 export async function checkRepost(req, res) {
   try {
     const { userId } = req.params;
-    const { access_token } = req.query;
 
     const response = await axios.get("https://api.vk.com/method/wall.get", {
       params: {
@@ -63,7 +60,7 @@ export async function checkRepost(req, res) {
         count: 100,
         filter: "owner",
         v: "5.131",
-        access_token,
+        access_token: process.env.VK_SERVICE_TOKEN_AUTH,
       },
     });
 
@@ -90,13 +87,13 @@ export async function getToken(req, res) {
     const response = await axios.get("https://api.vk.com/method/users.get", {
       params: {
         user_ids: userId,
-        access_token: process.env.VK_SERVICE_TOKEN,
+        access_token: process.env.VK_SERVICE_TOKEN_AUTH,
         v: "5.131",
       },
     });
 
     res.json({
-      token: process.env.VK_SERVICE_TOKEN,
+      // token: process.env.process.env.VK_SERVICE_TOKEN_AUTH,
       user: response.data,
     });
   } catch (err) {

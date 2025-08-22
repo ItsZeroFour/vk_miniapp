@@ -15,12 +15,12 @@ import FriendOrFoeGame from "./pages/friend-or-foe/FriendOrFoeGame";
 import FriendOrFoeEnd from "./pages/friend-or-foe/FriendOrFoeEnd";
 import ContactDots from "./pages/contact-dots/ContactDots";
 import ContactDotsGame from "./pages/contact-dots/ContactDotsGame";
-import { useEffect } from "react";
-import usePlatform from "./hooks/usePlatform";
+import { useEffect, useState } from "react";
+import axios from "./utils/axios";
 
 function App() {
+  const [user, setUser] = useState(null);
   const { userId, userData } = useUser();
-  const { isVKMiniApp } = usePlatform();
 
   const [searchParams] = useSearchParams();
 
@@ -30,32 +30,27 @@ function App() {
     }
   }, [searchParams]);
 
-  useEffect(() => {
-    if (searchParams.get("token")) {
-      localStorage.setItem("token", searchParams.get("token"));
-    }
-  }, [searchParams]);
-
-  const token = searchParams.get("token") || localStorage.getItem("token");
   const user_id = searchParams.get("userId") || localStorage.getItem("user_id");
 
   const finalUserId = user_id || userId;
 
   const { accessToken } = useVKAuth(finalUserId);
 
-  const isCommented = useCommentStatus(
-    accessToken || token,
-    finalUserId,
-    userData
-  );
-  const isSubscribe = useSubscriptionStatus(
-    accessToken || token,
-    finalUserId,
-    userData
-  );
-  const isShared = useRepostStatus(accessToken || token, finalUserId, userData);
+  const isCommented = useCommentStatus(accessToken, finalUserId, userData);
+  const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, userData);
+  const isShared = useRepostStatus(accessToken, finalUserId, userData);
 
-  console.log(isSubscribe);
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await axios.get(`/user/get/${finalUserId}`);
+
+      if (response.status === 200) {
+        setUser(response.data);
+      }
+    };
+
+    getUser();
+  }, [finalUserId]);
 
   return (
     <div className="App">
@@ -88,7 +83,7 @@ function App() {
                 />
                 <Route
                   path="/face-recognition/final"
-                  element={<FaceRecognitionFinal />}
+                  element={<FaceRecognitionFinal finalUserId={finalUserId} />}
                 />
 
                 {/* СВОЙ-ЧУЖОЙ */}
@@ -97,7 +92,10 @@ function App() {
                   path="/friend-or-foe/start"
                   element={<FriendOrFoeGame />}
                 />
-                <Route path="/friend-or-foe/end" element={<FriendOrFoeEnd />} />
+                <Route
+                  path="/friend-or-foe/end"
+                  element={<FriendOrFoeEnd finalUserId={finalUserId} />}
+                />
 
                 {/* ТОЧКИ КОНТАКТА */}
                 <Route path="/contact-dots" element={<ContactDots />} />
@@ -115,10 +113,12 @@ function App() {
           path="/main"
           element={
             <Main
+              isCommented={isCommented}
               isSubscribe={isSubscribe}
-              token={token}
+              isShared={isShared}
               user_id={user_id}
-              isVKMiniApp={isVKMiniApp}
+              user={user}
+              finalUserId={finalUserId}
             />
           }
         />

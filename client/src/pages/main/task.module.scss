@@ -1,5 +1,5 @@
 .task {
-  margin-top: 70px;
+  margin-top: 60px;
   padding-bottom: 40px;
 
   @media (max-width: 465px) {
@@ -76,25 +76,21 @@
         margin-top: auto;
         margin-bottom: 10px;
         text-transform: uppercase;
-        font-size: 24px;
+        font-size: 18px;
         font-weight: 500;
         padding-left: 10px;
 
         margin-top: auto;
 
         @media (max-width: 825px) {
-          font-size: 20px;
-        }
-
-        @media (max-width: 590px) {
           font-size: 16px;
         }
 
-        @media (max-width: 460px) {
+        @media (max-width: 590px) {
           font-size: 14px;
         }
 
-        @media (max-width: 410px) {
+        @media (max-width: 460px) {
           font-size: 12px;
         }
       }
@@ -296,4 +292,31 @@
 
 .task__popup__success {
   color: #1bdb65;
+}
+
+.task__popup__auth {
+  background: #0073f4;
+  padding: 5px;
+  width: 100%;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-white);
+}
+
+.task__popup__continue {
+  width: 100%;
+  padding: 15px;
+  border-radius: 5px;
+  background: none;
+  border: 2px solid var(--color-white);
+  color: var(--color-white);
+  font-weight: 500;
+
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--color-white);
+    color: #000;
+  }
 }

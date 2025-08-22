@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from "./FriendOrFoeEnd.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { items } from "../../data/friend-or-foe";
 import Video from "../../components/video/Video";
+import axios from "../../utils/axios";
 
-const FriendOrFoeEnd = () => {
+const FriendOrFoeEnd = ({ finalUserId }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -18,7 +19,22 @@ const FriendOrFoeEnd = () => {
     (answer) => answer.isFriend === true
   ).length;
 
-  console.log(answers);
+  useEffect(() => {
+    const completeGame = async () => {
+      try {
+        await axios.post("/user/complete-game", {
+          userId: finalUserId,
+          gameName: "second_game",
+        });
+
+        return;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    completeGame();
+  }, []);
 
   return (
     <section className={style.end}>

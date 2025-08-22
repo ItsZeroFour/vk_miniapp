@@ -7,14 +7,16 @@ import useVKAuth from "../../hooks/useVKAuth";
 import useSubscriptionStatus from "../../hooks/useSubscriptionStatus";
 import success from "../../assets/icons/success.svg";
 import unsuccess from "../../assets/icons/unsuccess.svg";
+import vklogo from "../../assets/icons/vk.svg";
 
-const Task = ({ isSubscribe }) => {
+const Task = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
   const { userId, userData } = useUser();
   const { accessToken } = useVKAuth(userId);
   const [loading, setLoading] = useState(false);
   const [completeSubscribe, setCompleteSubscribe] = useState(null);
+  const [navigateItemClick, setNavigateItemClick] = useState("");
 
   const subscriptionStatusHook = useSubscriptionStatus();
 
@@ -22,7 +24,7 @@ const Task = ({ isSubscribe }) => {
     {
       bg: "/images/main/tasks/bg/bg-1.png",
       img: "/images/main/tasks/task-1.png",
-      isDone: true,
+      isDone: user.gamesComplete.first_game,
       title: "игра \\ «распознавание лиц»",
       path: "/face-recognition",
     },
@@ -30,7 +32,7 @@ const Task = ({ isSubscribe }) => {
     {
       bg: "/images/main/tasks/bg/bg-2.png",
       img: "/images/main/tasks/task-2.png",
-      isDone: false,
+      isDone: user.gamesComplete.second_game,
       title: "игра \\ «СВОЙ-ЧУЖОЙ»",
       path: "/friend-or-foe",
     },
@@ -38,7 +40,7 @@ const Task = ({ isSubscribe }) => {
     {
       bg: "/images/main/tasks/bg/bg-3.png",
       img: "/images/main/tasks/task-3.png",
-      isDone: true,
+      isDone: user.gamesComplete.third_game,
       title: "игра \\ «ТОЧКИ контакта»",
       path: "/contact-dots",
     },
@@ -46,7 +48,7 @@ const Task = ({ isSubscribe }) => {
     {
       bg: "/images/main/tasks/bg/bg-4.png",
       img: "/images/main/tasks/task-4.png",
-      isDone: true,
+      isDone: isCommented,
       title: "вопрос \\ на засыпку",
       path: "/contact-dots",
     },
@@ -54,7 +56,7 @@ const Task = ({ isSubscribe }) => {
     {
       bg: "/images/main/tasks/bg/bg-5.png",
       img: "/images/main/tasks/task-5.png",
-      isDone: true,
+      isDone: isSubscribe,
       title: "подписка на паблик",
       path: "/contact-dots",
     },
@@ -62,7 +64,7 @@ const Task = ({ isSubscribe }) => {
     {
       bg: "/images/main/tasks/bg/bg-6.png",
       img: "/images/main/tasks/task-6.png",
-      isDone: false,
+      isDone: isShared,
       title: "репост записи в группе",
       path: "/contact-dots",
     },
@@ -107,52 +109,93 @@ const Task = ({ isSubscribe }) => {
     }
   };
 
+  const navigateItem = (itemPath) => {
+    setNavigateItemClick(itemPath);
+  };
+
+  const continueOnClick = () => {
+    navigate(navigateItemClick);
+  };
+
+  const handleRedirect = () => {
+    window.location.href = `${process.env.REACT_APP_SERVER_URL}/auth/vk`;
+  };
+
   return (
     <section className={style.task}>
       {showPopup && (
         <div className={style.task__popup}>
           <div className={style.task__popup__wrapper}>
-            <button
-              className={style.task__popup__close}
-              onClick={closePopup}
-            ></button>
-
-            <p className={style.task__popup__text}>
-              Для выполнения задачи подпишитесь на{" "}
-              <Link to="/">Central Partnership</Link> в VK
-            </p>
-
-            {typeof completeSubscribe === "boolean" && (
+            {!finalUserId ? (
               <>
-                {completeSubscribe ? (
-                  <p className={style.task__popup__success}>
-                    <img src={success} alt="success" />
-                    Задание выполнено
-                  </p>
-                ) : (
-                  <p className={style.task__popup__unsuccess}>
-                    <img src={unsuccess} alt="unsuccess" />
-                    Задание не выполнено
-                  </p>
+                <button
+                  className={style.task__popup__close}
+                  onClick={closePopup}
+                ></button>
+
+                <p className={style.task__popup__text}>
+                  Для выполнения задачи подпишитесь на{" "}
+                  <Link to="/">Central Partnership</Link> в VK
+                </p>
+
+                {typeof completeSubscribe === "boolean" && (
+                  <>
+                    {completeSubscribe ? (
+                      <p className={style.task__popup__success}>
+                        <img src={success} alt="success" />
+                        Задание выполнено
+                      </p>
+                    ) : (
+                      <p className={style.task__popup__unsuccess}>
+                        <img src={unsuccess} alt="unsuccess" />
+                        Задание не выполнено
+                      </p>
+                    )}
+                  </>
                 )}
+
+                <button
+                  className={style.task__popup__check}
+                  onClick={
+                    typeof completeSubscribe === "boolean"
+                      ? closePopup
+                      : checkSubscibe
+                  }
+                  style={loading ? { opacity: 0.5 } : { opacity: 1 }}
+                >
+                  {typeof completeSubscribe === "boolean"
+                    ? "Закрыть"
+                    : loading
+                    ? "Проверяется..."
+                    : "проверить подписку"}
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className={style.task__popup__close}
+                  onClick={closePopup}
+                ></button>
+
+                <p className={style.task__popup__text}>
+                  войДИТЕ для участия в конкурсе
+                </p>
+
+                <button
+                  className={style.task__popup__auth}
+                  onClick={handleRedirect}
+                >
+                  <img src={vklogo} alt="vklogo" /> Войти через VK
+                </button>
+
+                <button
+                  className={style.task__popup__continue}
+                  onClick={continueOnClick}
+                >
+                  Играть без призов
+                </button>
               </>
             )}
-
-            <button
-              className={style.task__popup__check}
-              onClick={
-                typeof completeSubscribe === "boolean"
-                  ? closePopup
-                  : checkSubscibe
-              }
-              style={loading ? { opacity: 0.5 } : { opacity: 1 }}
-            >
-              {typeof completeSubscribe === "boolean"
-                ? "Закрыть"
-                : loading
-                ? "Проверяется..."
-                : "проверить подписку"}
-            </button>
           </div>
         </div>
       )}
@@ -170,7 +213,10 @@ const Task = ({ isSubscribe }) => {
                   backgroundPosition: "center",
                   cursor: "pointer",
                 }}
-                onClick={(e) => handleItemClick({ path }, e)}
+                onClick={(e) => {
+                  navigateItem(path);
+                  handleItemClick({ path }, e);
+                }}
               >
                 <div className={style.task__top}>
                   <p
