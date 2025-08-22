@@ -42,8 +42,6 @@ export async function checkComment(req, res) {
       }
     );
 
-    console.log(access_token);
-
     const comments = response.data?.response?.items || [];
     const hasCommented = comments.some((c) => c.from_id === Number(userId));
 
@@ -68,8 +66,6 @@ export async function checkRepost(req, res) {
         access_token,
       },
     });
-
-    console.log(access_token);
 
     const posts = response.data?.response?.items || [];
     const groupId = -Number(process.env.VK_GROUP_ID);
@@ -101,7 +97,7 @@ export async function getToken(req, res) {
 
     res.json({
       token: process.env.VK_SERVICE_TOKEN,
-      user: response.data.response[0],
+      user: response.data,
     });
   } catch (err) {
     console.error("Ошибка получения токена:", err.message);
