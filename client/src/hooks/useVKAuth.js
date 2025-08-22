@@ -20,7 +20,7 @@ export default function useVKAuth(userId) {
         .catch(console.error);
     } else {
       axios
-        .get(`/auth/token?user_id=${userId}`)
+        .get(`/vk/get-token/${userId}`)
         .then((res) => setAccessToken(res.data.token))
         .catch(console.error);
     }
