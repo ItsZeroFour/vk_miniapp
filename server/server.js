@@ -100,9 +100,10 @@ app.get("/auth/vk/callback", async (req, res) => {
       const user_id = tokens.userId;
 
       if (!user_id) {
-        return res.status(404).json({
-          message: "Поле user_id обязательно",
-        });
+        return res.redirect(process.env.BASE_URL);
+        // return res.status(404).json({
+        //   message: "Поле user_id обязательно",
+        // });
       }
 
       const findUser = await User.findOne({ user_id });
@@ -112,11 +113,11 @@ app.get("/auth/vk/callback", async (req, res) => {
           user_id,
         });
 
-        const user = await doc.save();
-        const userData = user._doc;
-        return res.status(200).json({ ...userData });
+        await doc.save();
+        // const userData = user._doc;
+        return res.redirect(process.env.BASE_URL);
       } else {
-        return res.status(200).json(findUser);
+        return res.redirect(process.env.BASE_URL);
       }
     } catch (err) {
       console.log(err);
