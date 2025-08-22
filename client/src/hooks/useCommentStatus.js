@@ -37,9 +37,7 @@ export default function useCommentStatus(accessToken, userId, userData) {
           );
         } else {
           // Проверка через сервер
-          const res = await axios.get(`/vk/check-comment`, {
-            params: { user_id: userId },
-          });
+          const res = await axios.get(`/vk/check-comment/${userId}`);
           userHasCommented = res.data.hasCommented;
         }
 

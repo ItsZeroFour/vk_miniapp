@@ -47,9 +47,7 @@ export default function useRepostStatus(userId, userData) {
             );
           });
         } else {
-          const res = await axios.get(`/vk/check-repost`, {
-            params: { user_id: userId },
-          });
+          const res = await axios.get(`/vk/check-repost/${userId}`);
           reposted = res.data.reposted;
         }
 

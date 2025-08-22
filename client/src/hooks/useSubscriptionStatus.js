@@ -31,9 +31,7 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
           });
           subscribed = res.response === 1;
         } else {
-          const res = await axios.get(`/vk/check-subscribe`, {
-            params: { user_id: userId },
-          });
+          const res = await axios.get(`/vk/check-subscribe/${userId}`);
           subscribed = res.data.isMember === 1;
         }
 
