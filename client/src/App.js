@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useSearchParams } from "react-router-dom";
 import Home from "./pages/home/Home";
 import useUser from "./hooks/useUser";
 import useVKAuth from "./hooks/useVKAuth";
@@ -15,13 +15,28 @@ import FriendOrFoeGame from "./pages/friend-or-foe/FriendOrFoeGame";
 import FriendOrFoeEnd from "./pages/friend-or-foe/FriendOrFoeEnd";
 import ContactDots from "./pages/contact-dots/ContactDots";
 import ContactDotsGame from "./pages/contact-dots/ContactDotsGame";
+import { useEffect } from "react";
 
 function App() {
   const { userId, userData } = useUser();
-  const { accessToken } = useVKAuth(userId);
-  const isCommented = useCommentStatus(accessToken, userId, userData);
-  const isSubscribe = useSubscriptionStatus(accessToken, userId, userData);
-  const isShared = useRepostStatus(userId, userData);
+
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    localStorage.setItem("user_id", searchParams.get("userId"));
+  }, [searchParams.get("userId")]);
+
+  const token = searchParams.get("token");
+  const user_id = searchParams.get("userId") || localStorage.getItem("user_id");
+
+  const finalUserId = user_id || userId;
+
+  const { accessToken } = useVKAuth(finalUserId);
+  const isCommented = useCommentStatus(accessToken, finalUserId, userData);
+  const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, userData);
+  const isShared = useRepostStatus(finalUserId, userData);
+
+  console.log(user_id);
 
   return (
     <div className="App">
@@ -76,7 +91,12 @@ function App() {
           }
         />
 
-        <Route path="/main" element={<Main isSubscribe={isSubscribe} />} />
+        <Route
+          path="/main"
+          element={
+            <Main isSubscribe={isSubscribe} token={token} user_id={user_id} />
+          }
+        />
         {/* <Route path="/tasks" /> */}
       </Routes>
     </div>
