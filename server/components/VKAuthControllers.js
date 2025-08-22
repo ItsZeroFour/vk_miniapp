@@ -11,7 +11,8 @@ dotenv.config();
 const config = {
   clientId: process.env.VK_CLIENT_ID,
   redirectUri: process.env.VK_CALLBACK_URL,
-  scope: "email,wall,groups",
+  // scope: "email,wall,groups",
+  scope: "",
   authUrl: "https://id.vk.com/authorize",
   tokenUrl: "https://id.vk.com/oauth2/auth",
   userInfoUrl: "https://id.vk.com/oauth2/user_info",
