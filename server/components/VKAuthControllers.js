@@ -9,9 +9,9 @@ import axios from "axios";
 dotenv.config();
 
 const config = {
-  clientId: process.env.VK_CLIENT_ID, // Замените на ваш client_id
-  redirectUri: "https://august.muza.team/api/auth/vk/callback", // Замените на ваш redirect_uri
-  scope: "email", // Запрашиваемые разрешения
+  clientId: process.env.VK_CLIENT_ID,
+  redirectUri: process.env.VK_CALLBACK_URL,
+  scope: "email",
   authUrl: "https://id.vk.com/authorize",
   tokenUrl: "https://id.vk.com/oauth2/auth",
   userInfoUrl: "https://id.vk.com/oauth2/user_info",
