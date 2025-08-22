@@ -36,7 +36,7 @@ function App() {
   const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, userData);
   const isShared = useRepostStatus(finalUserId, userData);
 
-  console.log(user_id);
+  console.log(isSubscribe, isCommented, isShared);
 
   return (
     <div className="App">
