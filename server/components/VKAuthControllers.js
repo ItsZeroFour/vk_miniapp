@@ -10,7 +10,7 @@ dotenv.config();
 
 const config = {
   clientId: process.env.VK_CLIENT_ID, // Замените на ваш client_id
-  redirectUri: "https://48a68d47ee1d.ngrok-free.app/auth/vk/callback", // Замените на ваш redirect_uri
+  redirectUri: "https://august.muza.team/api/auth/vk/callback", // Замените на ваш redirect_uri
   scope: "email", // Запрашиваемые разрешения
   authUrl: "https://id.vk.com/authorize",
   tokenUrl: "https://id.vk.com/oauth2/auth",
