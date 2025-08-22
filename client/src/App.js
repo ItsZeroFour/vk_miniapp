@@ -26,17 +26,21 @@ function App() {
     localStorage.setItem("user_id", searchParams.get("userId"));
   }, [searchParams.get("userId")]);
 
-  const token = searchParams.get("token");
+  useEffect(() => {
+    localStorage.setItem("token", searchParams.get("token"));
+  }, [searchParams.get("token")]);
+
+  const token = searchParams.get("token") || localStorage.getItem("token");
   const user_id = searchParams.get("userId") || localStorage.getItem("user_id");
 
   const finalUserId = user_id || userId;
 
   const { accessToken } = useVKAuth(finalUserId);
-  const isCommented = useCommentStatus(accessToken, finalUserId, userData);
-  const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, userData);
+  const isCommented = useCommentStatus(accessToken || token, finalUserId, userData);
+  const isSubscribe = useSubscriptionStatus(accessToken || token, finalUserId, userData);
   const isShared = useRepostStatus(finalUserId, userData);
 
-  console.log(accessToken);
+  console.log(accessToken || token);
   console.log(finalUserId);
   console.log(isSubscribe, isCommented, isShared);
 
