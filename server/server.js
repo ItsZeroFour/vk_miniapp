@@ -184,7 +184,7 @@ app.get("/logout", async (req, res) => {
 
 /* ROUTES */
 app.use("/user", UserRoutes);
-app.use("/vk-api", vkRoutes);
+app.use("/vk", vkRoutes);
 
 /* START FUNCTION */
 async function start() {
