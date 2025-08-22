@@ -36,6 +36,8 @@ function App() {
   const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, userData);
   const isShared = useRepostStatus(finalUserId, userData);
 
+  console.log(accessToken);
+  console.log(finalUserId);
   console.log(isSubscribe, isCommented, isShared);
 
   return (
