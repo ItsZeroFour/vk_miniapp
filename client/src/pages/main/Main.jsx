@@ -9,7 +9,7 @@ import useDisableScroll from "../../hooks/useDisableScroll";
 import { motion, AnimatePresence } from "framer-motion";
 import Drawing from "./Drawing";
 
-const Main = () => {
+const Main = ({ isSubscribe }) => {
   const [showVideo, setShowVideo] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
   const [showPage, setShowPage] = useState("main");
@@ -159,7 +159,7 @@ const Main = () => {
             exit="exit"
           >
             <Head />
-            <Task />
+            <Task isSubscribe={isSubscribe} />
           </motion.div>
         );
       case "trailer":

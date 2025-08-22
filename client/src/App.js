@@ -76,7 +76,7 @@ function App() {
           }
         />
 
-        <Route path="/main" element={<Main />} />
+        <Route path="/main" element={<Main isSubscribe={isSubscribe} />} />
         {/* <Route path="/tasks" /> */}
       </Routes>
     </div>
