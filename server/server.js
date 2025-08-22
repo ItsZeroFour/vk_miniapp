@@ -125,18 +125,19 @@ app.get("/auth/vk/callback", async (req, res) => {
       });
     }
 
-    res.redirect(process.env.CLIENT_URL);
+    return res.redirect(process.env.BASE_URL);
   } catch (error) {
     console.error("Auth callback error:", error.message);
 
     if (error.message.includes("state parameter")) {
-      res.status(400).send("Session expired. Please try logging in again.");
+      console.log("Session expired. Please try logging in again.");
+      return res.redirect(process.env.BASE_URL);
     } else if (error.response?.data) {
-      res
-        .status(500)
-        .send(`VK ID error: ${JSON.stringify(error.response.data)}`);
+      console.log(`VK ID error: ${JSON.stringify(error.response.data)}`);
+      return res.redirect(process.env.BASE_URL);
     } else {
-      res.status(500).send("Authentication failed. Please try again.");
+      console.log("Authentication failed. Please try again");
+      return res.redirect(process.env.BASE_URL);
     }
   }
 });
