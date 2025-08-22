@@ -211,7 +211,14 @@ const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
             animate={isClosing ? "exit" : "animate"}
             exit="exit"
           >
-            <video autoPlay muted loop playsInline className={style.video}>
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              className={style.video}
+            >
               <source src={trailer} type="video/mp4" />
             </video>
 
