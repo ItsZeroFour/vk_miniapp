@@ -100,7 +100,7 @@ app.get("/auth/vk/callback", async (req, res) => {
       const user_id = tokens.userId;
 
       if (!user_id) {
-        return res.redirect(process.env.BASE_URL);
+        return res.redirect(process.env.CLIENT_URL);
         // return res.status(404).json({
         //   message: "Поле user_id обязательно",
         // });
@@ -115,9 +115,9 @@ app.get("/auth/vk/callback", async (req, res) => {
 
         await doc.save();
         // const userData = user._doc;
-        return res.redirect(process.env.BASE_URL);
+        return res.redirect(process.env.CLIENT_URL);
       } else {
-        return res.redirect(process.env.BASE_URL);
+        return res.redirect(process.env.CLIENT_URL);
       }
     } catch (err) {
       console.log(err);
@@ -126,19 +126,19 @@ app.get("/auth/vk/callback", async (req, res) => {
       });
     }
 
-    return res.redirect(process.env.BASE_URL);
+    return res.redirect(process.env.CLIENT_URL);
   } catch (error) {
     console.error("Auth callback error:", error.message);
 
     if (error.message.includes("state parameter")) {
       console.log("Session expired. Please try logging in again.");
-      return res.redirect(process.env.BASE_URL);
+      return res.redirect(process.env.CLIENT_URL);
     } else if (error.response?.data) {
       console.log(`VK ID error: ${JSON.stringify(error.response.data)}`);
-      return res.redirect(process.env.BASE_URL);
+      return res.redirect(process.env.CLIENT_URL);
     } else {
       console.log("Authentication failed. Please try again");
-      return res.redirect(process.env.BASE_URL);
+      return res.redirect(process.env.CLIENT_URL);
     }
   }
 });
