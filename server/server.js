@@ -6,6 +6,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import mongoose from "mongoose";
 import session from "express-session";
+import vkRoutes from "./routes/VKRoutes.js";
 
 /* ROUTES */
 import UserRoutes from "./routes/UserRoutes.js";
@@ -183,6 +184,7 @@ app.get("/logout", async (req, res) => {
 
 /* ROUTES */
 app.use("/user", UserRoutes);
+app.use("/vk-api", vkRoutes);
 
 /* START FUNCTION */
 async function start() {

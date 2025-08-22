@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import bridge from "@vkontakte/vk-bridge";
-import axios from "axios";
-import usePlatform from "./usePlatform";
+import axios from "../utils/axios";
+import { isVkMiniApp } from "../utils/isVkMiniApp";
 
 export default function useRepostStatus(userId, userData) {
   const [isShared, setIsShared] = useState(false);
-  const { isVKMiniApp } = usePlatform();
 
   useEffect(() => {
     if (userData?.targeted_actions?.share === true) {
@@ -14,10 +13,14 @@ export default function useRepostStatus(userId, userData) {
   }, [userData]);
 
   useEffect(() => {
+    if (!userId) return;
+
     async function checkRepost() {
       try {
-        if (isVKMiniApp) {
-          const userInfo = await bridge.send("VKWebAppGetUserInfo", {});
+        let reposted = false;
+
+        if (isVkMiniApp()) {
+          const userInfo = await bridge.send("VKWebAppGetUserInfo");
           const auth = await bridge.send("VKWebAppGetAuthToken", {
             app_id: Number(process.env.REACT_APP_APP_ID),
             scope: "wall",
@@ -29,57 +32,46 @@ export default function useRepostStatus(userId, userData) {
               owner_id: userInfo.id,
               count: 100,
               filter: "owner",
-              v: "5.131",
               access_token: auth.access_token,
+              v: "5.131",
             },
           });
 
           const groupId = -Number(process.env.REACT_APP_GROUP_ID);
           const postId = Number(process.env.REACT_APP_POST_ID);
 
-          const reposted = response.response.items.some((item) => {
+          reposted = response.response.items.some((item) => {
             const original = item.copy_history?.[0];
             return (
               original && original.from_id === groupId && original.id === postId
             );
           });
-
-          if (reposted) setIsShared(true);
         } else {
-          const token = localStorage.getItem("token");
-
-          const response = await axios.get(
-            "https://api.vk.com/method/wall.get",
-            {
-              params: {
-                owner_id: userId,
-                count: 100,
-                filter: "owner",
-                v: "5.131",
-                access_token: token,
-              },
-            }
-          );
-
-          const groupId = -Number(process.env.REACT_APP_GROUP_ID);
-          const postId = Number(process.env.REACT_APP_POST_ID);
-
-          const reposted = response.data.response.items.some((item) => {
-            const original = item.copy_history?.[0];
-            return (
-              original && original.from_id === groupId && original.id === postId
-            );
+          const res = await axios.get(`/vk/check-repost`, {
+            params: { user_id: userId },
           });
+          reposted = res.data.reposted;
+        }
 
-          if (reposted) setIsShared(true);
+        if (reposted && !isShared) {
+          setIsShared(true);
+
+          if (userData?.targeted_actions?.share === false) {
+            await axios.post("/user/update-target", {
+              user_id: userId,
+              target_name: "share",
+              target_value: true,
+            });
+          }
         }
       } catch (e) {
         console.error("Ошибка при проверке репоста:", e);
+        setIsShared(false);
       }
     }
 
     checkRepost();
-  }, [userId, userData, isVKMiniApp]);
+  }, [userId, userData, isShared]);
 
   return isShared;
 }
