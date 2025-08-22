@@ -126,7 +126,7 @@ const Task = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
       {showPopup && (
         <div className={style.task__popup}>
           <div className={style.task__popup__wrapper}>
-            {!finalUserId ? (
+            {finalUserId ? (
               <>
                 <button
                   className={style.task__popup__close}

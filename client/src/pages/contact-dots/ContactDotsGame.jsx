@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from "react";
+import React, { useLayoutEffect, useRef, useState, useMemo } from "react";
 import style from "./ContactDotsGame.module.scss";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
@@ -28,6 +28,7 @@ const ContactDotsGame = () => {
   const [current, setCurrent] = useState(getRandomObject());
   const [progress, setProgress] = useState(1);
   const [completed, setCompleted] = useState(false);
+  const [geomNonce, setGeomNonce] = useState(0);
 
   const bgPoints = useMemo(
     () => current.points.map((p) => ({ ...p })),
@@ -74,58 +75,103 @@ const ContactDotsGame = () => {
     return { svg, g, ctm, invCTM, invSvgCTM, vb };
   };
 
-  // Клиентские координаты -> локальные координаты группы <g>
   const clientToLocal = (clientX, clientY) => {
-    const geom = getGeom();
-    if (!geom) return null;
-    const { svg, invSvgCTM, invCTM } = geom;
+    const svg = svgRef.current;
+    const g = gRef.current;
+    if (!svg || !g) return null;
 
+    const m = g.getScreenCTM && g.getScreenCTM();
+    if (!m) return null;
+
+    const invM = m.inverse();
     const pt = svg.createSVGPoint();
     pt.x = clientX;
     pt.y = clientY;
 
-    // client -> SVG
-    const svgPt = pt.matrixTransform(invSvgCTM);
-    // SVG -> group-local
-    const localPt = svgPt.matrixTransform(invCTM);
+    const localPt = pt.matrixTransform(invM);
     return { x: localPt.x, y: localPt.y };
   };
 
-  // Кламп точки: берём локальную, переводим в SVG, зажимаем в видимом прямоугольнике,
-  // затем обратно в локальные координаты группы
+  // Кламп точки: работаем в экранных координатах, чтобы гарантированно держать "ручку" в пределах видимой области SVG
   const clampLocalWithCTM = (local) => {
-    const geom = getGeom();
-    if (!geom) return local;
-    const { svg, ctm, invCTM, vb } = geom;
+    if (!local || typeof local.x !== "number" || typeof local.y !== "number") {
+      return { x: 0, y: 0 }; // дефолтная точка (или можно вернуть local как есть)
+    }
 
-    // group-local -> SVG
-    const toSvgPt = svg.createSVGPoint();
-    toSvgPt.x = local.x;
-    toSvgPt.y = local.y;
-    const svgPt = toSvgPt.matrixTransform(ctm);
+    const svg = svgRef.current;
+    const g = gRef.current;
+    if (!svg || !g) return local;
 
-    const clampedSvgX = clamp(svgPt.x, HANDLE_R, vb.width - HANDLE_R);
-    const clampedSvgY = clamp(svgPt.y, HANDLE_R, vb.height - HANDLE_R);
+    const m = g.getScreenCTM && g.getScreenCTM();
+    if (!m) return local;
 
-    // SVG -> group-local
-    const backPt = svg.createSVGPoint();
-    backPt.x = clampedSvgX;
-    backPt.y = clampedSvgY;
-    const localPt = backPt.matrixTransform(invCTM);
+    const invM = m.inverse();
+    const rect = svg.getBoundingClientRect();
+
+    const toScreen = svg.createSVGPoint();
+    toScreen.x = local.x;
+    toScreen.y = local.y;
+    const screenPt = toScreen.matrixTransform(m);
+
+    const clampedScreenX = clamp(
+      screenPt.x,
+      rect.left + HANDLE_R,
+      rect.right - HANDLE_R
+    );
+    const clampedScreenY = clamp(
+      screenPt.y,
+      rect.top + HANDLE_R,
+      rect.bottom - HANDLE_R
+    );
+
+    const back = svg.createSVGPoint();
+    back.x = clampedScreenX;
+    back.y = clampedScreenY;
+    const localPt = back.matrixTransform(invM);
 
     return { x: localPt.x, y: localPt.y };
   };
 
-  function getTouchPoint(e) {
-    if (e.touches && e.touches[0]) {
-      return { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY };
+  function waitForCTMStableAnd(fn) {
+    const g = gRef.current;
+    if (!g || !g.getScreenCTM) {
+      requestAnimationFrame(() => waitForCTMStableAnd(fn));
+      return;
     }
-    return { clientX: e.clientX, clientY: e.clientY };
+
+    let last = null;
+    let tries = 0;
+    const MAX_TRIES = 30; // ~0.5 сек @ 60fps
+
+    const tick = () => {
+      const m = g.getScreenCTM();
+      if (!m) {
+        tries++;
+        if (tries < MAX_TRIES) requestAnimationFrame(tick);
+        else fn();
+        return;
+      }
+
+      const cur = [m.a, m.b, m.c, m.d, m.e, m.f];
+      if (last && cur.every((v, i) => Math.abs(v - last[i]) < 1e-3)) {
+        // матрица стабилизировалась на двух соседних кадрах
+        fn();
+      } else {
+        last = cur;
+        requestAnimationFrame(tick);
+      }
+    };
+
+    // подождём два кадра перед началом проверки, чтобы дать layout закончиться
+    requestAnimationFrame(() => requestAnimationFrame(tick));
   }
 
-  useEffect(() => {
-    // Новые стартовые точки + кламп через матрицы (на случай transform у <g>)
-    const nextContacts = current.points.map((target) => {
+  function reclampAllPoints() {
+    setContactPoints((prev) => prev.map((p) => (p ? clampLocalWithCTM(p) : p)));
+  }
+
+  function initPointsForObject(obj) {
+    const nextContacts = obj.points.map((target) => {
       const angle = Math.random() * Math.PI * 2;
       const r = 35 + Math.random() * 35;
       const rawLocal = {
@@ -136,12 +182,85 @@ const ContactDotsGame = () => {
     });
 
     setContactPoints(nextContacts);
+    setLocks(Array(obj.points.length).fill(-1));
+  }
+
+  useLayoutEffect(() => {
+    let cancelled = false;
+
+    waitForCTMStableAnd(() => {
+      if (cancelled) return;
+      // Если точки уже есть — просто поджимаем их к актуальным границам
+      reclampAllPoints();
+    });
+
+    // Рекламп после окончания CSS-анимации transform
+    const g = gRef.current;
+    const onTransitionEnd = (e) => {
+      if (e.propertyName === "transform") {
+        waitForCTMStableAnd(() => {
+          if (cancelled) return;
+          reclampAllPoints();
+        });
+      }
+    };
+    if (g) g.addEventListener("transitionend", onTransitionEnd);
+
+    // Рекламп при ресайзе
+    const onResize = () => {
+      waitForCTMStableAnd(() => {
+        if (cancelled) return;
+        reclampAllPoints();
+      });
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      cancelled = true;
+      if (g) g.removeEventListener("transitionend", onTransitionEnd);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [current, zoomed, completed]);
+
+  function getTouchPoint(e) {
+    if (e.touches && e.touches[0]) {
+      return { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY };
+    }
+    return { clientX: e.clientX, clientY: e.clientY };
+  }
+
+  useLayoutEffect(() => {
+    let raf1 = 0;
+    let raf2 = 0;
+
     setLocks(Array(current.points.length).fill(-1));
     setShowFill(false);
     setZoomed(true);
     draggingIdxRef.current = -1;
     isDraggingRef.current = false;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    raf1 = requestAnimationFrame(() => {
+      if (gRef.current && gRef.current.getCTM) gRef.current.getCTM();
+
+      raf2 = requestAnimationFrame(() => {
+        const nextContacts = current.points.map((target) => {
+          const angle = Math.random() * Math.PI * 2;
+          const r = 35 + Math.random() * 35;
+          const rawLocal = {
+            x: target.x + Math.cos(angle) * r,
+            y: target.y + Math.sin(angle) * r,
+          };
+          return clampLocalWithCTM(rawLocal);
+        });
+
+        setContactPoints(nextContacts);
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
   }, [current]);
 
   const onPointerDown = (idx) => (e) => {
@@ -309,10 +428,28 @@ const ContactDotsGame = () => {
   const total = OBJECTS.length;
 
   const handleNext = () => {
-    const next = getRandomObject(current.id);
-    setCurrent(next);
-    setProgress((p) => (p < total ? p + 1 : 1));
+    if (completed) {
+      const next = getRandomObject(current.id);
+
+      setCurrent(next);
+      setProgress((p) => (p < OBJECTS.length ? p + 1 : 1));
+      setCompleted(false);
+      setShowFill(false);
+      setZoomed(true);
+      draggingIdxRef.current = -1;
+      isDraggingRef.current = false;
+
+      waitForCTMStableAnd(() => {
+        initPointsForObject(next);
+      });
+    }
   };
+
+  useLayoutEffect(() => {
+    waitForCTMStableAnd(() => {
+      reclampAllPoints();
+    });
+  }, []);
 
   const drawProgress = useMemo(() => {
     const arr = Array(N).fill(0);
@@ -414,16 +551,18 @@ const ContactDotsGame = () => {
                       }}
                     >
                       {/* Мелкие фоновые точки (цели) */}
-                      {bgPoints.map((p, i) => (
-                        <circle
-                          key={`bg-${i}`}
-                          cx={p.x}
-                          cy={p.y}
-                          r={2}
-                          fill="#ffffff"
-                          opacity="0.9"
-                        />
-                      ))}
+                      {bgPoints.map((p, i) =>
+                        p ? (
+                          <circle
+                            key={`bg-${i}`}
+                            cx={p.x}
+                            cy={p.y}
+                            r={2}
+                            fill="#ffffff"
+                            opacity="0.9"
+                          />
+                        ) : null
+                      )}
 
                       {/* Текущая «нить» между контактными точками */}
                       <path
@@ -439,6 +578,8 @@ const ContactDotsGame = () => {
                       {/* Контактные точки (перетаскиваемые) */}
                       {contactPoints.map((p, i) => {
                         const bg = bgPoints[i];
+                        if (!p || !bg) return null;
+
                         const dx = bg.x - p.x;
                         const dy = bg.y - p.y;
                         const len = Math.hypot(dx, dy) || 1;

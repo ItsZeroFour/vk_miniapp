@@ -90,7 +90,7 @@
 .responsiveWrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1; // сохраняем пропорции квадрата
+  aspect-ratio: 1 / 1;
 }
 
 circle {
@@ -120,6 +120,7 @@ svg {
   width: 100%;
   height: auto;
   display: block;
+  // object-position: right;
 }
 
 .image-wrapper svg {
