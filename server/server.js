@@ -119,7 +119,9 @@ app.get("/auth/vk/callback", async (req, res) => {
           `${process.env.CLIENT_URL}?userId=${user_id}&token=${tokens.accessToken}`
         );
       } else {
-        return res.redirect(process.env.CLIENT_URL);
+        return res.redirect(
+          `${process.env.CLIENT_URL}?userId=${user_id}&token=${tokens.accessToken}`
+        );
       }
     } catch (err) {
       console.log(err);
@@ -128,7 +130,7 @@ app.get("/auth/vk/callback", async (req, res) => {
       });
     }
 
-    return res.redirect(process.env.CLIENT_URL);
+    // return res.redirect(process.env.CLIENT_URL);
   } catch (error) {
     console.error("Auth callback error:", error.message);
 
