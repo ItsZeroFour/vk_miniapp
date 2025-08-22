@@ -17,6 +17,7 @@ import {
   logout,
   isAuthenticated,
 } from "./components/VKAuthControllers.js";
+import User from "./models/User.js";
 
 dotenv.config({ path: "./.env" });
 const app = express();
@@ -95,7 +96,36 @@ app.get("/auth/vk/callback", async (req, res) => {
 
     console.log("Successfully authenticated user:", tokens.userId);
 
-    res.redirect("/profile");
+    try {
+      const user_id = tokens.userId;
+
+      if (!user_id) {
+        return res.status(404).json({
+          message: "Поле user_id обязательно",
+        });
+      }
+
+      const findUser = await User.findOne({ user_id });
+
+      if (!findUser) {
+        const doc = new User({
+          user_id,
+        });
+
+        const user = await doc.save();
+        const userData = user._doc;
+        return res.status(200).json({ ...userData });
+      } else {
+        return res.status(200).json(findUser);
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        message: "Не удалось аутентифицировать пользователя",
+      });
+    }
+
+    res.redirect(process.env.CLIENT_URL);
   } catch (error) {
     console.error("Auth callback error:", error.message);
 

@@ -28,6 +28,23 @@ const User = new mongoose.Schema({
     default: 0,
   },
 
+  gamesComplete: {
+    first_game: {
+      type: Boolean,
+      default: false,
+    },
+
+    last_game: {
+      type: Boolean,
+      default: false,
+    },
+
+    third_game: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   prize: {
     type: Boolean,
     default: false,
