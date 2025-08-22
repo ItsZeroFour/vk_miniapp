@@ -115,7 +115,9 @@ app.get("/auth/vk/callback", async (req, res) => {
 
         await doc.save();
         // const userData = user._doc;
-        return res.redirect(process.env.CLIENT_URL);
+        return res.redirect(
+          `${process.env.CLIENT_URL}?userId=${user_id}&token=${tokens.accessToken}`
+        );
       } else {
         return res.redirect(process.env.CLIENT_URL);
       }
