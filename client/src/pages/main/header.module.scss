@@ -11,6 +11,7 @@
     img {
       width: 150px;
       height: auto;
+      color: #e1adff;
     }
   }
 
@@ -137,49 +138,9 @@
 }
 
 .header__volume {
-  padding: 2px;
-  background: var(--color-white);
-  border-radius: 20px;
-  width: 69px;
-  height: 35px;
   display: none;
-  flex-direction: column;
-  justify-content: center;
-  position: relative; /* для позиционирования кружка */
-  cursor: pointer;
-
-  .header__volume__item {
-    background: #000;
-    border-radius: 50%;
-    padding: 5px;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    transition: all 0.3s ease;
-  }
-
-  &.on {
-    align-items: start;
-
-    .header__volume__item {
-      transform: translateX(0);
-    }
-  }
-
-  &.off {
-    // align-items: end;
-    background: var(--color-orange);
-
-    .header__volume__item {
-      background: var(--color-white);
-      transform: translateX(36px);
-    }
-  }
 
   @media (max-width: 980px) {
-    display: flex;
+    display: block;
   }
 }

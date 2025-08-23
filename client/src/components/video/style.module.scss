@@ -1,0 +1,13 @@
+.video {
+  height: 350px;
+  border-radius: 10px;
+
+  @media (max-width: 1020px) {
+    height: 300px;
+  }
+
+  
+  @media (max-width: 620px) {
+    height: 200px;
+  }
+}

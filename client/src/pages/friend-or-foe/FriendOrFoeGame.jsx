@@ -51,7 +51,7 @@ const FriendOrFoeGame = () => {
   return (
     <section className={style.game}>
       <div className="container">
-        <div className={style.game__wrappe}>
+        <div className={style.game__wrapper}>
           <div className={style.game__top}>
             <h1>СВОЙ-ЧУЖОЙ</h1>
             <p>Выберите и отметьте, кто из этих двоих - свой</p>

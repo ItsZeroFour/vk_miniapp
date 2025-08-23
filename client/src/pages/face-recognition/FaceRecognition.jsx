@@ -16,6 +16,7 @@ const FaceRecognition = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showImage, setShowImage] = useState(true);
   const [chosenFaces, setChosenFaces] = useState([]);
+  const [timeLeft, setTimeLeft] = useState(3);
 
   const navigate = useNavigate();
 
@@ -40,14 +41,21 @@ const FaceRecognition = () => {
       return;
     }
 
+    setTimeLeft(3);
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
     const timer = setTimeout(() => {
       setCurrentIndex((prev) => prev + 1);
     }, 3000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timer);
+    };
   }, [currentIndex, selected3.length]);
 
-  // Эффект зернистости (noise)
   const NoiseOverlay = () => (
     <div
       style={{
@@ -97,57 +105,45 @@ const FaceRecognition = () => {
             <div className={style.face_recognition__container}>
               <AnimatePresence mode="wait">
                 {showImage && (
-                  <motion.div
-                    key={currentIndex}
-                    className={style.face_recognition__images}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 1 }}
-                  >
-                    <motion.img
-                      src={selected3[currentIndex]}
-                      alt={`face ${currentIndex + 1}`}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        borderRadius: "8px",
-                        filter: "sepia(50%) contrast(110%) brightness(90%)",
-                        position: "relative",
-                        zIndex: 0,
-                      }}
+                  <div className={style.face_recognition__content}>
+                    <div className={style.face_recognition__top}>
+                      <p>
+                        {currentIndex + 1} / {selected3.length}
+                      </p>
+                      <p>00:0{timeLeft}</p>
+                    </div>
+                    <motion.div
+                      key={currentIndex}
+                      className={style.face_recognition__images}
                       initial={{ opacity: 0 }}
-                      animate={{
-                        opacity: 1,
-                        transition: {
-                          duration: 1,
-                          ease: "easeInOut",
-                        },
-                      }}
-                      exit={{
-                        opacity: 0,
-                        transition: {
-                          duration: 1,
-                          ease: "easeInOut",
-                        },
-                      }}
-                    />
-                    <NoiseOverlay />
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        background:
-                          "linear-gradient(0deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.1) 100%)",
-                        pointerEvents: "none",
-                        zIndex: 1,
-                      }}
-                    />
-                  </motion.div>
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1 }}
+                    >
+                      <motion.img
+                        src={selected3[currentIndex]}
+                        alt={`face ${currentIndex + 1}`}
+                        className={style.face_recognition__img}
+                        initial={{ opacity: 0 }}
+                        animate={{
+                          opacity: 1,
+                          transition: {
+                            duration: 1,
+                            ease: "easeInOut",
+                          },
+                        }}
+                        exit={{
+                          opacity: 0,
+                          transition: {
+                            duration: 1,
+                            ease: "easeInOut",
+                          },
+                        }}
+                      />
+                      <NoiseOverlay />
+                      <div className={style.face_recognition__overlay} />
+                    </motion.div>
+                  </div>
                 )}
               </AnimatePresence>
             </div>
@@ -174,26 +170,30 @@ const FaceRecognition = () => {
             </div>
           )}
 
-          <button
-            className={
-              chosenFaces.length < 3
-                ? `${style.face_recognition__button}`
-                : `${style.face_recognition__button} ${style.active}`
-            }
-            disabled={chosenFaces.length < 3}
-            onClick={() =>
-              navigate("/face-recognition/final", {
-                state: {
-                  isWon: selected3.every((item) => chosenFaces.includes(item)),
-                  correct_item_count: selected3.filter((item) =>
-                    chosenFaces.includes(item)
-                  ).length,
-                },
-              })
-            }
-          >
-            Проверить
-          </button>
+          {!showImage && (
+            <button
+              className={
+                chosenFaces.length < 3
+                  ? `${style.face_recognition__button}`
+                  : `${style.face_recognition__button} ${style.active}`
+              }
+              disabled={chosenFaces.length < 3}
+              onClick={() =>
+                navigate("/face-recognition/final", {
+                  state: {
+                    isWon: selected3.every((item) =>
+                      chosenFaces.includes(item)
+                    ),
+                    correct_item_count: selected3.filter((item) =>
+                      chosenFaces.includes(item)
+                    ).length,
+                  },
+                })
+              }
+            >
+              Проверить
+            </button>
+          )}
         </div>
       </div>
     </section>

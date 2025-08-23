@@ -9,12 +9,24 @@
     color: var(--color-orange);
     font-weight: 500;
     text-align: center;
+
+    @media (max-width: 520px) {
+      font-size: 24px;
+    }
   }
 
   p {
     font-size: 16px;
     font-weight: 500;
     text-align: center;
+
+    @media (max-width: 520px) {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    gap: 5px;
   }
 }
 
@@ -27,6 +39,10 @@
 
   p {
     font-size: 24px;
+
+    @media (max-width: 520px) {
+      font-size: 16px;
+    }
   }
 
   .game__main__cards {
@@ -71,15 +87,23 @@
 
   img {
     width: 100%;
-    height: auto; // <-- авто-высота
-    aspect-ratio: 1 / 2; // <-- делает высоту ровно 200% ширины
+    height: auto;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 5px;
     display: block;
+
+    @media (max-width: 620px) {
+      aspect-ratio: 1 / 2;
+    }
+
+    @media (max-width: 520px) {
+      aspect-ratio: 1 / 1.5;
+    }
   }
 }
 
-.game__wrappe {
+.game__wrapper {
   button {
     width: 100%;
     margin-top: 60px;
@@ -90,5 +114,16 @@
     color: var(--color-white);
     font-size: 20px;
     font-weight: 500;
+
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--color-white);
+      color: #000;
+    }
+
+    @media (max-width: 520px) {
+      font-size: 16px;
+    }
   }
 }

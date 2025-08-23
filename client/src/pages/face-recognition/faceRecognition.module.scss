@@ -46,6 +46,10 @@
     filter: sepia(50%) contrast(110%) brightness(90%);
     position: relative;
     z-index: 0;
+
+    @media (max-width: 620px) {
+      width: 90%;
+    }
   }
 }
 
@@ -76,13 +80,22 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  width: 280px;
+  width: 360px;
 
   .face_recognition__faces__img {
-    width: 64px;
-    height: 96px;
+    width: 84px;
+    height: 106px;
     border-radius: 4px;
     object-fit: cover;
+
+    @media (max-width: 460px) {
+      width: 64px;
+      height: 96px;
+    }
+  }
+
+  @media (max-width: 460px) {
+    width: 280px;
   }
 }
 
@@ -111,5 +124,83 @@
       rgba(255, 255, 255, 0) 0%,
       rgba(175, 125, 44, 1) 100%
     );
+  }
+}
+
+.face_recognition__img {
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  filter: sepia(50%) contrast(110%) brightness(90%);
+  position: relative;
+  z-index: 0;
+
+  @media (max-width: 620px) {
+    width: 90%;
+  }
+}
+
+.face_recognition__images {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.face_recognition__overlay {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: 50%;
+  transform: translate(-50%, 0%);
+
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0) 20%,
+    rgba(0, 0, 0, 0) 80%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+
+  pointer-events: none;
+  z-index: 1;
+
+  @media (max-width: 620px) {
+    width: 90%;
+  }
+}
+
+.face_recognition__content {
+  width: 50%;
+
+  border: 1px solid #303030;
+  padding: 10px;
+
+  display: block;
+  margin-top: 60px;
+  border-radius: 10px;
+
+  backdrop-filter: blur(10px);
+
+  @media (max-width: 620px) {
+    width: 90%;
+  }
+}
+
+.face_recognition__top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  p {
+    font-size: 24px;
+    font-weight: 500;
+
+    @media (max-width: 620px) {
+      font-size: 18px;
+    }
   }
 }

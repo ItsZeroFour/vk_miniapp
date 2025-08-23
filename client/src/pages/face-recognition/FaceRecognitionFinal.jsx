@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import style from "./FaceRecognitionFinal.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "../../utils/axios";
+import Video from "../../components/video/Video";
 
 const FaceRecognitionFinal = ({ finalUserId }) => {
   const location = useLocation();
@@ -43,14 +44,7 @@ const FaceRecognitionFinal = ({ finalUserId }) => {
           </p>
 
           <div className={style.final__container}>
-            <iframe
-              src="https://vkvideo.ru/video_ext.php?oid=-211437014&id=456246667&hd=2&autoplay=1"
-              width="100%"
-              height="192"
-              allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
-              frameborder="0"
-              allowfullscreen
-            ></iframe>
+            <Video />
           </div>
 
           <div className={style.final__buttons}>

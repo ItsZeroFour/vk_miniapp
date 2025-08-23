@@ -3,8 +3,12 @@
 }
 
 .game__main {
-  width: 100%;
+  width: 50%;
   user-select: none;
+
+  @media (max-width: 475px) {
+    width: 100%;
+  }
 }
 
 .game__image {
@@ -60,6 +64,11 @@
 }
 
 .game__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   button {
     margin-top: 60px;
     width: 100%;
@@ -71,6 +80,17 @@
     color: var(--color-white);
     font-weight: 500;
     user-select: none;
+
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--color-white);
+      color: #000;
+    }
+
+    @media (max-width: 480px) {
+      margin-top: 30px;
+    }
   }
 }
 
@@ -101,9 +121,9 @@ svg {
 }
 
 .handle {
-  touch-action: none; /* отключает жесты pinch/scroll */
-  user-select: none; /* отключает выделение текста */
-  -webkit-user-drag: none; /* отключает drag image в Safari */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
   cursor: grab;
 }
 .handle:active {
@@ -120,7 +140,6 @@ svg {
   width: 100%;
   height: auto;
   display: block;
-  // object-position: right;
 }
 
 .image-wrapper svg {
@@ -134,8 +153,8 @@ svg {
 .game__img__container {
   position: relative;
   width: 100%;
-  max-width: 445px; /* твой максимум */
-  height: 100%; /* высота под img */
+  max-width: 445px;
+  height: 100%;
 }
 
 // .game__image {

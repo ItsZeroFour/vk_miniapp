@@ -68,11 +68,11 @@ footer {
 }
 
 .wrapper-container {
-  max-width: 445px;
+  max-width: 845px;
   min-height: 100vh;
   padding: 10px;
   margin: 0 auto;
-  border: 1px solid #2e2e2e;
+  // border: 1px solid #2e2e2e;
   border-radius: 2px;
   position: relative;
 
@@ -105,4 +105,43 @@ li {
 
 button {
   font-family: "Roboto-flex", sans-serif;
+}
+
+.game-content {
+  background: url("../assets/images/game-bg.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.volume {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  position: fixed;
+
+  top: 93%;
+  left: 1%;
+
+  p {
+    text-transform: uppercase;
+    text-decoration: underline;
+
+    @media (max-width: 1320px) {
+      font-size: 14px;
+    }
+
+    @media (max-width: 1260px) {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 1320px) {
+    gap: 10px;
+  }
+
+  @media (max-width: 1220px) {
+    display: none;
+  }
 }

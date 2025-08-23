@@ -33,7 +33,7 @@ const FaceRecognitionHome = () => {
     },
   ];
 
-  const doubledImages = [...images, ...images];
+  const doubledImages = [...images, ...images, ...images, ...images];
 
   return (
     <section className={style.home}>

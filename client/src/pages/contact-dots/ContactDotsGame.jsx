@@ -3,39 +3,63 @@ import style from "./ContactDotsGame.module.scss";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { OBJECTS } from "../../data/contact-dots";
+import { useNavigate } from "react-router-dom";
 
 gsap.registerPlugin(Draggable);
 
 // ---------- Вспомогательные функции ----------
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
-function getRandomObject(excludeId = null) {
-  const pool = excludeId ? OBJECTS.filter((o) => o.id !== excludeId) : OBJECTS;
-  return pool[Math.floor(Math.random() * pool.length)];
+let usedIds = new Set();
+
+function getUniqueObject(excludeId = null) {
+  if (usedIds.size >= OBJECTS.length) {
+    usedIds.clear();
+  }
+
+  let pool = OBJECTS.filter((o) => o.id !== excludeId && !usedIds.has(o.id));
+
+  if (pool.length === 0) {
+    usedIds.clear();
+    pool = OBJECTS.filter((o) => o.id !== excludeId);
+  }
+
+  const next = pool[Math.floor(Math.random() * pool.length)];
+  usedIds.add(next.id);
+  return next;
 }
 
 function polyPath(pts) {
   return pts.length ? `M ${pts.map((p) => `${p.x},${p.y}`).join(" L ")} Z` : "";
 }
 
-// const MIN_SNAP = 15;
 const MAX_SNAP = 20;
 
 // Радиус "ручки" точки — держим её ПОЛНОСТЬЮ в пределах вьюпорта
 const HANDLE_R = window.innerWidth <= 768 ? 15 : 10;
 
 const ContactDotsGame = () => {
-  const [current, setCurrent] = useState(getRandomObject());
+  const [current, setCurrent] = useState(getUniqueObject());
   const [progress, setProgress] = useState(1);
   const [completed, setCompleted] = useState(false);
-  const [geomNonce, setGeomNonce] = useState(0);
+  const [showFill, setShowFill] = useState(false);
+  const [zoomed, setZoomed] = useState(true);
+
+  const isDraggingRef = useRef(false);
+  const svgRef = useRef(null);
+  const gRef = useRef(null);
+  const draggingIdxRef = useRef(-1);
+
+  const navigate = useNavigate();
 
   const bgPoints = useMemo(
     () => current.points.map((p) => ({ ...p })),
     [current]
   );
+
   const N = bgPoints.length;
 
+  const [locks, setLocks] = useState(() => Array(N).fill(-1));
   const [contactPoints, setContactPoints] = useState(() =>
     bgPoints.map((target) => {
       const angle = Math.random() * Math.PI * 0.5;
@@ -46,34 +70,6 @@ const ContactDotsGame = () => {
       };
     })
   );
-
-  const [locks, setLocks] = useState(() => Array(N).fill(-1));
-  const [showFill, setShowFill] = useState(false);
-  const [zoomed, setZoomed] = useState(true);
-  const isDraggingRef = useRef(false);
-
-  const svgRef = useRef(null);
-  const gRef = useRef(null);
-  const draggingIdxRef = useRef(-1);
-
-  // --- Геометрия: перевод координат между системами с учётом transform у <g> ---
-  const getGeom = () => {
-    const svg = svgRef.current;
-    const g = gRef.current;
-    if (!svg || !g) return null;
-
-    const svgCTM = svg.getScreenCTM(); // SVG -> screen
-    if (!svgCTM) return null;
-
-    const ctm = g.getCTM(); // group-local -> SVG
-    if (!ctm) return null;
-
-    const invCTM = ctm.inverse(); // SVG -> group-local
-    const invSvgCTM = svgCTM.inverse(); // screen -> SVG
-    const vb = svg.viewBox.baseVal; // видимые границы в SVG-координатах
-
-    return { svg, g, ctm, invCTM, invSvgCTM, vb };
-  };
 
   const clientToLocal = (clientX, clientY) => {
     const svg = svgRef.current;
@@ -400,7 +396,6 @@ const ContactDotsGame = () => {
         });
       }
 
-      // ✅ Только здесь вызываем проверку завершения
       setTimeout(checkCompletion, 0);
 
       return next;
@@ -425,11 +420,16 @@ const ContactDotsGame = () => {
     [current]
   );
 
-  const total = OBJECTS.length;
-
   const handleNext = () => {
     if (completed) {
-      const next = getRandomObject(current.id);
+      if (progress === 3) {
+        navigate("/contact-dots/end", {
+          state: { isCompleted: progress === 3 },
+        });
+        return;
+      }
+
+      const next = getUniqueObject(current.id);
 
       setCurrent(next);
       setProgress((p) => (p < OBJECTS.length ? p + 1 : 1));
@@ -450,14 +450,6 @@ const ContactDotsGame = () => {
       reclampAllPoints();
     });
   }, []);
-
-  const drawProgress = useMemo(() => {
-    const arr = Array(N).fill(0);
-    for (let i = 0; i < N; i++) {
-      arr[i] = locks[i] >= 0 ? 1 : 0;
-    }
-    return arr;
-  }, [locks, N]);
 
   return (
     <section className={style.game}>
@@ -580,31 +572,20 @@ const ContactDotsGame = () => {
                         const bg = bgPoints[i];
                         if (!p || !bg) return null;
 
-                        const dx = bg.x - p.x;
-                        const dy = bg.y - p.y;
-                        const len = Math.hypot(dx, dy) || 1;
-                        const dashOffset = len * (1 - (drawProgress[i] ?? 0));
+                        // Логика цвета
+                        let fillColor = "#1A1A1A";
+                        if (locks[i] >= 0) {
+                          fillColor = locks[i] === i ? "#f4a623" : "#FFFFFF";
+                        }
 
                         return (
                           <g key={`c-${i}`}>
-                            <line
-                              x1={p.x}
-                              y1={p.y}
-                              x2={bg.x}
-                              y2={bg.y}
-                              stroke="#f4a623"
-                              strokeWidth="1.2"
-                              strokeDasharray={len}
-                              strokeDashoffset={dashOffset}
-                              strokeLinecap="round"
-                              className={style.spring}
-                            />
                             <circle
                               cx={p.x}
                               cy={p.y}
                               r={HANDLE_R}
-                              fill="#f4a623"
-                              stroke="#111"
+                              fill={fillColor}
+                              stroke="#f4a623"
                               strokeWidth="1"
                               className={style.handle}
                               onPointerDown={onPointerDown(i)}
@@ -643,7 +624,7 @@ const ContactDotsGame = () => {
           </div>
 
           <button className={style.nextBtn} onClick={handleNext}>
-            Следующий объект
+            {progress === 3 ? "Завершить" : "Следующий объект"}
           </button>
         </div>
       </div>

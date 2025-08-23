@@ -16,8 +16,10 @@ const ContactDots = () => {
             </p>
           </div>
 
-          <div className={style.svg_wrap}>
-            <StarAnimation />
+          <div className={style.contact_dots__animation}>
+            <div className={style.svg_wrap}>
+              <StarAnimation />
+            </div>
           </div>
 
           <p className={style.contact_dots__text}>

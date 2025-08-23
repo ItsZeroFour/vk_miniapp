@@ -17,6 +17,8 @@ import ContactDots from "./pages/contact-dots/ContactDots";
 import ContactDotsGame from "./pages/contact-dots/ContactDotsGame";
 import { useEffect, useState } from "react";
 import axios from "./utils/axios";
+import ContactDotsEnd from "./pages/contact-dots/ContactDotsEnd";
+import ToggleVolume from "./components/toggle_volume/ToggleVolume";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -58,59 +60,60 @@ function App() {
         <Route
           path="/*"
           element={
-            <div className="wrapper-container">
+            <div className="game-content">
               <Header />
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <Home
-                      isCommented={isCommented}
-                      isSubscribe={isSubscribe}
-                      isShared={isShared}
-                    />
-                  }
-                />
 
-                {/* РАСПОЗНАВАНИЕ ЛИЦ */}
-                <Route
-                  path="/face-recognition"
-                  element={<FaceRecognitionHome />}
-                />
-                <Route
-                  path="/face-recognition/game"
-                  element={<FaceRecognition />}
-                />
-                <Route
-                  path="/face-recognition/final"
-                  element={<FaceRecognitionFinal finalUserId={finalUserId} />}
-                />
+              <div className="wrapper-container">
+                <Routes>
+                  {/* РАСПОЗНАВАНИЕ ЛИЦ */}
+                  <Route
+                    path="/face-recognition"
+                    element={<FaceRecognitionHome />}
+                  />
+                  <Route
+                    path="/face-recognition/game"
+                    element={<FaceRecognition />}
+                  />
+                  <Route
+                    path="/face-recognition/final"
+                    element={<FaceRecognitionFinal finalUserId={finalUserId} />}
+                  />
 
-                {/* СВОЙ-ЧУЖОЙ */}
-                <Route path="/friend-or-foe" element={<FriendOrFoe />} />
-                <Route
-                  path="/friend-or-foe/start"
-                  element={<FriendOrFoeGame />}
-                />
-                <Route
-                  path="/friend-or-foe/end"
-                  element={<FriendOrFoeEnd finalUserId={finalUserId} />}
-                />
+                  {/* СВОЙ-ЧУЖОЙ */}
+                  <Route path="/friend-or-foe" element={<FriendOrFoe />} />
+                  <Route
+                    path="/friend-or-foe/start"
+                    element={<FriendOrFoeGame />}
+                  />
+                  <Route
+                    path="/friend-or-foe/end"
+                    element={<FriendOrFoeEnd finalUserId={finalUserId} />}
+                  />
 
-                {/* ТОЧКИ КОНТАКТА */}
-                <Route path="/contact-dots" element={<ContactDots />} />
-                <Route
-                  path="/contact-dots/game"
-                  element={<ContactDotsGame />}
-                />
-              </Routes>
+                  {/* ТОЧКИ КОНТАКТА */}
+                  <Route path="/contact-dots" element={<ContactDots />} />
+                  <Route
+                    path="/contact-dots/game"
+                    element={<ContactDotsGame />}
+                  />
+                  <Route
+                    path="/contact-dots/end"
+                    element={<ContactDotsEnd finalUserId={finalUserId} />}
+                  />
+                </Routes>
+              </div>
+
+              <div className="volume">
+                <ToggleVolume />
+                <p>ВЫКЛЮЧИТЬ ЗВУК</p>
+              </div>
             </div>
           }
         />
 
         {/* Основная страница */}
         <Route
-          path="/main"
+          path="/"
           element={
             <Main
               isCommented={isCommented}
