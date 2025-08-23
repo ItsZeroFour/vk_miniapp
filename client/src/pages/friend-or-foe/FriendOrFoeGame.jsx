@@ -2,11 +2,21 @@ import React, { useState } from "react";
 import style from "./game.module.scss";
 import { items } from "../../data/friend-or-foe";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  popupAnimation,
+  wrapperAnimation,
+  buttonAnimation,
+  contentAnimation,
+  DELAYS,
+} from "../../animations/popup";
 
 const FriendOrFoeGame = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [answers, setAnswers] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
 
   const navigate = useNavigate();
 
@@ -19,6 +29,10 @@ const FriendOrFoeGame = () => {
 
     const currentPair = items[currentIndex];
     const chosenCard = currentPair[selected];
+
+    setIsCorrect(chosenCard.isFriend);
+
+    console.log(currentIndex);
 
     setAnswers((prev) => {
       const updatedAnswers = [
@@ -41,13 +55,88 @@ const FriendOrFoeGame = () => {
       return updatedAnswers;
     });
 
+    if (currentIndex !== 6) setShowPopup(true);
     setSelected(null);
+  };
+
+  const getCorrectWordForm = (number) => {
+    const lastDigit = number % 10;
+    const lastTwoDigits = number % 100;
+
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+      return "пар";
+    }
+
+    if (lastDigit === 1) {
+      return "пара";
+    }
+
+    if (lastDigit >= 2 && lastDigit <= 4) {
+      return "пары";
+    }
+
+    return "пар";
   };
 
   const currentPair = items[currentIndex];
 
+  const closePopup = () => {
+    setShowPopup(false);
+  };
+
   return (
     <section className={style.game}>
+      <AnimatePresence>
+        {showPopup && (
+          <motion.div className={style.task__popup} {...popupAnimation}>
+            <motion.div
+              className={style.task__popup__wrapper}
+              {...wrapperAnimation}
+            >
+              <motion.button
+                className={style.task__popup__close}
+                onClick={closePopup}
+                {...buttonAnimation}
+              ></motion.button>
+              <motion.p
+                className={style.task__popup__text__main}
+                {...contentAnimation}
+                transition={{
+                  ...contentAnimation.transition,
+                  delay: DELAYS.TEXT,
+                }}
+              >
+                {isCorrect ? "Верно!" : "Не верно"}
+              </motion.p>
+              <motion.p
+                className={style.task__popup__text}
+                {...contentAnimation}
+                transition={{
+                  ...contentAnimation.transition,
+                  delay: DELAYS.TEXT,
+                }}
+              >
+                Осталось {items.length - answers.length}{" "}
+                {getCorrectWordForm(items.length - answers.length)}
+              </motion.p>
+              <motion.button
+                className={style.task__popup__check}
+                onClick={() => setShowPopup(false)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                {...contentAnimation}
+                transition={{
+                  ...contentAnimation.transition,
+                  delay: DELAYS.CHECK_BUTTON,
+                }}
+              >
+                Продолжить
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="container">
         <div className={style.game__wrapper}>
           <div className={style.game__top}>

@@ -8,6 +8,15 @@ import useSubscriptionStatus from "../../hooks/useSubscriptionStatus";
 import success from "../../assets/icons/success.svg";
 import unsuccess from "../../assets/icons/unsuccess.svg";
 import vklogo from "../../assets/icons/vk.svg";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  popupAnimation,
+  wrapperAnimation,
+  buttonAnimation,
+  contentAnimation,
+  iconAnimation,
+  DELAYS,
+} from "../../animations/popup";
 
 const Task = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -123,82 +132,136 @@ const Task = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
 
   return (
     <section className={style.task}>
-      {showPopup && (
-        <div className={style.task__popup}>
-          <div className={style.task__popup__wrapper}>
-            {finalUserId ? (
-              <>
-                <button
-                  className={style.task__popup__close}
-                  onClick={closePopup}
-                ></button>
+      <AnimatePresence>
+        {showPopup && (
+          <motion.div className={style.task__popup} {...popupAnimation}>
+            <motion.div
+              className={style.task__popup__wrapper}
+              {...wrapperAnimation}
+            >
+              {finalUserId ? (
+                <>
+                  <motion.button
+                    className={style.task__popup__close}
+                    onClick={closePopup}
+                    {...buttonAnimation}
+                  ></motion.button>
 
-                <p className={style.task__popup__text}>
-                  Для выполнения задачи подпишитесь на{" "}
-                  <Link to="/">Central Partnership</Link> в VK
-                </p>
+                  <motion.p
+                    className={style.task__popup__text}
+                    {...contentAnimation}
+                    transition={{
+                      ...contentAnimation.transition,
+                      delay: DELAYS.TEXT,
+                    }}
+                  >
+                    Для выполнения задачи подпишитесь на{" "}
+                    <Link to="/">Central Partnership</Link> в VK
+                  </motion.p>
 
-                {typeof completeSubscribe === "boolean" && (
-                  <>
-                    {completeSubscribe ? (
-                      <p className={style.task__popup__success}>
-                        <img src={success} alt="success" />
-                        Задание выполнено
-                      </p>
-                    ) : (
-                      <p className={style.task__popup__unsuccess}>
-                        <img src={unsuccess} alt="unsuccess" />
-                        Задание не выполнено
-                      </p>
-                    )}
-                  </>
-                )}
+                  {typeof completeSubscribe === "boolean" && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {completeSubscribe ? (
+                        <p className={style.task__popup__success}>
+                          <motion.img
+                            src={success}
+                            alt="success"
+                            {...iconAnimation}
+                          />
+                          Задание выполнено
+                        </p>
+                      ) : (
+                        <p className={style.task__popup__unsuccess}>
+                          <motion.img
+                            src={unsuccess}
+                            alt="unsuccess"
+                            {...iconAnimation}
+                          />
+                          Задание не выполнено
+                        </p>
+                      )}
+                    </motion.div>
+                  )}
 
-                <button
-                  className={style.task__popup__check}
-                  onClick={
-                    typeof completeSubscribe === "boolean"
-                      ? closePopup
-                      : checkSubscibe
-                  }
-                  style={loading ? { opacity: 0.5 } : { opacity: 1 }}
-                >
-                  {typeof completeSubscribe === "boolean"
-                    ? "Закрыть"
-                    : loading
-                    ? "Проверяется..."
-                    : "проверить подписку"}
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className={style.task__popup__close}
-                  onClick={closePopup}
-                ></button>
+                  <motion.button
+                    className={style.task__popup__check}
+                    onClick={
+                      typeof completeSubscribe === "boolean"
+                        ? closePopup
+                        : checkSubscibe
+                    }
+                    style={loading ? { opacity: 0.5 } : { opacity: 1 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    {...contentAnimation}
+                    transition={{
+                      ...contentAnimation.transition,
+                      delay: DELAYS.CHECK_BUTTON,
+                    }}
+                  >
+                    {typeof completeSubscribe === "boolean"
+                      ? "Закрыть"
+                      : loading
+                      ? "Проверяется..."
+                      : "проверить подписку"}
+                  </motion.button>
+                </>
+              ) : (
+                <>
+                  <motion.button
+                    className={style.task__popup__close}
+                    onClick={closePopup}
+                    {...buttonAnimation}
+                  ></motion.button>
 
-                <p className={style.task__popup__text}>
-                  войДИТЕ для участия в конкурсе
-                </p>
+                  <motion.p
+                    className={style.task__popup__text}
+                    {...contentAnimation}
+                    transition={{
+                      ...contentAnimation.transition,
+                      delay: DELAYS.TEXT,
+                    }}
+                  >
+                    войДИТЕ для участия в конкурсе
+                  </motion.p>
 
-                <button
-                  className={style.task__popup__auth}
-                  onClick={handleRedirect}
-                >
-                  <img src={vklogo} alt="vklogo" /> Войти через VK
-                </button>
+                  <motion.button
+                    className={style.task__popup__auth}
+                    onClick={handleRedirect}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    {...contentAnimation}
+                    transition={{
+                      ...contentAnimation.transition,
+                      delay: DELAYS.BUTTONS,
+                    }}
+                  >
+                    <img src={vklogo} alt="vklogo" /> Войти через VK
+                  </motion.button>
 
-                <button
-                  className={style.task__popup__continue}
-                  onClick={continueOnClick}
-                >
-                  Играть без призов
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
+                  <motion.button
+                    className={style.task__popup__continue}
+                    onClick={continueOnClick}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    {...contentAnimation}
+                    transition={{
+                      ...contentAnimation.transition,
+                      delay: DELAYS.CHECK_BUTTON,
+                    }}
+                  >
+                    Играть без призов
+                  </motion.button>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="container">
         <div className={style.task__wrapper}>
