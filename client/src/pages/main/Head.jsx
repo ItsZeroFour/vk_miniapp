@@ -2,14 +2,16 @@ import React from "react";
 import style from "./head.module.scss";
 import { motion } from "framer-motion";
 import vklogo from "../../assets/icons/vk.svg";
-import { isVkMiniApp } from "../../utils/isVkMiniApp";
 import {
   titleVariants,
   textVariants,
   buttonVariants,
 } from "../../animations/main-head";
+import { useDetectEnvironment } from "../../hooks/useDetectEnvironment";
 
 const Head = () => {
+  const environment = useDetectEnvironment();
+
   const handleRedirect = () => {
     window.location.href = `${process.env.REACT_APP_SERVER_URL}/auth/vk`;
   };
@@ -32,7 +34,7 @@ const Head = () => {
           </motion.p>
         </div>
 
-        {!isVkMiniApp() && (
+        {environment === "web" && (
           <div className={style.head__auth}>
             <motion.h4
               initial={{ opacity: 0 }}
