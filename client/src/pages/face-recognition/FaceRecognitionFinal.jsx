@@ -3,6 +3,16 @@ import style from "./FaceRecognitionFinal.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "../../utils/axios";
 import Video from "../../components/video/Video";
+import {
+  containerVariants,
+  titleVariants,
+  textVariants,
+  videoVariants,
+  buttonVariants,
+  spanVariants,
+  animationDelays,
+} from "../../animations/face-recognition-final";
+import { motion } from "framer-motion";
 
 const FaceRecognitionFinal = ({ finalUserId }) => {
   const location = useLocation();
@@ -33,34 +43,72 @@ const FaceRecognitionFinal = ({ finalUserId }) => {
   }, []);
 
   return (
-    <section className={style.final}>
+    <motion.section
+      className={style.final}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       <div className="container">
         <div className={style.final__wrapper}>
-          <h1>{isWon ? "Вы справились!" : "Вы ошиблись!"}</h1>
-          <p>
-            <span>{correct_item_count} из 3!</span> <br /> Это была лишь
-            тренировка. В настоящем деле всё намного сложнее. Смотри «Август» в
-            кино с 25 сентября.
-          </p>
+          <motion.h1
+            variants={titleVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: animationDelays.title }}
+          >
+            {isWon ? "Вы справились!" : "Вы ошиблись!"}
+          </motion.h1>
 
-          <div className={style.final__container}>
+          <motion.p
+            variants={textVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: animationDelays.text }}
+          >
+            <motion.span
+              variants={spanVariants}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: animationDelays.span }}
+            >
+              {correct_item_count} из 3!
+            </motion.span>{" "}
+            <br /> Это была лишь тренировка. В настоящем деле всё намного
+            сложнее. Смотри «Август» в кино с 25 сентября.
+          </motion.p>
+
+          <motion.div
+            className={style.final__container}
+            variants={videoVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: animationDelays.video }}
+          >
             <Video />
-          </div>
+          </motion.div>
 
-          <div className={style.final__buttons}>
+          <motion.div
+            className={style.final__buttons}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: animationDelays.buttons }}
+          >
             <Link
               className={style.final__buttons__first}
               to="/face-recognition"
             >
               Начать игру заново
             </Link>
+
             <Link className={style.final__buttons__last} to="/">
               Другие игры
             </Link>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

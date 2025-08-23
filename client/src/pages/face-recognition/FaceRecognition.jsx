@@ -2,6 +2,15 @@ import React, { useEffect, useMemo, useState } from "react";
 import style from "./faceRecognition.module.scss";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import {
+  containerVariants,
+  imageVariants,
+  faceItemVariants,
+  buttonVariants,
+  titleVariants,
+  textVariants,
+  animationDelays,
+} from "../../animations/face-recognition-game";
 
 const shuffleArray = (array) => {
   const arr = [...array];
@@ -86,19 +95,42 @@ const FaceRecognition = () => {
   };
 
   return (
-    <section className={style.face_recognition}>
+    <motion.section
+      className={style.face_recognition}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       <div className="contgaine">
         <div className={style.face_recognition__wrapper}>
-          <h1>РАСПОЗНАНИЕ ЛИЦ</h1>
+          <motion.h1
+            variants={titleVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: animationDelays.title }}
+          >
+            РАСПОЗНАНИЕ ЛИЦ
+          </motion.h1>
+
           {currentIndex < selected3.length ? (
-            <p>
+            <motion.p
+              variants={textVariants}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: animationDelays.text }}
+            >
               Смотрите <br /> и запоминайте
-            </p>
+            </motion.p>
           ) : (
-            <p>
+            <motion.p
+              variants={textVariants}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: animationDelays.text }}
+            >
               Отметьте среди этих людей только <br />
               тех, кого вы только что видели
-            </p>
+            </motion.p>
           )}
 
           {currentIndex < selected3.length ? (
@@ -115,30 +147,19 @@ const FaceRecognition = () => {
                     <motion.div
                       key={currentIndex}
                       className={style.face_recognition__images}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 1 }}
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
                     >
                       <motion.img
                         src={selected3[currentIndex]}
                         alt={`face ${currentIndex + 1}`}
                         className={style.face_recognition__img}
-                        initial={{ opacity: 0 }}
-                        animate={{
-                          opacity: 1,
-                          transition: {
-                            duration: 1,
-                            ease: "easeInOut",
-                          },
-                        }}
-                        exit={{
-                          opacity: 0,
-                          transition: {
-                            duration: 1,
-                            ease: "easeInOut",
-                          },
-                        }}
+                        variants={imageVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
                       />
                       <NoiseOverlay />
                       <div className={style.face_recognition__overlay} />
@@ -148,30 +169,48 @@ const FaceRecognition = () => {
               </AnimatePresence>
             </div>
           ) : (
-            <div className={style.face_recognition__container}>
-              <ul className={style.face_recognition__faces}>
+            <motion.div
+              className={style.face_recognition__container}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.ul
+                className={style.face_recognition__faces}
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
                 {random12.map((item, index) => {
                   const isSelected = chosenFaces.includes(item);
                   return (
-                    <li
+                    <motion.li
                       key={index}
                       onClick={() => toggleFaceSelection(item)}
-                      className={isSelected && style.face_recognition__selected}
+                      className={`${
+                        isSelected ? style.face_recognition__selected : ""
+                      }`}
+                      variants={faceItemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      custom={index}
+                      whileHover="hover"
+                      whileTap="tap"
                     >
                       <img
                         className={style.face_recognition__faces__img}
                         src={item}
                         alt=""
                       />
-                    </li>
+                    </motion.li>
                   );
                 })}
-              </ul>
-            </div>
+              </motion.ul>
+            </motion.div>
           )}
 
           {!showImage && (
-            <button
+            <motion.button
               className={
                 chosenFaces.length < 3
                   ? `${style.face_recognition__button}`
@@ -190,13 +229,18 @@ const FaceRecognition = () => {
                   },
                 })
               }
+              variants={buttonVariants}
+              initial="hidden"
+              whileHover={chosenFaces.length < 3 ? "disabled" : "hover"}
+              whileTap={chosenFaces.length < 3 ? "disabled" : "tap"}
+              animate={chosenFaces.length < 3 ? "disabled" : "visible"}
             >
               Проверить
-            </button>
+            </motion.button>
           )}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

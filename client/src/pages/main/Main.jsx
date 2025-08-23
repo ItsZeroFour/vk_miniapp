@@ -1,18 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./main.module.scss";
-import Header from "./Header";
+import Header from "../../components/header/Header";
 import Head from "./Head";
 import Task from "./Task";
+import About from "./About";
 import Trailer from "./Trailer";
 import trailer from "../../assets/videos/trailer.mp4";
 import useDisableScroll from "../../hooks/useDisableScroll";
 import { motion, AnimatePresence } from "framer-motion";
 import Drawing from "./Drawing";
+import { useLocation } from "react-router-dom";
+import {
+  videoVariants,
+  buttonVariants,
+  contentVariants,
+  pageVariants,
+  navButtonVariants,
+} from "../../animations/main";
 
 const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
   const [showVideo, setShowVideo] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
   const [showPage, setShowPage] = useState("main");
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (
+      (location.state && location.state?.page_type !== undefined) ||
+      location.state?.page_type
+    ) {
+      setShowPage(location.state.page_type);
+    } else {
+      setShowPage("main");
+    }
+  }, [location]);
 
   useDisableScroll(showVideo);
 
@@ -22,129 +44,6 @@ const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
       setShowVideo(false);
       setIsClosing(false);
     }, 800);
-  };
-
-  // Анимация видео-блока
-  const videoVariants = {
-    initial: {
-      opacity: 0,
-      scale: 1.1,
-      filter: "blur(20px)",
-    },
-    animate: {
-      opacity: 1,
-      scale: 1,
-      filter: "blur(0px)",
-      transition: {
-        duration: 1.5,
-        ease: "easeOut",
-      },
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.9,
-      filter: "blur(20px)",
-      transition: {
-        duration: 0.8,
-        ease: "easeIn",
-      },
-    },
-  };
-
-  // Анимация кнопки
-  const buttonVariants = {
-    initial: {
-      opacity: 0,
-      y: 50,
-    },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: 2,
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    },
-    hover: {
-      scale: 1.05,
-      backgroundColor: "#fff",
-      transition: {
-        duration: 0.3,
-      },
-    },
-    tap: {
-      scale: 0.95,
-    },
-  };
-
-  // Анимация основного контейнера
-  const contentVariants = {
-    initial: {
-      opacity: 0,
-      y: 50,
-    },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  // Анимация переключения страниц
-  const pageVariants = {
-    initial: {
-      opacity: 0,
-      x: 50,
-      scale: 0.95,
-    },
-    animate: {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-    exit: {
-      opacity: 0,
-      x: -50,
-      scale: 0.95,
-      transition: {
-        duration: 0.4,
-        ease: "easeIn",
-      },
-    },
-  };
-
-  // Анимация кнопок навигации
-  const navButtonVariants = {
-    initial: {
-      opacity: 0,
-      y: -20,
-    },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-    hover: {
-      scale: 1.05,
-      backgroundColor: "rgba(255, 255, 255, 0.1)",
-      transition: {
-        duration: 0.2,
-      },
-    },
-    tap: {
-      scale: 0.95,
-    },
   };
 
   const renderPage = () => {
@@ -166,6 +65,7 @@ const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
               user={user}
               finalUserId={finalUserId}
             />
+            <Trailer />
           </motion.div>
         );
       case "trailer":
@@ -177,7 +77,7 @@ const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
             animate="animate"
             exit="exit"
           >
-            <Trailer />
+            <About />
           </motion.div>
         );
       case "drawing":

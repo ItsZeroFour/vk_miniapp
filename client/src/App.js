@@ -1,5 +1,4 @@
 import { Routes, Route, useSearchParams } from "react-router-dom";
-import Home from "./pages/home/Home";
 import useUser from "./hooks/useUser";
 import useVKAuth from "./hooks/useVKAuth";
 import useCommentStatus from "./hooks/useCommentStatus";

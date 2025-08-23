@@ -1,6 +1,15 @@
 import React from "react";
 import style from "./FaceRecognitionHome.module.scss";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  titleVariants,
+  textVariants,
+  scrollerVariants,
+  buttonVariants,
+  itemVariants,
+  animationDelays,
+} from "../../animations/face-recognition-home";
 
 const FaceRecognitionHome = () => {
   const images = [
@@ -39,23 +48,49 @@ const FaceRecognitionHome = () => {
     <section className={style.home}>
       <div className="containe">
         <div className={style.home__wrapper}>
-          <h1>Распознавание ЛИЦ</h1>
-          <p>
+          <motion.h1
+            variants={titleVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: animationDelays.title }}
+          >
+            Распознавание ЛИЦ
+          </motion.h1>
+          <motion.p
+            variants={textVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: animationDelays.firstText }}
+          >
             Каждый оперативник СМЕРШ хранил в голове целую картотеку. Лица.
             Глаза. Брови. Носы. Губы. Уши. Особые приметы.
-          </p>
+          </motion.p>
 
           <div className={style.scroller}>
-            <ul>
+            <motion.ul variants={scrollerVariants} animate="animate">
               {doubledImages.map(({ path }, index) => (
-                <li key={index}>
+                <motion.li
+                  key={index}
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{
+                    delay: animationDelays.scroller + index * 0.05,
+                  }}
+                >
                   <img src={path} alt="face" />
-                </li>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
           </div>
 
-          <div className={style.home__text}>
+          <motion.div
+            className={style.home__text}
+            variants={textVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: animationDelays.secondText }}
+          >
             <p>
               Они тренировались запоминать лица, которые видели лишь мельком, и
               безошибочно узнавать их среди множества других. Теперь вы тоже
@@ -63,9 +98,20 @@ const FaceRecognitionHome = () => {
               Вы увидите несколько портретов, каждый по 3 секунды: найдите и
               отметьте их среди других лиц.
             </p>
-          </div>
+          </motion.div>
 
-          <Link to="/face-recognition/game">Начать игру</Link>
+          <motion.div
+            variants={buttonVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            whileTap="tap"
+            transition={{ delay: animationDelays.button }}
+          >
+            <Link className={style.home__link} to="/face-recognition/game">
+              Начать игру
+            </Link>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -3,22 +3,13 @@ import style from "./head.module.scss";
 import { motion } from "framer-motion";
 import vklogo from "../../assets/icons/vk.svg";
 import { isVkMiniApp } from "../../utils/isVkMiniApp";
+import {
+  titleVariants,
+  textVariants,
+  buttonVariants,
+} from "../../animations/main-head";
 
 const Head = () => {
-  const titleVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
-  };
-
-  const textVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.8, delay: 0.3 } },
-  };
-
-  const buttonVariants = {
-    tap: { scale: 0.95 },
-  };
-
   const handleRedirect = () => {
     window.location.href = `${process.env.REACT_APP_SERVER_URL}/auth/vk`;
   };

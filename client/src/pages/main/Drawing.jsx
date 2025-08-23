@@ -5,9 +5,8 @@ import gift2 from "../../assets/images/gifts/gift-2.png";
 import gift3 from "../../assets/images/gifts/gift-3.png";
 import { faq } from "../../data/faq";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
 import _1kanal from "../../assets/icons/logos/1kanal-2.svg";
-import kinopoisk from "../../assets/icons/logos/kinopoisk-2.svg";
+import Trailer from "./Trailer";
 
 const Drawing = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -82,40 +81,7 @@ const Drawing = () => {
             </ul>
           </div>
 
-          <h3>«Август» в кино с 25 сентября</h3>
-
-          <div className={style.trailer__video}>
-            <iframe
-              src="https://vkvideo.ru/video_ext.php?oid=-211437014&id=456246667&hd=2&autoplay=1"
-              width="100%"
-              height="620"
-              allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
-              frameborder="0"
-              allowfullscreen
-            ></iframe>
-          </div>
-
-          <Link className={style.trailer__tickets} to="/">
-            КУПИТЬ БИЛЕТЫ
-          </Link>
-
-          <div className={style.trailer__socials}>
-            <p>Следите за нами</p>
-
-            <ul>
-              <li>
-                <Link to="">
-                  <img src={_1kanal} alt="1  канал" />
-                </Link>
-              </li>
-
-              <li>
-                <Link to="">
-                  <img src={kinopoisk} alt="Кинопоиск" />
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <Trailer />
         </div>
       </div>
     </section>
