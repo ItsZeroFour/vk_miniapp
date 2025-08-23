@@ -5,7 +5,6 @@ import gift2 from "../../assets/images/gifts/gift-2.png";
 import gift3 from "../../assets/images/gifts/gift-3.png";
 import { faq } from "../../data/faq";
 import { motion, AnimatePresence } from "framer-motion";
-import _1kanal from "../../assets/icons/logos/1kanal-2.svg";
 import Trailer from "./Trailer";
 
 const Drawing = () => {

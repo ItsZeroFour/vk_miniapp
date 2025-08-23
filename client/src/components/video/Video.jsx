@@ -34,6 +34,7 @@ const Video = () => {
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
           frameborder="0"
           allowfullscreen
+          title="Август"
         ></iframe>
       )}
     </div>

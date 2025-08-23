@@ -14,7 +14,7 @@ const ContactDotsEnd = ({ finalUserId }) => {
     if (isCompleted === undefined || (isCompleted === null && !isCompleted)) {
       return navigate("/");
     }
-  }, []);
+  }, [isCompleted, navigate]);
 
   useEffect(() => {
     const completeGame = async () => {
@@ -31,7 +31,7 @@ const ContactDotsEnd = ({ finalUserId }) => {
     };
 
     completeGame();
-  }, []);
+  }, [finalUserId]);
 
   return (
     <section className={style.contact_dots_end}>

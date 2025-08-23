@@ -11,9 +11,11 @@ const FriendOrFoeEnd = ({ finalUserId }) => {
 
   const { answers, isEnd } = location.state;
 
-  if (!isEnd) {
-    // return navigate("/");
-  }
+  useEffect(() => {
+    if (!isEnd) {
+      return navigate("/");
+    }
+  }, [isEnd, navigate]);
 
   const friendCount = answers.filter(
     (answer) => answer.isFriend === true
@@ -34,7 +36,7 @@ const FriendOrFoeEnd = ({ finalUserId }) => {
     };
 
     completeGame();
-  }, []);
+  }, [finalUserId]);
 
   return (
     <section className={style.end}>

@@ -1,4 +1,10 @@
-import React, { useLayoutEffect, useRef, useState, useMemo } from "react";
+import React, {
+  useLayoutEffect,
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
 import style from "./ContactDotsGame.module.scss";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
@@ -128,7 +134,7 @@ const ContactDotsGame = () => {
     return { x: localPt.x, y: localPt.y };
   };
 
-  function waitForCTMStableAnd(fn) {
+  const waitForCTMStableAnd = useCallback((fn) => {
     const g = gRef.current;
     if (!g || !g.getScreenCTM) {
       requestAnimationFrame(() => waitForCTMStableAnd(fn));
@@ -158,13 +164,12 @@ const ContactDotsGame = () => {
       }
     };
 
-    // подождём два кадра перед началом проверки, чтобы дать layout закончиться
     requestAnimationFrame(() => requestAnimationFrame(tick));
-  }
+  }, []);
 
-  function reclampAllPoints() {
+  const reclampAllPoints = useCallback(() => {
     setContactPoints((prev) => prev.map((p) => (p ? clampLocalWithCTM(p) : p)));
-  }
+  }, [setContactPoints]);
 
   function initPointsForObject(obj) {
     const nextContacts = obj.points.map((target) => {
@@ -216,7 +221,7 @@ const ContactDotsGame = () => {
       if (g) g.removeEventListener("transitionend", onTransitionEnd);
       window.removeEventListener("resize", onResize);
     };
-  }, [current, zoomed, completed]);
+  }, [current, zoomed, completed, reclampAllPoints, waitForCTMStableAnd]);
 
   function getTouchPoint(e) {
     if (e.touches && e.touches[0]) {
@@ -449,7 +454,7 @@ const ContactDotsGame = () => {
     waitForCTMStableAnd(() => {
       reclampAllPoints();
     });
-  }, []);
+  }, [reclampAllPoints, waitForCTMStableAnd]);
 
   return (
     <section className={style.game}>

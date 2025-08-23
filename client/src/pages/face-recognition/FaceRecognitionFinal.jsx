@@ -8,7 +8,6 @@ import {
   titleVariants,
   textVariants,
   videoVariants,
-  buttonVariants,
   spanVariants,
   animationDelays,
 } from "../../animations/face-recognition-final";
@@ -40,7 +39,7 @@ const FaceRecognitionFinal = ({ finalUserId }) => {
     };
 
     completeGame();
-  }, []);
+  }, [finalUserId]);
 
   return (
     <motion.section

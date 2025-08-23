@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import style from "./header.module.scss";
 import logo from "../../assets/logo.svg";
 import { Link } from "react-router-dom";
 import ToggleVolume from "../toggle_volume/ToggleVolume";
-import _1kanal from "../../assets/icons/logos/1kanal-black.svg";
 import { motion, AnimatePresence } from "framer-motion";
 import useDisableScroll from "../../hooks/useDisableScroll";
 import partners from "../../assets/icons/partners.svg";

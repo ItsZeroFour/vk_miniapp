@@ -7,7 +7,6 @@ const FriendOrFoeGame = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [answers, setAnswers] = useState([]);
-  const [isEnd, setIsEnd] = useState(false);
 
   const navigate = useNavigate();
 
@@ -34,7 +33,6 @@ const FriendOrFoeGame = () => {
       if (currentIndex < items.length - 1) {
         setCurrentIndex((prev) => prev + 1);
       } else {
-        setIsEnd(true);
         navigate("/friend-or-foe/end", {
           state: { answers: updatedAnswers, isEnd: true },
         });
