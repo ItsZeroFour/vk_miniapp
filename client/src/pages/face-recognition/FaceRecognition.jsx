@@ -109,7 +109,7 @@ const FaceRecognition = () => {
             animate="visible"
             transition={{ delay: animationDelays.title }}
           >
-            РАСПОЗНАНИЕ ЛИЦ
+            Распознавание ЛИЦ
           </motion.h1>
 
           {currentIndex < selected3.length ? (
