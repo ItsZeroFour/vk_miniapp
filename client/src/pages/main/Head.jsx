@@ -7,14 +7,16 @@ import {
   textVariants,
   buttonVariants,
 } from "../../animations/main-head";
-import { useDetectEnvironment } from "../../hooks/useDetectEnvironment";
+import useVkEnvironment from "../../hooks/useVkEnvironment";
 
 const Head = () => {
-  const environment = useDetectEnvironment();
+  const { environment, isMiniApp, isBridgeAvailable } = useVkEnvironment();
 
   const handleRedirect = () => {
     window.location.href = `${process.env.REACT_APP_SERVER_URL}/auth/vk`;
   };
+
+  console.log(environment, isMiniApp);
 
   return (
     <section className={style.head}>
