@@ -67,6 +67,7 @@ function App() {
 
   const { userInfo, loading } = useGetUserInfo(finalUserId);
 
+  console.log(loading);
   if (loading) return <Preloader />;
 
   return (
