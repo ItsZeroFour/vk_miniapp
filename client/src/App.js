@@ -10,6 +10,7 @@ import useRepostStatus from "./hooks/useRepostStatus";
 import Header from "./components/header/Header";
 import ToggleVolume from "./components/toggle_volume/ToggleVolume";
 import axios from "./utils/axios";
+import Preloader from "./components/preloader/Preloader";
 
 const FaceRecognition = React.lazy(() =>
   import("./pages/face-recognition/FaceRecognition")
@@ -79,13 +80,13 @@ function App() {
 
   return (
     <div className="App">
-      <Suspense fallback={<p>Загрузка...</p>}>
+      <Suspense fallback={<Preloader />}>
         <Routes>
           <Route
             path="/*"
             element={
               <div className="game-content">
-                <Header />
+                <Header finalUserId={finalUserId} />
 
                 <div className="wrapper-container">
                   <Routes>

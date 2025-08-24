@@ -10,6 +10,7 @@ import {
   contentAnimation,
   DELAYS,
 } from "../../animations/popup";
+import { usePreloadNextImages } from "../../hooks/usePreloadNextImages";
 
 const FriendOrFoeGame = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -31,8 +32,6 @@ const FriendOrFoeGame = () => {
     const chosenCard = currentPair[selected];
 
     setIsCorrect(chosenCard.isFriend);
-
-    console.log(currentIndex);
 
     setAnswers((prev) => {
       const updatedAnswers = [
@@ -83,6 +82,9 @@ const FriendOrFoeGame = () => {
   const closePopup = () => {
     setShowPopup(false);
   };
+
+  /* PRELOAD IMAGES */
+  usePreloadNextImages(items, currentIndex);
 
   return (
     <section className={style.game}>

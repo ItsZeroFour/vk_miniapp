@@ -35,21 +35,27 @@ export default function useCommentStatus(accessToken, userId, userData) {
             (c) => c.from_id === Number(userId)
           );
         } else {
-          const res = await axios.get(
-            `/vk/check-comment/${userId}`
-          );
-          userHasCommented = res.data.hasCommented;
+          try {
+            const res = await axios.get(`/vk/check-comment/${userId}`);
+            userHasCommented = res.data.hasCommented;
+          } catch (error) {
+            console.log(error);
+          }
         }
 
         if (userHasCommented && !commentStatus) {
           setCommentStatus(true);
 
           if (userData?.targeted_actions?.comment === false) {
-            await axios.post("/user/update-target", {
-              user_id: userId,
-              target_name: "comment",
-              target_value: true,
-            });
+            try {
+              await axios.post("/user/update-target", {
+                user_id: userId,
+                target_name: "comment",
+                target_value: true,
+              });
+            } catch (error) {
+              console.log(error);
+            }
           }
         }
       } catch (err) {

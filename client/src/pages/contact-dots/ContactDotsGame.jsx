@@ -10,6 +10,7 @@ import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { OBJECTS } from "../../data/contact-dots";
 import { useNavigate } from "react-router-dom";
+import { usePreloadNextImages } from "../../hooks/usePreloadNextImages";
 
 gsap.registerPlugin(Draggable);
 
