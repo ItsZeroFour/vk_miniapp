@@ -18,19 +18,24 @@ const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
 let usedIds = new Set();
 
-function getUniqueObject(excludeId = null) {
-  if (usedIds.size >= OBJECTS.length) {
+function getUniqueObject(currentId = null) {
+  let available = OBJECTS.filter((o) => !usedIds.has(o.id));
+
+  if (available.length === 0) {
     usedIds.clear();
+    if (currentId !== null) {
+      usedIds.add(currentId);
+    }
+    available = OBJECTS.filter((o) => !usedIds.has(o.id));
   }
 
-  let pool = OBJECTS.filter((o) => o.id !== excludeId && !usedIds.has(o.id));
+  let next = available[Math.floor(Math.random() * available.length)];
 
-  if (pool.length === 0) {
-    usedIds.clear();
-    pool = OBJECTS.filter((o) => o.id !== excludeId);
+  if (currentId !== null && next.id === currentId && available.length > 1) {
+    available = available.filter((o) => o.id !== currentId);
+    next = available[Math.floor(Math.random() * available.length)];
   }
 
-  const next = pool[Math.floor(Math.random() * pool.length)];
   usedIds.add(next.id);
   return next;
 }
