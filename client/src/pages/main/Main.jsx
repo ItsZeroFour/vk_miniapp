@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "./main.module.scss";
 import Header from "../../components/header/Header";
 import Head from "./Head";
@@ -22,6 +22,8 @@ const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
   const [showVideo, setShowVideo] = useState(true);
   const [isClosing, setIsClosing] = useState(false);
   const [showPage, setShowPage] = useState("main");
+
+  const videoRef = useRef(null);
 
   const location = useLocation();
 
@@ -97,6 +99,20 @@ const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
     }
   };
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = true;
+      video.playsInline = true;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.log("Autoplay failed, user interaction required:", error);
+        });
+      }
+    }
+  }, []);
+
   return (
     <main className={!showVideo ? style.main : ""}>
       <Header finalUserId={finalUserId} user={user} />
@@ -112,6 +128,7 @@ const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
             exit="exit"
           >
             <video
+              ref={videoRef}
               autoPlay
               muted
               loop

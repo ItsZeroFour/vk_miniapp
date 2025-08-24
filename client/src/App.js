@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect } from "react";
 import { Routes, Route, useSearchParams } from "react-router-dom";
 
 import useUser from "./hooks/useUser";
