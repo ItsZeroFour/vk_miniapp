@@ -11,12 +11,15 @@ import TaskPopup from "../task-popup/TaskPopup";
 import useUser from "../../hooks/useUser";
 import useVKAuth from "../../hooks/useVKAuth";
 import { menuItems } from "../../data/menu";
+import useVkEnvironment from "../../hooks/useVkEnvironment";
 
 const Header = ({ finalUserId, user }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [showOtherLinks, setShowOtherLinks] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [navigateItemClick, setNavigateItemClick] = useState("");
+
+  const { isMiniApp } = useVkEnvironment();
 
   const navigate = useNavigate();
 
@@ -53,6 +56,7 @@ const Header = ({ finalUserId, user }) => {
       />
 
       <div
+        style={isMiniApp ? { paddingTop: 35 } : { paddingTop: 0 }}
         className={
           openMenu
             ? `${style.header__wrapper} ${style.active}`
