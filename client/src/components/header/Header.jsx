@@ -40,8 +40,6 @@ const Header = ({ finalUserId, user }) => {
 
   useDisableScroll(openMenu);
 
-  console.log(accessToken);
-
   return (
     <header className={style.header}>
       <TaskPopup

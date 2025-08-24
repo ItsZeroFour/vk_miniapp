@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- Главная -->
+  <url>
+    <loc>https://betagame.augustmovie.ru/</loc>
+    <priority>1.0</priority>
+    <changefreq>daily</changefreq>
+  </url>
+
+  <!-- РАСПОЗНАВАНИЕ ЛИЦ -->
+  <url>
+    <loc>https://betagame.augustmovie.ru/face-recognition</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://betagame.augustmovie.ru/face-recognition/game</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://betagame.augustmovie.ru/face-recognition/final</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- СВОЙ-ЧУЖОЙ -->
+  <url>
+    <loc>https://betagame.augustmovie.ru/friend-or-foe</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://betagame.augustmovie.ru/friend-or-foe/start</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://betagame.augustmovie.ru/friend-or-foe/end</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- ТОЧКИ КОНТАКТА -->
+  <url>
+    <loc>https://betagame.augustmovie.ru/contact-dots</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://betagame.augustmovie.ru/contact-dots/game</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://betagame.augustmovie.ru/contact-dots/end</loc>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>
