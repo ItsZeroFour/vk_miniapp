@@ -1,21 +1,57 @@
 import React, { useState } from "react";
 import style from "./header.module.scss";
 import logo from "../../assets/logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ToggleVolume from "../toggle_volume/ToggleVolume";
 import { motion, AnimatePresence } from "framer-motion";
 import useDisableScroll from "../../hooks/useDisableScroll";
 import partners from "../../assets/icons/partners.svg";
 import { menuVariants, itemVariants } from "../../animations/header";
+import TaskPopup from "../task-popup/TaskPopup";
+import useUser from "../../hooks/useUser";
+import useVKAuth from "../../hooks/useVKAuth";
+import { menuItems } from "../../data/menu";
 
-const Header = () => {
+const Header = ({ finalUserId }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [showOtherLinks, setShowOtherLinks] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [navigateItemClick, setNavigateItemClick] = useState("");
+
+  const navigate = useNavigate();
+
+  const { userId, userData } = useUser();
+  const { accessToken } = useVKAuth(userId);
+
+  const continueOnClick = () => {
+    navigate(navigateItemClick);
+  };
+
+  const handleProtectedClick = (path, page_type) => {
+    setOpenMenu(false);
+
+    if (userData?.subscribed) {
+      navigate(path, { state: { page_type: page_type } });
+    } else {
+      setNavigateItemClick(path);
+      setShowPopup(true);
+    }
+  };
 
   useDisableScroll(openMenu);
 
   return (
     <header className={style.header}>
+      <TaskPopup
+        showPopup={showPopup}
+        onClose={() => setShowPopup(false)}
+        finalUserId={finalUserId}
+        userId={userId}
+        accessToken={accessToken}
+        userData={userData}
+        continueOnClick={continueOnClick}
+      />
+
       <div
         className={
           openMenu
@@ -67,56 +103,34 @@ const Header = () => {
             {showOtherLinks ? (
               <nav>
                 <motion.ul>
-                  {[
-                    {
-                      title: "ГЛАВНАЯ",
-                      path: "/",
-                      page_type: "main",
-                    },
-
-                    {
-                      title: "РОЗЫГРЫШ",
-                      path: "/",
-                      page_type: "drawing",
-                    },
-
-                    {
-                      title: "РАСПОЗНАВАНИЕ ЛИЦ",
-                      path: "/face-recognition",
-                      page_type: "",
-                    },
-
-                    {
-                      title: "СВОЙ-ЧУЖОЙ",
-                      path: "/friend-or-foe",
-                      page_type: "",
-                    },
-
-                    {
-                      title: "ТОЧКИ КОНТАКТА",
-                      path: "/contact-dots",
-                      page_type: "",
-                    },
-
-                    {
-                      title: "О ФИЛЬМЕ",
-                      path: "/",
-                      page_type: "trailer",
-                    },
-                  ].map(({ title, path, page_type }, index) => (
-                    <motion.li key={index} variants={itemVariants}>
-                      <Link
-                        onClick={() => {
-                          setShowOtherLinks(false);
-                          setOpenMenu(false);
-                        }}
-                        to={path}
-                        state={{ page_type }}
-                      >
-                        {title}
-                      </Link>
-                    </motion.li>
-                  ))}
+                  {menuItems.map(
+                    (
+                      { title, path, page_type, protected: isProtected },
+                      index
+                    ) => (
+                      <motion.li key={index} variants={itemVariants}>
+                        {isProtected ? (
+                          <button
+                            onClick={() => handleProtectedClick(path)}
+                            className="text-left"
+                          >
+                            {title}
+                          </button>
+                        ) : (
+                          <Link
+                            onClick={() => {
+                              setShowOtherLinks(false);
+                              setOpenMenu(false);
+                            }}
+                            to={path}
+                            state={{ page_type }}
+                          >
+                            {title}
+                          </Link>
+                        )}
+                      </motion.li>
+                    )
+                  )}
                 </motion.ul>
               </nav>
             ) : (

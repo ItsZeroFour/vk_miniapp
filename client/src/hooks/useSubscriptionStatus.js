@@ -31,19 +31,27 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
           });
           subscribed = res.response === 1;
         } else {
-          const res = await axios.get(`/vk/check-subscribe/${userId}`);
-          subscribed = res.data.isMember === 1;
+          try {
+            const res = await axios.get(`/vk/check-subscribe/${userId}`);
+            subscribed = res.data.isMember === 1;
+          } catch (error) {
+            console.log(error);
+          }
         }
 
         if (subscribed && !isSubscribe) {
           setIsSubscribe(true);
 
           if (userData?.targeted_actions?.subscribe === false) {
-            await axios.post("/user/update-target", {
-              user_id: userId,
-              target_name: "subscribe",
-              target_value: true,
-            });
+            try {
+              await axios.post("/user/update-target", {
+                user_id: userId,
+                target_name: "subscribe",
+                target_value: true,
+              });
+            } catch (error) {
+              console.log(error);
+            }
           }
         }
       } catch (err) {

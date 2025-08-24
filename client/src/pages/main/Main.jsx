@@ -116,7 +116,7 @@ const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
               muted
               loop
               playsInline
-              preload="auto"
+              preload="metadata"
               className={style.video}
             >
               <source src={trailer} type="video/mp4" />

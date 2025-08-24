@@ -1,0 +1,35 @@
+.preloader__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+
+  img {
+    width: 400px;
+    height: auto;
+    object-fit: contain;
+
+    animation-name: preload;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+
+    @media (max-width: 475px) {
+      width: 100%;
+    }
+  }
+}
+
+@keyframes preload {
+  from {
+    opacity: 0.8;
+    filter: blur(10px);
+    margin-bottom: 20px;
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    margin-bottom: 0px;
+  }
+}

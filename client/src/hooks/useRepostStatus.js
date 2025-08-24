@@ -47,19 +47,27 @@ export default function useRepostStatus(accessToken, userId, userData) {
             );
           });
         } else {
-          const res = await axios.get(`/vk/check-repost/${userId}`);
-          reposted = res.data.shared;
+          try {
+            const res = await axios.get(`/vk/check-repost/${userId}`);
+            reposted = res.data.shared;
+          } catch (error) {
+            console.log(error);
+          }
         }
 
         if (reposted && !isShared) {
           setIsShared(true);
 
           if (userData?.targeted_actions?.share === false) {
-            await axios.post("/user/update-target", {
-              user_id: userId,
-              target_name: "share",
-              target_value: true,
-            });
+            try {
+              await axios.post("/user/update-target", {
+                user_id: userId,
+                target_name: "share",
+                target_value: true,
+              });
+            } catch (error) {
+              console.log(error);
+            }
           }
         }
       } catch (e) {
