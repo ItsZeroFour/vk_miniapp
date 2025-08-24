@@ -40,7 +40,7 @@ const Header = ({ finalUserId, user }) => {
 
   useDisableScroll(openMenu);
 
-  console.log(user);
+  console.log(accessToken);
 
   return (
     <header className={style.header}>

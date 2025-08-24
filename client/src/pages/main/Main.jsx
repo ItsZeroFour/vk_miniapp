@@ -99,7 +99,7 @@ const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
 
   return (
     <main className={!showVideo ? style.main : ""}>
-      <Header />
+      <Header finalUserId={finalUserId} user={user} />
 
       <AnimatePresence mode="wait">
         {showVideo ? (
