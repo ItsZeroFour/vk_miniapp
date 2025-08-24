@@ -8,7 +8,7 @@ const ContactDotsEnd = ({ finalUserId }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isCompleted = location?.state?.isCompleted;
+  const isCompleted = location.state?.isCompleted;
 
   useEffect(() => {
     if (isCompleted === undefined || (isCompleted === null && !isCompleted)) {

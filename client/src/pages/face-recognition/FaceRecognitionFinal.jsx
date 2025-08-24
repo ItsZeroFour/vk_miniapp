@@ -15,7 +15,8 @@ import { motion } from "framer-motion";
 
 const FaceRecognitionFinal = ({ finalUserId }) => {
   const location = useLocation();
-  const { isWon, correct_item_count } = location.state;
+  const correct_item_count = location.state?.correct_item_count;
+  const isWon = location.state?.isWon;
   const navigate = useNavigate();
 
   useEffect(() => {

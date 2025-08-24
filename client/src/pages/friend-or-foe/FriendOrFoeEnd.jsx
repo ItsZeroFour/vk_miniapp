@@ -9,7 +9,8 @@ const FriendOrFoeEnd = ({ finalUserId }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { answers, isEnd } = location.state;
+  const answers = location.state?.answers;
+  const isEnd = location.state?.isEnd;
 
   useEffect(() => {
     if (!isEnd) {
@@ -17,9 +18,8 @@ const FriendOrFoeEnd = ({ finalUserId }) => {
     }
   }, [isEnd, navigate]);
 
-  const friendCount = answers.filter(
-    (answer) => answer.isFriend === true
-  ).length;
+  const friendCount =
+    answers && answers.filter((answer) => answer.isFriend === true).length;
 
   useEffect(() => {
     const completeGame = async () => {

@@ -7,10 +7,14 @@ export default function useVKAuth(userId) {
   useEffect(() => {
     if (!userId) return;
 
-    axios
-      .get(`/vk/get-token/${userId}`)
-      .then((res) => setAccessToken(res.data.token))
-      .catch(console.error);
+    const authVk = async () => {
+      await axios
+        .get(`/vk/get-token/${userId}`)
+        .then((res) => setAccessToken(res.data.token))
+        .catch(console.error);
+    };
+
+    authVk();
   }, [userId]);
 
   return { accessToken };

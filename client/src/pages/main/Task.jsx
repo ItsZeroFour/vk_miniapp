@@ -14,6 +14,8 @@ const Task = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
   const { userId, userData } = useUser();
   const { accessToken } = useVKAuth(userId);
 
+  console.log(userData);
+
   const items = [
     {
       bg: "/images/main/tasks/bg/bg-1.png",

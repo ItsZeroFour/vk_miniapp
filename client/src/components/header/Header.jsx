@@ -12,7 +12,7 @@ import useUser from "../../hooks/useUser";
 import useVKAuth from "../../hooks/useVKAuth";
 import { menuItems } from "../../data/menu";
 
-const Header = ({ finalUserId }) => {
+const Header = ({ finalUserId, user }) => {
   const [openMenu, setOpenMenu] = useState(false);
   const [showOtherLinks, setShowOtherLinks] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -20,7 +20,7 @@ const Header = ({ finalUserId }) => {
 
   const navigate = useNavigate();
 
-  const { userId, userData } = useUser();
+  const { userId } = useUser();
   const { accessToken } = useVKAuth(userId);
 
   const continueOnClick = () => {
@@ -30,7 +30,7 @@ const Header = ({ finalUserId }) => {
   const handleProtectedClick = (path, page_type) => {
     setOpenMenu(false);
 
-    if (userData?.subscribed) {
+    if (user?.subscribed) {
       navigate(path, { state: { page_type: page_type } });
     } else {
       setNavigateItemClick(path);
@@ -40,6 +40,8 @@ const Header = ({ finalUserId }) => {
 
   useDisableScroll(openMenu);
 
+  console.log(user);
+
   return (
     <header className={style.header}>
       <TaskPopup
@@ -48,7 +50,7 @@ const Header = ({ finalUserId }) => {
         finalUserId={finalUserId}
         userId={userId}
         accessToken={accessToken}
-        userData={userData}
+        userData={user}
         continueOnClick={continueOnClick}
       />
 

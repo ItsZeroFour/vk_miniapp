@@ -16,10 +16,14 @@ export default function useUser() {
   useEffect(() => {
     if (!userId) return;
 
-    axios
-      .post("/user/auth", { user_id: userId })
-      .then((res) => setUserData(res.data))
-      .catch(console.error);
+    const authUser = async () => {
+      await axios
+        .post("/user/auth", { user_id: userId })
+        .then((res) => setUserData(res.data))
+        .catch(console.error);
+    };
+
+    authUser();
   }, [userId]);
 
   return { userId, userData };

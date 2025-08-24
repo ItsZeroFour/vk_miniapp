@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 import session from "express-session";
 import vkRoutes from "./routes/VKRoutes.js";
 
-
 /* ROUTES */
 import UserRoutes from "./routes/UserRoutes.js";
 import MongoStore from "connect-mongo";

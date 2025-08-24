@@ -9,8 +9,8 @@ import useRepostStatus from "./hooks/useRepostStatus";
 
 import Header from "./components/header/Header";
 import ToggleVolume from "./components/toggle_volume/ToggleVolume";
-import axios from "./utils/axios";
 import Preloader from "./components/preloader/Preloader";
+import { useGetUserInfo } from "./hooks/useGetUserInfo";
 
 const FaceRecognition = React.lazy(() =>
   import("./pages/face-recognition/FaceRecognition")
@@ -45,7 +45,6 @@ const ContactDotsEnd = React.lazy(() =>
 const Main = React.lazy(() => import("./pages/main/Main"));
 
 function App() {
-  const [user, setUser] = useState(null);
   const { userId, userData } = useUser();
 
   const [searchParams] = useSearchParams();
@@ -66,17 +65,9 @@ function App() {
   const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, userData);
   const isShared = useRepostStatus(accessToken, finalUserId, userData);
 
-  useEffect(() => {
-    const getUser = async () => {
-      const response = await axios.get(`/user/get/${finalUserId}`);
+  const { userInfo, loading } = useGetUserInfo(finalUserId);
 
-      if (response.status === 200) {
-        setUser(response.data);
-      }
-    };
-
-    getUser();
-  }, [finalUserId]);
+  if (loading) return <Preloader />;
 
   return (
     <div className="App">
@@ -86,7 +77,7 @@ function App() {
             path="/*"
             element={
               <div className="game-content">
-                <Header finalUserId={finalUserId} />
+                <Header finalUserId={finalUserId} user={userInfo} />
 
                 <div className="wrapper-container">
                   <Routes>
@@ -147,7 +138,7 @@ function App() {
                 isSubscribe={isSubscribe}
                 isShared={isShared}
                 user_id={user_id}
-                user={user}
+                user={userInfo}
                 finalUserId={finalUserId}
               />
             }
