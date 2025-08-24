@@ -9,7 +9,7 @@ import {
 } from "../../animations/main-head";
 import useVkEnvironment from "../../hooks/useVkEnvironment";
 
-const Head = () => {
+const Head = React.memo(() => {
   const { environment } = useVkEnvironment();
 
   const handleRedirect = () => {
@@ -57,6 +57,6 @@ const Head = () => {
       </div>
     </section>
   );
-};
+});
 
 export default Head;

@@ -2,7 +2,7 @@ import React from "react";
 import style from "./home.module.scss";
 import { Link } from "react-router-dom";
 
-const FriendOrFoe = () => {
+const FriendOrFoe = React.memo(() => {
   return (
     <section className={style.friend_or_foe}>
       <div className="container">
@@ -33,6 +33,6 @@ const FriendOrFoe = () => {
       </div>
     </section>
   );
-};
+});
 
 export default FriendOrFoe;

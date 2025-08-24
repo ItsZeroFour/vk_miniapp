@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import style from "./ContactDotsEnd.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Video from "../../components/video/Video";
-import axios from "../../utils/axios";
+import useCompleteGame from "../../hooks/useCompleteGame";
 
-const ContactDotsEnd = ({ finalUserId }) => {
+const ContactDotsEnd = React.memo(({ finalUserId }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const completeGame = useCompleteGame();
 
   const isCompleted = location.state?.isCompleted;
 
@@ -17,21 +18,16 @@ const ContactDotsEnd = ({ finalUserId }) => {
   }, [isCompleted, navigate]);
 
   useEffect(() => {
-    const completeGame = async () => {
-      try {
-        await axios.post("/user/complete-game", {
-          userId: finalUserId,
-          gameName: "third_game",
-        });
+    const markGameAsComplete = async () => {
+      const result = await completeGame(finalUserId, "third_game");
 
-        return;
-      } catch (err) {
-        console.log(err);
+      if (!result.success) {
+        console.error("Failed to complete game:", result.error);
       }
     };
 
-    completeGame();
-  }, [finalUserId]);
+    markGameAsComplete();
+  }, [finalUserId, completeGame]);
 
   return (
     <section className={style.contact_dots_end}>
@@ -57,6 +53,6 @@ const ContactDotsEnd = ({ finalUserId }) => {
       </div>
     </section>
   );
-};
+});
 
 export default ContactDotsEnd;

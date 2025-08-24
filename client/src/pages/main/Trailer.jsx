@@ -5,7 +5,7 @@ import kinopoisk from "../../assets/icons/logos/kinopoisk-2.svg";
 import { Link } from "react-router-dom";
 import Video from "../../components/video/Video";
 
-const TrailerBottom = () => {
+const TrailerBottom = React.memo(() => {
   return (
     <div className={style.trailer}>
       <h3>«Август» в кино с 25 сентября</h3>
@@ -37,6 +37,6 @@ const TrailerBottom = () => {
       </div>
     </div>
   );
-};
+});
 
 export default TrailerBottom;

@@ -12,7 +12,7 @@ import {
 } from "../../animations/popup";
 import { usePreloadNextImages } from "../../hooks/usePreloadNextImages";
 
-const FriendOrFoeGame = () => {
+const FriendOrFoeGame = React.memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [answers, setAnswers] = useState([]);
@@ -176,6 +176,6 @@ const FriendOrFoeGame = () => {
       </div>
     </section>
   );
-};
+});
 
 export default FriendOrFoeGame;

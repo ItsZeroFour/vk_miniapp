@@ -11,7 +11,7 @@ import {
   animationDelays,
 } from "../../animations/face-recognition-home";
 
-const FaceRecognitionHome = () => {
+const FaceRecognitionHome = React.memo(() => {
   const images = [
     {
       path: "/images/face-recognition/1.jpg",
@@ -116,6 +116,6 @@ const FaceRecognitionHome = () => {
       </div>
     </section>
   );
-};
+});
 
 export default FaceRecognitionHome;

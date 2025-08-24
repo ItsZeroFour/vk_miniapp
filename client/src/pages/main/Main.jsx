@@ -18,199 +18,201 @@ import {
   navButtonVariants,
 } from "../../animations/main";
 
-const Main = ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
-  const [showVideo, setShowVideo] = useState(true);
-  const [isClosing, setIsClosing] = useState(false);
-  const [showPage, setShowPage] = useState("main");
+const Main = React.memo(
+  ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
+    const [showVideo, setShowVideo] = useState(true);
+    const [isClosing, setIsClosing] = useState(false);
+    const [showPage, setShowPage] = useState("main");
 
-  const videoRef = useRef(null);
+    const videoRef = useRef(null);
 
-  const location = useLocation();
+    const location = useLocation();
 
-  useEffect(() => {
-    if (
-      (location.state && location.state?.page_type !== undefined) ||
-      location.state?.page_type
-    ) {
-      setShowPage(location.state.page_type);
-    } else {
-      setShowPage("main");
-    }
-  }, [location]);
-
-  useDisableScroll(showVideo);
-
-  const handleSkipTrailer = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setShowVideo(false);
-      setIsClosing(false);
-    }, 800);
-  };
-
-  const renderPage = () => {
-    switch (showPage) {
-      case "main":
-        return (
-          <motion.div
-            key="main-page"
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Head />
-            <Task
-              isSubscribe={isSubscribe}
-              isCommented={isCommented}
-              isShared={isShared}
-              user={user}
-              finalUserId={finalUserId}
-            />
-            <Trailer />
-          </motion.div>
-        );
-      case "trailer":
-        return (
-          <motion.div
-            key="trailer-page"
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <About />
-          </motion.div>
-        );
-      case "drawing":
-        return (
-          <motion.div
-            key="drawing-page"
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Drawing />
-          </motion.div>
-        );
-      default:
-        return null;
-    }
-  };
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (video) {
-      video.muted = true;
-      video.playsInline = true;
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          console.log("Autoplay failed, user interaction required:", error);
-        });
+    useEffect(() => {
+      if (
+        (location.state && location.state?.page_type !== undefined) ||
+        location.state?.page_type
+      ) {
+        setShowPage(location.state.page_type);
+      } else {
+        setShowPage("main");
       }
-    }
-  }, []);
+    }, [location]);
 
-  return (
-    <main className={!showVideo ? style.main : ""}>
-      <Header finalUserId={finalUserId} user={user} />
+    useDisableScroll(showVideo);
 
-      <AnimatePresence mode="wait">
-        {showVideo ? (
-          <motion.div
-            key="video-block"
-            className={style.main__video}
-            variants={videoVariants}
-            initial="initial"
-            animate={isClosing ? "exit" : "animate"}
-            exit="exit"
-          >
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              className={style.video}
-            >
-              <source src={trailer} type="video/mp4" />
-            </video>
+    const handleSkipTrailer = () => {
+      setIsClosing(true);
+      setTimeout(() => {
+        setShowVideo(false);
+        setIsClosing(false);
+      }, 800);
+    };
 
-            <motion.button
-              variants={buttonVariants}
+    const renderPage = () => {
+      switch (showPage) {
+        case "main":
+          return (
+            <motion.div
+              key="main-page"
+              variants={pageVariants}
               initial="initial"
               animate="animate"
-              whileHover="hover"
-              whileTap="tap"
-              onClick={handleSkipTrailer}
-              className={style.skipButton}
+              exit="exit"
             >
-              пропустить заставку
-            </motion.button>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="content-block"
-            className="main__container"
-            variants={contentVariants}
-            initial="initial"
-            animate="animate"
-          >
-            <div className={style.main__wrapper}>
-              {/* Навигация */}
-              <motion.nav
-                className={style.navigation}
+              <Head />
+              <Task
+                isSubscribe={isSubscribe}
+                isCommented={isCommented}
+                isShared={isShared}
+                user={user}
+                finalUserId={finalUserId}
+              />
+              <Trailer />
+            </motion.div>
+          );
+        case "trailer":
+          return (
+            <motion.div
+              key="trailer-page"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              <About />
+            </motion.div>
+          );
+        case "drawing":
+          return (
+            <motion.div
+              key="drawing-page"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+            >
+              <Drawing />
+            </motion.div>
+          );
+        default:
+          return null;
+      }
+    };
+
+    useEffect(() => {
+      const video = videoRef.current;
+      if (video) {
+        video.muted = true;
+        video.playsInline = true;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error) => {
+            console.log("Autoplay failed, user interaction required:", error);
+          });
+        }
+      }
+    }, []);
+
+    return (
+      <main className={!showVideo ? style.main : ""}>
+        <Header finalUserId={finalUserId} user={user} />
+
+        <AnimatePresence mode="wait">
+          {showVideo ? (
+            <motion.div
+              key="video-block"
+              className={style.main__video}
+              variants={videoVariants}
+              initial="initial"
+              animate={isClosing ? "exit" : "animate"}
+              exit="exit"
+            >
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className={style.video}
+              >
+                <source src={trailer} type="video/mp4" />
+              </video>
+
+              <motion.button
+                variants={buttonVariants}
                 initial="initial"
                 animate="animate"
-                transition={{ staggerChildren: 0.1 }}
+                whileHover="hover"
+                whileTap="tap"
+                onClick={handleSkipTrailer}
+                className={style.skipButton}
               >
-                <motion.ul>
-                  <motion.li variants={navButtonVariants}>
-                    <motion.button
-                      onClick={() => setShowPage("main")}
-                      whileHover="hover"
-                      whileTap="tap"
-                      className={showPage === "main" ? style.active : ""}
-                    >
-                      Задания
-                    </motion.button>
-                  </motion.li>
+                пропустить заставку
+              </motion.button>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="content-block"
+              className="main__container"
+              variants={contentVariants}
+              initial="initial"
+              animate="animate"
+            >
+              <div className={style.main__wrapper}>
+                {/* Навигация */}
+                <motion.nav
+                  className={style.navigation}
+                  initial="initial"
+                  animate="animate"
+                  transition={{ staggerChildren: 0.1 }}
+                >
+                  <motion.ul>
+                    <motion.li variants={navButtonVariants}>
+                      <motion.button
+                        onClick={() => setShowPage("main")}
+                        whileHover="hover"
+                        whileTap="tap"
+                        className={showPage === "main" ? style.active : ""}
+                      >
+                        Задания
+                      </motion.button>
+                    </motion.li>
 
-                  <motion.li variants={navButtonVariants}>
-                    <motion.button
-                      onClick={() => setShowPage("trailer")}
-                      whileHover="hover"
-                      whileTap="tap"
-                      className={showPage === "trailer" ? style.active : ""}
-                    >
-                      О фильме
-                    </motion.button>
-                  </motion.li>
+                    <motion.li variants={navButtonVariants}>
+                      <motion.button
+                        onClick={() => setShowPage("trailer")}
+                        whileHover="hover"
+                        whileTap="tap"
+                        className={showPage === "trailer" ? style.active : ""}
+                      >
+                        О фильме
+                      </motion.button>
+                    </motion.li>
 
-                  <motion.li variants={navButtonVariants}>
-                    <motion.button
-                      onClick={() => setShowPage("drawing")}
-                      whileHover="hover"
-                      whileTap="tap"
-                      className={showPage === "drawing" ? style.active : ""}
-                    >
-                      Розыгрыш
-                    </motion.button>
-                  </motion.li>
-                </motion.ul>
-              </motion.nav>
+                    <motion.li variants={navButtonVariants}>
+                      <motion.button
+                        onClick={() => setShowPage("drawing")}
+                        whileHover="hover"
+                        whileTap="tap"
+                        className={showPage === "drawing" ? style.active : ""}
+                      >
+                        Розыгрыш
+                      </motion.button>
+                    </motion.li>
+                  </motion.ul>
+                </motion.nav>
 
-              {/* Контент страницы с анимацией */}
-              <AnimatePresence mode="wait">{renderPage()}</AnimatePresence>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </main>
-  );
-};
+                {/* Контент страницы с анимацией */}
+                <AnimatePresence mode="wait">{renderPage()}</AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
+    );
+  }
+);
 
 export default Main;

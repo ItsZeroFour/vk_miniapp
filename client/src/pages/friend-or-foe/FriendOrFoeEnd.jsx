@@ -4,10 +4,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { items } from "../../data/friend-or-foe";
 import Video from "../../components/video/Video";
 import axios from "../../utils/axios";
+import useCompleteGame from "../../hooks/useCompleteGame";
 
-const FriendOrFoeEnd = ({ finalUserId }) => {
+const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const completeGame = useCompleteGame();
 
   const answers = location.state?.answers;
   const isEnd = location.state?.isEnd;
@@ -22,21 +24,16 @@ const FriendOrFoeEnd = ({ finalUserId }) => {
     answers && answers.filter((answer) => answer.isFriend === true).length;
 
   useEffect(() => {
-    const completeGame = async () => {
-      try {
-        await axios.post("/user/complete-game", {
-          userId: finalUserId,
-          gameName: "second_game",
-        });
+    const markGameAsComplete = async () => {
+      const result = await completeGame(finalUserId, "second_game");
 
-        return;
-      } catch (err) {
-        console.log(err);
+      if (!result.success) {
+        console.error("Failed to complete game:", result.error);
       }
     };
 
-    completeGame();
-  }, [finalUserId]);
+    markGameAsComplete();
+  }, [finalUserId, completeGame]);
 
   return (
     <section className={style.end}>
@@ -71,6 +68,6 @@ const FriendOrFoeEnd = ({ finalUserId }) => {
       </div>
     </section>
   );
-};
+});
 
 export default FriendOrFoeEnd;

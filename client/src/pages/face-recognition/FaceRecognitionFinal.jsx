@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import style from "./FaceRecognitionFinal.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from "../../utils/axios";
 import Video from "../../components/video/Video";
 import {
   containerVariants,
@@ -12,11 +11,14 @@ import {
   animationDelays,
 } from "../../animations/face-recognition-final";
 import { motion } from "framer-motion";
+import useCompleteGame from "../../hooks/useCompleteGame";
 
-const FaceRecognitionFinal = ({ finalUserId }) => {
+const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
   const location = useLocation();
   const correct_item_count = location.state?.correct_item_count;
   const isWon = location.state?.isWon;
+
+  const completeGame = useCompleteGame();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,21 +28,16 @@ const FaceRecognitionFinal = ({ finalUserId }) => {
   }, [isWon, navigate]);
 
   useEffect(() => {
-    const completeGame = async () => {
-      try {
-        await axios.post("/user/complete-game", {
-          userId: finalUserId,
-          gameName: "first_game",
-        });
+    const markGameAsComplete = async () => {
+      const result = await completeGame(finalUserId, "first_game");
 
-        return;
-      } catch (err) {
-        console.log(err);
+      if (!result.success) {
+        console.error("Failed to complete game:", result.error);
       }
     };
 
-    completeGame();
-  }, [finalUserId]);
+    markGameAsComplete();
+  }, [finalUserId, completeGame]);
 
   return (
     <motion.section
@@ -110,6 +107,6 @@ const FaceRecognitionFinal = ({ finalUserId }) => {
       </div>
     </motion.section>
   );
-};
+});
 
 export default FaceRecognitionFinal;

@@ -10,7 +10,6 @@ import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { OBJECTS } from "../../data/contact-dots";
 import { useNavigate } from "react-router-dom";
-import { usePreloadNextImages } from "../../hooks/usePreloadNextImages";
 
 gsap.registerPlugin(Draggable);
 
@@ -45,7 +44,7 @@ const MAX_SNAP = 20;
 // Радиус "ручки" точки — держим её ПОЛНОСТЬЮ в пределах вьюпорта
 const HANDLE_R = window.innerWidth <= 768 ? 15 : 10;
 
-const ContactDotsGame = () => {
+const ContactDotsGame = React.memo(() => {
   const [current, setCurrent] = useState(getUniqueObject());
   const [progress, setProgress] = useState(1);
   const [completed, setCompleted] = useState(false);
@@ -636,6 +635,6 @@ const ContactDotsGame = () => {
       </div>
     </section>
   );
-};
+});
 
 export default ContactDotsGame;

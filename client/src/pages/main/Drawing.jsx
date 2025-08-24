@@ -7,7 +7,7 @@ import { faq } from "../../data/faq";
 import { motion, AnimatePresence } from "framer-motion";
 import Trailer from "./Trailer";
 
-const Drawing = () => {
+const Drawing = React.memo(() => {
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleFaq = (index) => {
@@ -85,6 +85,6 @@ const Drawing = () => {
       </div>
     </section>
   );
-};
+});
 
 export default Drawing;

@@ -21,7 +21,7 @@ const shuffleArray = (array) => {
   return arr;
 };
 
-const FaceRecognition = () => {
+const FaceRecognition = React.memo(() => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showImage, setShowImage] = useState(true);
   const [chosenFaces, setChosenFaces] = useState([]);
@@ -242,6 +242,6 @@ const FaceRecognition = () => {
       </div>
     </motion.section>
   );
-};
+});
 
 export default FaceRecognition;

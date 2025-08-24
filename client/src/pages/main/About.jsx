@@ -5,7 +5,7 @@ import _1kanal from "../../assets/icons/logos/1kanal-2.svg";
 import kinopoisk from "../../assets/icons/logos/kinopoisk-2.svg";
 import Video from "../../components/video/Video";
 
-const About = () => {
+const About = React.memo(() => {
   return (
     <section className={style.about}>
       <div className={style.about__wrapper}>
@@ -48,6 +48,6 @@ const About = () => {
       </div>
     </section>
   );
-};
+});
 
 export default About;

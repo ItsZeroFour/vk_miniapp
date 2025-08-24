@@ -3,7 +3,7 @@ import style from "./ContactDots.module.scss";
 import StarAnimation from "../../components/star-animation/StarAnimation";
 import { Link } from "react-router-dom";
 
-const ContactDots = () => {
+const ContactDots = React.memo(() => {
   return (
     <section className={style.contact_dots}>
       <div className="container">
@@ -33,6 +33,6 @@ const ContactDots = () => {
       </div>
     </section>
   );
-};
+});
 
 export default ContactDots;

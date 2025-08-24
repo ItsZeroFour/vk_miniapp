@@ -114,7 +114,6 @@ export async function exchangeCodeForToken(code, state, deviceId) {
     const expiresIn = parseInt(responseData.expires_in) || 86400;
     const expiresAt = new Date(Date.now() + expiresIn * 1000);
 
-    // Сохраняем токены в MongoDB
     const token = new Token({
       userId: responseData.user_id?.toString() || "unknown",
       accessToken: responseData.access_token,
@@ -140,7 +139,6 @@ export async function exchangeCodeForToken(code, state, deviceId) {
       error.response?.data || error.message
     );
 
-    // Удаляем сессию в случае ошибки
     await Session.deleteOne({ state });
 
     throw error;
@@ -159,7 +157,6 @@ export async function refreshToken(userId) {
   params.append("grant_type", "refresh_token");
   params.append("refresh_token", token.refreshToken);
 
-  // Добавляем device_id если он есть
   if (token.deviceId && token.deviceId !== "unknown") {
     params.append("device_id", token.deviceId);
     console.log("Using device_id for refresh:", token.deviceId);
@@ -178,7 +175,6 @@ export async function refreshToken(userId) {
       throw new Error("Invalid response data from VK ID");
     }
 
-    // Обновляем токены в MongoDB
     const expiresAt = new Date(
       Date.now() + parseInt(responseData.expires_in) * 1000
     );

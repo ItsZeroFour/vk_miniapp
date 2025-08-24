@@ -102,9 +102,6 @@ app.get("/auth/vk/callback", async (req, res) => {
 
       if (!user_id) {
         return res.redirect(process.env.CLIENT_URL);
-        // return res.status(404).json({
-        //   message: "Поле user_id обязательно",
-        // });
       }
 
       const findUser = await User.findOne({ user_id });
@@ -115,7 +112,6 @@ app.get("/auth/vk/callback", async (req, res) => {
         });
 
         await doc.save();
-        // const userData = user._doc;
         return res.redirect(
           `${process.env.CLIENT_URL}?userId=${user_id}&token=${tokens.accessToken}`
         );
@@ -130,8 +126,6 @@ app.get("/auth/vk/callback", async (req, res) => {
         message: "Не удалось аутентифицировать пользователя",
       });
     }
-
-    // return res.redirect(process.env.CLIENT_URL);
   } catch (error) {
     console.error("Auth callback error:", error.message);
 
