@@ -18,6 +18,7 @@ export const useGetUserInfo = (userId) => {
         }
       } catch (err) {
         setError(err);
+        setLoading(false);
       } finally {
         setLoading(false);
       }

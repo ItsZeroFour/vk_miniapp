@@ -65,10 +65,7 @@ function App() {
   const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, userData);
   const isShared = useRepostStatus(accessToken, finalUserId, userData);
 
-  const { userInfo, loading } = useGetUserInfo(finalUserId);
-
-  console.log(loading);
-  if (loading) return <Preloader />;
+  const { userInfo } = useGetUserInfo(finalUserId);
 
   return (
     <div className="App">
