@@ -2,7 +2,7 @@ import React from "react";
 import style from "./style.module.scss";
 import { useState, useRef, useEffect } from "react";
 
-const Video = () => {
+const Video = ({ src }) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
 
@@ -29,7 +29,7 @@ const Video = () => {
       {isVisible && (
         <iframe
           className={style.video}
-          src="https://vkvideo.ru/video_ext.php?oid=-211437014&id=456246667&hd=2&autoplay=1"
+          src={src || "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239021&hd=2&autoplay=1"}
           width="100%"
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
           frameborder="0"

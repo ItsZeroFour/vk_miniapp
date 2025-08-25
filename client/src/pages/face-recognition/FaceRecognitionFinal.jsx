@@ -39,6 +39,10 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
     markGameAsComplete();
   }, [finalUserId, completeGame]);
 
+  const videoSrc = isWon
+    ? "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239018&hd=2&autoplay=1"
+    : "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239020&hd=2&autoplay=1";
+
   return (
     <motion.section
       className={style.final}
@@ -82,7 +86,7 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
             animate="visible"
             transition={{ delay: animationDelays.video }}
           >
-            <Video />
+            <Video src={videoSrc} />
           </motion.div>
 
           <motion.div

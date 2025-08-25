@@ -33,6 +33,10 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
 
     markGameAsComplete();
   }, [finalUserId, completeGame]);
+  const videoSrc =
+    friendCount > items.length
+      ? "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239019&hd=2&autoplay=1"
+      : "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239020&hd=2&autoplay=1";
 
   return (
     <section className={style.end}>
@@ -56,7 +60,7 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
           </div>
 
           <div className={style.end__video}>
-            <Video />
+            <Video src={videoSrc} />
           </div>
 
           <div className={style.end__buttons}>

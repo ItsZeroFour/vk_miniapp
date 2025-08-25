@@ -5,13 +5,15 @@ import kinopoisk from "../../assets/icons/logos/kinopoisk-2.svg";
 import { Link } from "react-router-dom";
 import Video from "../../components/video/Video";
 
-const TrailerBottom = React.memo(() => {
+const TrailerBottom = React.memo(({ src }) => {
+  console.log(src);
+
   return (
     <div className={style.trailer}>
       <h3>«Август» в кино с 25 сентября</h3>
 
       <div className={style.trailer__video}>
-        <Video />
+        <Video src={src || "https://vkvideo.ru/video-232235882_456239021"} />
       </div>
 
       <Link className={style.trailer__tickets} to="/">

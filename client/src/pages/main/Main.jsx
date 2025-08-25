@@ -68,7 +68,7 @@ const Main = React.memo(
                 user={user}
                 finalUserId={finalUserId}
               />
-              <Trailer />
+              <Trailer src="https://vkvideo.ru/video-232235882_456239021" />
             </motion.div>
           );
         case "trailer":
