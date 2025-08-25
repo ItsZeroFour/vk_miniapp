@@ -69,80 +69,76 @@ function App() {
 
   return (
     <div className="App">
-      <Suspense fallback={<Preloader />}>
-        <Routes>
-          <Route
-            path="/*"
-            element={
-              <div className="game-content">
-                <Header finalUserId={finalUserId} user={userInfo} />
+      <Routes>
+        <Route
+          path="/*"
+          element={
+            <div className="game-content">
+              <Header finalUserId={finalUserId} user={userInfo} />
 
-                <div className="wrapper-container">
-                  <Routes>
-                    {/* РАСПОЗНАВАНИЕ ЛИЦ */}
-                    <Route
-                      path="/face-recognition"
-                      element={<FaceRecognitionHome />}
-                    />
-                    <Route
-                      path="/face-recognition/game"
-                      element={<FaceRecognition />}
-                    />
-                    <Route
-                      path="/face-recognition/final"
-                      element={
-                        <FaceRecognitionFinal finalUserId={finalUserId} />
-                      }
-                    />
+              <div className="wrapper-container">
+                <Routes>
+                  {/* РАСПОЗНАВАНИЕ ЛИЦ */}
+                  <Route
+                    path="/face-recognition"
+                    element={<FaceRecognitionHome />}
+                  />
+                  <Route
+                    path="/face-recognition/game"
+                    element={<FaceRecognition />}
+                  />
+                  <Route
+                    path="/face-recognition/final"
+                    element={<FaceRecognitionFinal finalUserId={finalUserId} />}
+                  />
 
-                    {/* СВОЙ-ЧУЖОЙ */}
-                    <Route path="/friend-or-foe" element={<FriendOrFoe />} />
-                    <Route
-                      path="/friend-or-foe/start"
-                      element={<FriendOrFoeGame />}
-                    />
-                    <Route
-                      path="/friend-or-foe/end"
-                      element={<FriendOrFoeEnd finalUserId={finalUserId} />}
-                    />
+                  {/* СВОЙ-ЧУЖОЙ */}
+                  <Route path="/friend-or-foe" element={<FriendOrFoe />} />
+                  <Route
+                    path="/friend-or-foe/start"
+                    element={<FriendOrFoeGame />}
+                  />
+                  <Route
+                    path="/friend-or-foe/end"
+                    element={<FriendOrFoeEnd finalUserId={finalUserId} />}
+                  />
 
-                    {/* ТОЧКИ КОНТАКТА */}
-                    <Route path="/contact-dots" element={<ContactDots />} />
-                    <Route
-                      path="/contact-dots/game"
-                      element={<ContactDotsGame />}
-                    />
-                    <Route
-                      path="/contact-dots/end"
-                      element={<ContactDotsEnd finalUserId={finalUserId} />}
-                    />
-                  </Routes>
-                </div>
-
-                <div className="volume">
-                  <ToggleVolume />
-                  <p>ВЫКЛЮЧИТЬ ЗВУК</p>
-                </div>
+                  {/* ТОЧКИ КОНТАКТА */}
+                  <Route path="/contact-dots" element={<ContactDots />} />
+                  <Route
+                    path="/contact-dots/game"
+                    element={<ContactDotsGame />}
+                  />
+                  <Route
+                    path="/contact-dots/end"
+                    element={<ContactDotsEnd finalUserId={finalUserId} />}
+                  />
+                </Routes>
               </div>
-            }
-          />
 
-          {/* Основная страница */}
-          <Route
-            path="/"
-            element={
-              <Main
-                isCommented={isCommented}
-                isSubscribe={isSubscribe}
-                isShared={isShared}
-                user_id={user_id}
-                user={userInfo}
-                finalUserId={finalUserId}
-              />
-            }
-          />
-        </Routes>
-      </Suspense>
+              <div className="volume">
+                <ToggleVolume />
+                <p>ВЫКЛЮЧИТЬ ЗВУК</p>
+              </div>
+            </div>
+          }
+        />
+
+        {/* Основная страница */}
+        <Route
+          path="/"
+          element={
+            <Main
+              isCommented={isCommented}
+              isSubscribe={isSubscribe}
+              isShared={isShared}
+              user_id={user_id}
+              user={userInfo}
+              finalUserId={finalUserId}
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 }

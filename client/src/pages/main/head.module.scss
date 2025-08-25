@@ -47,7 +47,7 @@
   p {
     font-size: 24px;
     font-weight: 500;
-    line-height: 56px;
+    line-height: 46px;
     text-align: center;
     color: #bbbbbb;
 
@@ -57,17 +57,36 @@
 
     @media (max-width: 825px) {
       font-size: 16px;
-      line-height: 40px;
+      line-height: 32px;
     }
 
     @media (max-width: 520px) {
       font-size: 14px;
+      line-height: auto;
     }
 
     // @media (max-width: 465px) {
     //   font-size: 14px;
     //   line-height: 30px;
     // }
+  }
+
+  .head__text__desctop {
+    @media (max-width: 425px) {
+      display: none;
+    }
+  }
+
+  .head__text__mobile {
+    display: none;
+
+    @media (max-width: 425px) {
+      display: block;
+    }
+  
+    @media (max-width: 355px) {
+      font-size: 13px;
+    }
   }
 }
 

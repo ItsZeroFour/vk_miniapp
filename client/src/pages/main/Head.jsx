@@ -28,8 +28,23 @@ const Head = React.memo(() => {
           >
             Курсы разведчика
           </motion.h1>
-          <motion.p initial="hidden" animate="visible" variants={textVariants}>
-            Каждое выполненное задание приближает героев к цели, а вас к
+          <motion.p
+            initial="hidden"
+            animate="visible"
+            variants={textVariants}
+            className={style.head__text__desctop}
+          >
+            Каждое выполненное задание приближает героев к цели, <br /> а вас к
+            заслуженной награде!
+          </motion.p>
+
+          <motion.p
+            initial="hidden"
+            animate="visible"
+            variants={textVariants}
+            className={style.head__text__mobile}
+          >
+            Каждое выполненное задание приближает героев <br /> к цели, а вас к
             заслуженной награде!
           </motion.p>
         </div>
