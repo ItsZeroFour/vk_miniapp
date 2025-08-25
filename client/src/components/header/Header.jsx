@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import style from "./header.module.scss";
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import ToggleVolume from "../toggle_volume/ToggleVolume";
 import { motion, AnimatePresence } from "framer-motion";
