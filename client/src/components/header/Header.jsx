@@ -5,13 +5,13 @@ import { Link, useNavigate } from "react-router-dom";
 import ToggleVolume from "../toggle_volume/ToggleVolume";
 import { motion, AnimatePresence } from "framer-motion";
 import useDisableScroll from "../../hooks/useDisableScroll";
-import partners from "../../assets/icons/partners.svg";
 import { menuVariants, itemVariants } from "../../animations/header";
 import TaskPopup from "../task-popup/TaskPopup";
 import useUser from "../../hooks/useUser";
 import useVKAuth from "../../hooks/useVKAuth";
 import { menuItems } from "../../data/menu";
 import useVkEnvironment from "../../hooks/useVkEnvironment";
+import { partners } from "../../data/partners";
 
 const Header = ({ finalUserId, user }) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -193,7 +193,11 @@ const Header = ({ finalUserId, user }) => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
             >
-              <img src={partners} alt="Партнеры" />
+              {partners.map(({ title, logo, link }) => (
+                <Link to={link} target="_blank">
+                  <img src={logo} alt={title} />
+                </Link>
+              ))}
             </motion.div>
           </motion.div>
         )}
