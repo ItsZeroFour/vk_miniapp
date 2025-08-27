@@ -41,15 +41,17 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
             сентября.
           </p>
 
-          <div className={style.contact_dots_end__video}>
-            <Video />
-          </div>
+          <div className={style.contact_dots_end__main}>
+            <div className={style.contact_dots_end__video}>
+              <Video />
+            </div>
 
-          <div className={style.contact_dots_end__buttons}>
-            <Link to="/contact-dots">НАЧАТЬ ИГРУ ЗАНОВО</Link>
-            <Link to="/" state={{ hiddenVideo: true }}>
-              ДРУГИЕ ИГРЫ
-            </Link>
+            <div className={style.contact_dots_end__buttons}>
+              <Link to="/contact-dots">НАЧАТЬ ИГРУ ЗАНОВО</Link>
+              <Link to="/" state={{ hiddenVideo: true }}>
+                ДРУГИЕ ИГРЫ
+              </Link>
+            </div>
           </div>
         </div>
       </div>

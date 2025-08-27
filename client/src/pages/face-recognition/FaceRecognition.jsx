@@ -119,7 +119,7 @@ const FaceRecognition = React.memo(() => {
               animate="visible"
               transition={{ delay: animationDelays.text }}
             >
-              Смотрите <br /> и запоминайте
+              Смотрите и запоминайте
             </motion.p>
           ) : (
             <motion.p

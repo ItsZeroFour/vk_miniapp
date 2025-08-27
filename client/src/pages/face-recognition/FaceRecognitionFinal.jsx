@@ -79,49 +79,51 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
             сложнее. Смотри «Август» в кино с 25 сентября.
           </motion.p>
 
-          <motion.div
-            className={style.final__container}
-            variants={videoVariants}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: animationDelays.video }}
-          >
-            {/* <Video src={videoSrc} /> */}
-            <iframe
-              width="100%"
-              height="305"
-              src="https://rutube.ru/play/embed/71b10747ad2423d3feabca5d47d8214d/"
-              frameBorder="0"
-              autoplay="1"
-              allow="clipboard-write; autoplay"
-              webkitAllowFullScreen
-              mozallowfullscreen
-              allowFullScreen
-            ></iframe>
-          </motion.div>
-
-          <motion.div
-            className={style.final__buttons}
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            transition={{ delay: animationDelays.buttons }}
-          >
-            <Link
-              className={style.final__buttons__first}
-              to="/face-recognition"
+          <div className={style.final__main}>
+            <motion.div
+              className={style.final__container}
+              variants={videoVariants}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: animationDelays.video }}
             >
-              Начать игру заново
-            </Link>
+              {/* <Video src={videoSrc} /> */}
+              <iframe
+                width="100%"
+                height="305"
+                src="https://rutube.ru/play/embed/71b10747ad2423d3feabca5d47d8214d/"
+                frameBorder="0"
+                autoplay="1"
+                allow="clipboard-write; autoplay"
+                webkitAllowFullScreen
+                mozallowfullscreen
+                allowFullScreen
+              ></iframe>
+            </motion.div>
 
-            <Link
-              className={style.final__buttons__last}
-              to="/"
-              state={{ hiddenVideo: true }}
+            <motion.div
+              className={style.final__buttons}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: animationDelays.buttons }}
             >
-              Другие игры
-            </Link>
-          </motion.div>
+              <Link
+                className={style.final__buttons__first}
+                to="/face-recognition"
+              >
+                Начать игру заново
+              </Link>
+
+              <Link
+                className={style.final__buttons__last}
+                to="/"
+                state={{ hiddenVideo: true }}
+              >
+                Другие игры
+              </Link>
+            </motion.div>
+          </div>
         </div>
       </div>
     </motion.section>

@@ -6,14 +6,19 @@
   gap: 20px;
 
   & > p {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 400;
     text-align: center;
     line-height: auto;
     width: 70%;
 
+    @media (max-width: 620px) {
+      font-size: 16px;
+    }
+
     @media (max-width: 480px) {
       width: 100%;
+      font-size: 14px;
     }
   }
 }
@@ -21,20 +26,31 @@
 .friend_or_foe__top {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
   margin-top: 15px;
 
   h1 {
-    font-size: 28px;
+    font-size: 64px;
     color: var(--color-orange);
     font-weight: 500;
     text-align: center;
+
+    @media (max-width: 1024px) {
+      font-size: 32px;
+    }
+
+    @media (max-width: 475px) {
+      font-size: 24px;
+    }
   }
 
   p {
-    font-size: 16px;
+    font-size: 24px;
     font-weight: 500;
     text-align: center;
+    width: 70%;
   }
 }
 
@@ -59,6 +75,8 @@
   background: none;
   border: 2px solid var(--color-white);
   columns: var(--color-white);
+
+  text-transform: uppercase;
 
   font-size: 20px;
   font-weight: 500;

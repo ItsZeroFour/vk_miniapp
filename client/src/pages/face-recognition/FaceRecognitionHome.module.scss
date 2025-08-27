@@ -10,11 +10,19 @@
   align-items: center;
 
   h1 {
-    font-size: 32px;
+    font-size: 64px;
     color: var(--color-orange);
     font-weight: 500;
     text-align: center;
     text-transform: uppercase;
+
+    @media (max-width: 1024px) {
+      font-size: 32px;
+    }
+
+    @media (max-width: 475px) {
+      font-size: 24px;
+    }
   }
 
   & > p {
@@ -26,6 +34,7 @@
 
     @media (max-width: 620px) {
       width: 100%;
+      font-size: 16px;
     }
 
     @media (max-width: 475px) {
@@ -35,7 +44,7 @@
 
   .home__link {
     width: 100%;
-    
+
     a {
       border: 2px solid var(--color-white);
       color: var(--color-white);
@@ -46,6 +55,7 @@
       display: block;
       text-align: center;
       margin-top: 40px;
+      text-transform: uppercase;
 
       transition: all 0.3s ease;
 
@@ -76,8 +86,8 @@
 
       img {
         display: block;
-        width: 94px;
-        height: 126px;
+        width: 124px;
+        height: 186px;
         object-fit: cover;
         border-radius: 4px;
 
@@ -92,8 +102,8 @@
   &::before {
     content: "";
     position: absolute;
-    width: 94px;
-    height: 126px;
+    width: 124px;
+    height: 186px;
     border: 2px solid var(--color-orange);
     border-radius: 4px;
     background: linear-gradient(
