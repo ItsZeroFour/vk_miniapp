@@ -140,6 +140,12 @@
   }
 }
 
+@media (min-height: 800px) {
+  .video {
+    transform: scale(1.4);
+  }
+}
+
 @media (max-width: 640px) {
   .video {
     object-position: 55%;

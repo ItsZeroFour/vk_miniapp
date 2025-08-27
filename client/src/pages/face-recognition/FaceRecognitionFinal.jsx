@@ -86,7 +86,18 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
             animate="visible"
             transition={{ delay: animationDelays.video }}
           >
-            <Video src={videoSrc} />
+            {/* <Video src={videoSrc} /> */}
+            <iframe
+              width="100%"
+              height="305"
+              src="https://rutube.ru/play/embed/71b10747ad2423d3feabca5d47d8214d/"
+              frameBorder="0"
+              autoplay="1"
+              allow="clipboard-write; autoplay"
+              webkitAllowFullScreen
+              mozallowfullscreen
+              allowFullScreen
+            ></iframe>
           </motion.div>
 
           <motion.div

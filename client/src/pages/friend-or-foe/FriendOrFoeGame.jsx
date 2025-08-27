@@ -98,39 +98,18 @@ const FriendOrFoeGame = React.memo(() => {
               <motion.button
                 className={style.task__popup__close}
                 onClick={closePopup}
-                {...buttonAnimation}
               ></motion.button>
-              <motion.p
-                className={style.task__popup__text__main}
-                {...contentAnimation}
-                transition={{
-                  ...contentAnimation.transition,
-                  delay: DELAYS.TEXT,
-                }}
-              >
-                {isCorrect ? "Верно!" : "Не верно"}
+              <motion.p className={style.task__popup__text__main}>
+                {isCorrect ? "Верно!" : "Неверно"}
               </motion.p>
-              <motion.p
-                className={style.task__popup__text}
-                {...contentAnimation}
-                transition={{
-                  ...contentAnimation.transition,
-                  delay: DELAYS.TEXT,
-                }}
-              >
+              <motion.p className={style.task__popup__text}>
                 Осталось {items.length - answers.length}{" "}
                 {getCorrectWordForm(items.length - answers.length)}
               </motion.p>
               <motion.button
                 className={style.task__popup__check}
                 onClick={() => setShowPopup(false)}
-                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                {...contentAnimation}
-                transition={{
-                  ...contentAnimation.transition,
-                  delay: DELAYS.CHECK_BUTTON,
-                }}
               >
                 Продолжить
               </motion.button>

@@ -4,6 +4,11 @@
 }
 
 .home__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   h1 {
     font-size: 32px;
     color: var(--color-orange);
@@ -17,6 +22,11 @@
     font-weight: 500;
     font-size: 20px;
     text-align: center;
+    width: 60%;
+
+    @media (max-width: 620px) {
+      width: 100%;
+    }
 
     @media (max-width: 475px) {
       font-size: 16px;
@@ -24,21 +34,25 @@
   }
 
   .home__link {
-    border: 2px solid var(--color-white);
-    color: var(--color-white);
-    background: none;
-    border-radius: 5px;
-    padding: 15px;
     width: 100%;
-    display: block;
-    text-align: center;
-    margin-top: 40px;
+    
+    a {
+      border: 2px solid var(--color-white);
+      color: var(--color-white);
+      background: none;
+      border-radius: 5px;
+      padding: 15px;
+      width: 100%;
+      display: block;
+      text-align: center;
+      margin-top: 40px;
 
-    transition: all 0.3s ease;
+      transition: all 0.3s ease;
 
-    &:hover {
-      background: var(--color-white);
-      color: #000;
+      &:hover {
+        background: var(--color-white);
+        color: #000;
+      }
     }
   }
 }
@@ -47,7 +61,7 @@
   width: 100%;
   overflow: hidden;
   position: relative;
-  margin-top: 10px;
+  margin-top: 20px;
 
   ul {
     display: flex;

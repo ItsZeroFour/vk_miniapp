@@ -16,28 +16,15 @@ gsap.registerPlugin(Draggable);
 // ---------- Вспомогательные функции ----------
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
-let usedIds = new Set();
+let currentIndex = 0;
 
-function getUniqueObject(currentId = null) {
-  let available = OBJECTS.filter((o) => !usedIds.has(o.id));
-
-  if (available.length === 0) {
-    usedIds.clear();
-    if (currentId !== null) {
-      usedIds.add(currentId);
-    }
-    available = OBJECTS.filter((o) => !usedIds.has(o.id));
+function getNextObject() {
+  if (currentIndex < OBJECTS.length) {
+    const next = OBJECTS[currentIndex];
+    currentIndex++;
+    return next;
   }
-
-  let next = available[Math.floor(Math.random() * available.length)];
-
-  if (currentId !== null && next.id === currentId && available.length > 1) {
-    available = available.filter((o) => o.id !== currentId);
-    next = available[Math.floor(Math.random() * available.length)];
-  }
-
-  usedIds.add(next.id);
-  return next;
+  return null;
 }
 
 function polyPath(pts) {
@@ -50,7 +37,7 @@ const MAX_SNAP = 20;
 const HANDLE_R = window.innerWidth <= 768 ? 15 : 10;
 
 const ContactDotsGame = React.memo(() => {
-  const [current, setCurrent] = useState(getUniqueObject());
+  const [current, setCurrent] = useState(() => getNextObject());
   const [progress, setProgress] = useState(1);
   const [completed, setCompleted] = useState(false);
   const [showFill, setShowFill] = useState(false);
@@ -177,18 +164,36 @@ const ContactDotsGame = React.memo(() => {
   }, [setContactPoints]);
 
   function initPointsForObject(obj) {
-    const nextContacts = obj.points.map((target) => {
-      const angle = Math.random() * Math.PI * 2;
-      const r = 35 + Math.random() * 35;
-      const rawLocal = {
-        x: target.x + Math.cos(angle) * r,
-        y: target.y + Math.sin(angle) * r,
-      };
-      return clampLocalWithCTM(rawLocal);
+    console.log(obj);
+
+    let freeCount = 1; // по умолчанию 1
+    if (obj.id === 2) freeCount = 3; // для второго объекта
+    if (obj.id === 3) freeCount = 4; // для третьего объекта
+
+    const total = obj.points.length;
+    const indices = [...Array(total).keys()];
+
+    const shuffled = indices.sort(() => Math.random() - 0.5);
+    const freeIndices = new Set(shuffled.slice(0, freeCount));
+
+    const nextLocks = Array(total).fill(-1);
+    const nextContacts = obj.points.map((target, i) => {
+      if (freeIndices.has(i)) {
+        const angle = Math.random() * Math.PI * 2;
+        const r = 35 + Math.random() * 35;
+        const rawLocal = {
+          x: target.x + Math.cos(angle) * r,
+          y: target.y + Math.sin(angle) * r,
+        };
+        return clampLocalWithCTM(rawLocal);
+      } else {
+        nextLocks[i] = i;
+        return clampLocalWithCTM({ x: target.x, y: target.y });
+      }
     });
 
     setContactPoints(nextContacts);
-    setLocks(Array(obj.points.length).fill(-1));
+    setLocks(nextLocks);
   }
 
   useLayoutEffect(() => {
@@ -239,7 +244,6 @@ const ContactDotsGame = React.memo(() => {
     let raf1 = 0;
     let raf2 = 0;
 
-    setLocks(Array(current.points.length).fill(-1));
     setShowFill(false);
     setZoomed(true);
     draggingIdxRef.current = -1;
@@ -249,17 +253,7 @@ const ContactDotsGame = React.memo(() => {
       if (gRef.current && gRef.current.getCTM) gRef.current.getCTM();
 
       raf2 = requestAnimationFrame(() => {
-        const nextContacts = current.points.map((target) => {
-          const angle = Math.random() * Math.PI * 2;
-          const r = 35 + Math.random() * 35;
-          const rawLocal = {
-            x: target.x + Math.cos(angle) * r,
-            y: target.y + Math.sin(angle) * r,
-          };
-          return clampLocalWithCTM(rawLocal);
-        });
-
-        setContactPoints(nextContacts);
+        initPointsForObject(current);
       });
     });
 
@@ -432,17 +426,15 @@ const ContactDotsGame = React.memo(() => {
 
   const handleNext = () => {
     if (completed) {
-      if (progress === 3) {
-        navigate("/contact-dots/end", {
-          state: { isCompleted: progress === 3 },
-        });
+      const next = getNextObject();
+
+      if (!next) {
+        navigate("/contact-dots/end", { state: { isCompleted: true } });
         return;
       }
 
-      const next = getUniqueObject(current.id);
-
       setCurrent(next);
-      setProgress((p) => (p < OBJECTS.length ? p + 1 : 1));
+      setProgress((p) => p + 1);
       setCompleted(false);
       setShowFill(false);
       setZoomed(true);
@@ -576,6 +568,23 @@ const ContactDotsGame = React.memo(() => {
                         strokeLinejoin="round"
                         opacity="0.95"
                       />
+
+                      {contactPoints.map((p, i) => {
+                        const bg = bgPoints[i];
+                        if (!p || !bg) return null;
+
+                        return (
+                          <line
+                            key={`line-${i}`}
+                            x1={p.x}
+                            y1={p.y}
+                            x2={bg.x}
+                            y2={bg.y}
+                            stroke="#f4a623"
+                            strokeWidth="1"
+                          />
+                        );
+                      })}
 
                       {/* Контактные точки (перетаскиваемые) */}
                       {contactPoints.map((p, i) => {
