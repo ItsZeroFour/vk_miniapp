@@ -65,7 +65,9 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
 
           <div className={style.end__buttons}>
             <Link to="/friend-or-foe/start">Начать игру заново</Link>
-            <Link to="/">Вернуться в главное меню</Link>
+            <Link to="/" state={{ hiddenVideo: true }}>
+              Вернуться в главное меню
+            </Link>
           </div>
         </div>
       </div>

@@ -47,7 +47,9 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
 
           <div className={style.contact_dots_end__buttons}>
             <Link to="/contact-dots">НАЧАТЬ ИГРУ ЗАНОВО</Link>
-            <Link to="/">ДРУГИЕ ИГРЫ</Link>
+            <Link to="/" state={{ hiddenVideo: true }}>
+              ДРУГИЕ ИГРЫ
+            </Link>
           </div>
         </div>
       </div>

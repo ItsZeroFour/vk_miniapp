@@ -9,7 +9,7 @@ import trailer from "../../assets/videos/trailer.mp4";
 import useDisableScroll from "../../hooks/useDisableScroll";
 import { motion, AnimatePresence } from "framer-motion";
 import Drawing from "./Drawing";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   videoVariants,
   buttonVariants,
@@ -23,10 +23,37 @@ const Main = React.memo(
     const [showVideo, setShowVideo] = useState(true);
     const [isClosing, setIsClosing] = useState(false);
     const [showPage, setShowPage] = useState("main");
+    const [hideButton, setHideButton] = useState(false);
 
     const videoRef = useRef(null);
 
     const location = useLocation();
+    const navigate = useNavigate();
+    const searchParams = new URLSearchParams(location.search);
+
+    useEffect(() => {
+      if (location.state?.hiddenVideo) {
+        setShowVideo(false);
+
+        if (location.state) {
+          navigate(location.pathname + location.search, {
+            replace: true,
+            state: {},
+          });
+        }
+      }
+    }, [location, navigate]);
+
+    useEffect(() => {
+      if (
+        searchParams.get("hide_video") &&
+        searchParams.get("hide_video") === "true"
+      ) {
+        setShowVideo(false);
+
+        navigate(location.pathname, { replace: true });
+      }
+    }, [searchParams]);
 
     useEffect(() => {
       if (
@@ -49,6 +76,16 @@ const Main = React.memo(
       }, 800);
     };
 
+    // console.log(user);
+
+    useEffect(() => {
+      if (user) {
+        setHideButton(true);
+      } else {
+        setHideButton(false);
+      }
+    }, [user]);
+
     const renderPage = () => {
       switch (showPage) {
         case "main":
@@ -60,7 +97,7 @@ const Main = React.memo(
               animate="animate"
               exit="exit"
             >
-              <Head />
+              <Head hideButton={hideButton} />
               <Task
                 isSubscribe={isSubscribe}
                 isCommented={isCommented}

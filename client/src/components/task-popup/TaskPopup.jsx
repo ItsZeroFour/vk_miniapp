@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "./style.module.scss";
 import success from "../../assets/icons/success.svg";
 import unsuccess from "../../assets/icons/unsuccess.svg";
@@ -28,6 +28,7 @@ const TaskPopup = ({
   const [completeSubscribe, setCompleteSubscribe] = useState(null);
 
   const subscriptionStatusHook = useSubscriptionStatus();
+  const wrapperRef = useRef(null);
 
   const checkSubscibe = async () => {
     setLoading(true);
@@ -55,11 +56,36 @@ const TaskPopup = ({
     window.location.href = `${process.env.REACT_APP_SERVER_URL}/auth/vk`;
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        onClose();
+      }
+    };
+
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    if (showPopup) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEsc);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEsc);
+    };
+  }, [showPopup, onClose]);
+
   return (
     <AnimatePresence>
       {showPopup && (
         <motion.div className={style.task__popup} {...popupAnimation}>
           <motion.div
+            ref={wrapperRef}
             className={style.task__popup__wrapper}
             {...wrapperAnimation}
           >
@@ -71,16 +97,16 @@ const TaskPopup = ({
                     setCompleteSubscribe(null);
                     onClose();
                   }}
-                  {...buttonAnimation}
+                  // {...buttonAnimation}
                 ></motion.button>
 
                 <motion.p
                   className={style.task__popup__text}
-                  {...contentAnimation}
-                  transition={{
-                    ...contentAnimation.transition,
-                    delay: DELAYS.TEXT,
-                  }}
+                  // {...contentAnimation}
+                  // transition={{
+                  // ...contentAnimation.transition,
+                  // delay: DELAYS.TEXT,
+                  // }}
                 >
                   Для выполнения задачи подпишитесь на{" "}
                   <Link to="/">Central Partnership</Link> в VK
@@ -97,7 +123,7 @@ const TaskPopup = ({
                         <motion.img
                           src={success}
                           alt="success"
-                          {...iconAnimation}
+                          // {...iconAnimation}
                         />
                         Задание выполнено
                       </p>
@@ -106,7 +132,7 @@ const TaskPopup = ({
                         <motion.img
                           src={unsuccess}
                           alt="unsuccess"
-                          {...iconAnimation}
+                          // {...iconAnimation}
                         />
                         Задание не выполнено
                       </p>
@@ -125,13 +151,13 @@ const TaskPopup = ({
                       : checkSubscibe
                   }
                   style={loading ? { opacity: 0.5 } : { opacity: 1 }}
-                  whileHover={{ scale: 1.05 }}
+                  // whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  {...contentAnimation}
-                  transition={{
-                    ...contentAnimation.transition,
-                    delay: DELAYS.CHECK_BUTTON,
-                  }}
+                  // {...contentAnimation}
+                  // transition={{
+                  //   ...contentAnimation.transition,
+                  //   delay: DELAYS.CHECK_BUTTON,
+                  // }}
                 >
                   {typeof completeSubscribe === "boolean"
                     ? "Закрыть"
@@ -145,7 +171,7 @@ const TaskPopup = ({
                 <motion.button
                   className={style.task__popup__close}
                   onClick={onClose}
-                  {...buttonAnimation}
+                  // {...buttonAnimation}
                 ></motion.button>
 
                 <motion.p
@@ -162,13 +188,13 @@ const TaskPopup = ({
                 <motion.button
                   className={style.task__popup__auth}
                   onClick={handleRedirect}
-                  whileHover={{ scale: 1.05 }}
+                  // whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  {...contentAnimation}
-                  transition={{
-                    ...contentAnimation.transition,
-                    delay: DELAYS.BUTTONS,
-                  }}
+                  // {...contentAnimation}
+                  // transition={{
+                  //   ...contentAnimation.transition,
+                  //   delay: DELAYS.BUTTONS,
+                  // }}
                 >
                   <img src={vklogo} alt="vklogo" /> Войти через VK
                 </motion.button>
@@ -176,13 +202,13 @@ const TaskPopup = ({
                 <motion.button
                   className={style.task__popup__continue}
                   onClick={continueOnClick}
-                  whileHover={{ scale: 1.05 }}
+                  // whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  {...contentAnimation}
-                  transition={{
-                    ...contentAnimation.transition,
-                    delay: DELAYS.CHECK_BUTTON,
-                  }}
+                  // {...contentAnimation}
+                  // transition={{
+                  //   ...contentAnimation.transition,
+                  //   delay: DELAYS.CHECK_BUTTON,
+                  // }}
                 >
                   Играть без призов
                 </motion.button>

@@ -9,7 +9,7 @@ import {
 } from "../../animations/main-head";
 import useVkEnvironment from "../../hooks/useVkEnvironment";
 
-const Head = React.memo(() => {
+const Head = React.memo(({ hideButton }) => {
   const { environment } = useVkEnvironment();
 
   const handleRedirect = () => {
@@ -56,17 +56,21 @@ const Head = React.memo(() => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              войДИТЕ для участия в конкурсе
+              {!hideButton
+                ? "войДИТЕ для участия в конкурсе"
+                : "ВЫ АВТОРИЗОВАНЫ"}
             </motion.h4>
-            <motion.button
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-              onClick={handleRedirect}
-            >
-              <img src={vklogo} alt="vklogo" />
-              Войти через VK
-            </motion.button>
+            {!hideButton && (
+              <motion.button
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+                onClick={handleRedirect}
+              >
+                <img src={vklogo} alt="vklogo" />
+                Войти через VK
+              </motion.button>
+            )}
           </div>
         )}
       </div>

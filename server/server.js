@@ -101,7 +101,7 @@ app.get("/auth/vk/callback", async (req, res) => {
       const user_id = tokens.userId;
 
       if (!user_id) {
-        return res.redirect(process.env.CLIENT_URL);
+        return res.redirect(`${process.env.CLIENT_URL}?hide_video=true`);
       }
 
       const findUser = await User.findOne({ user_id });
@@ -113,11 +113,11 @@ app.get("/auth/vk/callback", async (req, res) => {
 
         await doc.save();
         return res.redirect(
-          `${process.env.CLIENT_URL}?userId=${user_id}&token=${tokens.accessToken}`
+          `${process.env.CLIENT_URL}?userId=${user_id}&token=${tokens.accessToken}&hide_video=true`
         );
       } else {
         return res.redirect(
-          `${process.env.CLIENT_URL}?userId=${user_id}&token=${tokens.accessToken}`
+          `${process.env.CLIENT_URL}?userId=${user_id}&token=${tokens.accessToken}&hide_video=true`
         );
       }
     } catch (err) {
@@ -131,13 +131,13 @@ app.get("/auth/vk/callback", async (req, res) => {
 
     if (error.message.includes("state parameter")) {
       console.log("Session expired. Please try logging in again.");
-      return res.redirect(process.env.CLIENT_URL);
+      return res.redirect(`${process.env.CLIENT_URL}?hide_video=true`);
     } else if (error.response?.data) {
       console.log(`VK ID error: ${JSON.stringify(error.response.data)}`);
-      return res.redirect(process.env.CLIENT_URL);
+      return res.redirect(`${process.env.CLIENT_URL}?hide_video=true`);
     } else {
       console.log("Authentication failed. Please try again");
-      return res.redirect(process.env.CLIENT_URL);
+      return res.redirect(`${process.env.CLIENT_URL}?hide_video=true`);
     }
   }
 });

@@ -103,7 +103,11 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
               Начать игру заново
             </Link>
 
-            <Link className={style.final__buttons__last} to="/">
+            <Link
+              className={style.final__buttons__last}
+              to="/"
+              state={{ hiddenVideo: true }}
+            >
               Другие игры
             </Link>
           </motion.div>

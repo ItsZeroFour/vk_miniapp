@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, useSearchParams } from "react-router-dom";
 
 import useUser from "./hooks/useUser";
@@ -9,7 +9,6 @@ import useRepostStatus from "./hooks/useRepostStatus";
 
 import Header from "./components/header/Header";
 import ToggleVolume from "./components/toggle_volume/ToggleVolume";
-import Preloader from "./components/preloader/Preloader";
 import { useGetUserInfo } from "./hooks/useGetUserInfo";
 
 const FaceRecognition = React.lazy(() =>
@@ -65,7 +64,7 @@ function App() {
   const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, userData);
   const isShared = useRepostStatus(accessToken, finalUserId, userData);
 
-  const { userInfo } = useGetUserInfo(finalUserId);
+  const { loading, userInfo } = useGetUserInfo(finalUserId);
 
   return (
     <div className="App">
@@ -133,7 +132,7 @@ function App() {
               isSubscribe={isSubscribe}
               isShared={isShared}
               user_id={user_id}
-              user={userInfo}
+              user={!loading && userInfo}
               finalUserId={finalUserId}
             />
           }
