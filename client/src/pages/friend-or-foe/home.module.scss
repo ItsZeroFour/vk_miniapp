@@ -11,11 +11,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
   margin-top: 15px;
 
   h1 {
-    font-size: 64px;
+    font-size: 52px;
     color: var(--color-orange);
     font-weight: 500;
     text-align: center;
@@ -31,7 +31,7 @@
   }
 
   p {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 500;
     text-align: center;
     width: 70%;
@@ -39,7 +39,7 @@
 }
 
 .friend_or_foe__img {
-  width: 100%;
+  width: 95%;
   // width: 50%;
   // height: 100%;
 
@@ -68,7 +68,7 @@
   gap: 20px;
 
   & > p {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 400;
     text-align: center;
     line-height: auto;

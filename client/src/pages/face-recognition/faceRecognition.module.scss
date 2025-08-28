@@ -105,7 +105,7 @@
   justify-content: start;
   align-items: start;
 
-  margin-top: 80px;
+  margin-top: 20px;
 
   gap: 10px;
   border: 1px solid #303030;
@@ -120,12 +120,12 @@
 .face_recognition__faces {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
-  width: 423px;
+  gap: 5px;
+  width: 400px;
 
   .face_recognition__faces__img {
     width: 94px;
-    height: 136px;
+    height: 116px;
     border-radius: 4px;
     object-fit: cover;
 
