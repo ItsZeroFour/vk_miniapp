@@ -170,73 +170,79 @@ const FaceRecognition = React.memo(() => {
             </div>
           ) : (
             <motion.div
-              className={style.face_recognition__container}
+              className={`${style.face_recognition__container} ${style.face_recognition__container__main}`}
               variants={containerVariants}
               initial="hidden"
               animate="visible"
             >
-              <motion.ul
-                className={style.face_recognition__faces}
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                {random12.map((item, index) => {
-                  const isSelected = chosenFaces.includes(item);
-                  return (
-                    <motion.li
-                      key={index}
-                      onClick={() => toggleFaceSelection(item)}
-                      className={`${
-                        isSelected ? style.face_recognition__selected : ""
-                      }`}
-                      variants={faceItemVariants}
-                      initial="hidden"
-                      animate="visible"
-                      custom={index}
-                      whileHover="hover"
-                      whileTap="tap"
-                    >
-                      <img
-                        className={style.face_recognition__faces__img}
-                        src={item}
-                        alt=""
-                      />
-                    </motion.li>
-                  );
-                })}
-              </motion.ul>
-            </motion.div>
-          )}
+              <div>
+                <div className={style.face_recognition__items}>
+                  <p>{chosenFaces.length} / 3</p>
 
-          {!showImage && (
-            <motion.button
-              className={
-                chosenFaces.length < 3
-                  ? `${style.face_recognition__button}`
-                  : `${style.face_recognition__button} ${style.active}`
-              }
-              disabled={chosenFaces.length < 3}
-              onClick={() =>
-                navigate("/face-recognition/final", {
-                  state: {
-                    isWon: selected3.every((item) =>
-                      chosenFaces.includes(item)
-                    ),
-                    correct_item_count: selected3.filter((item) =>
-                      chosenFaces.includes(item)
-                    ).length,
-                  },
-                })
-              }
-              variants={buttonVariants}
-              initial="hidden"
-              whileHover={chosenFaces.length < 3 ? "disabled" : "hover"}
-              whileTap={chosenFaces.length < 3 ? "disabled" : "tap"}
-              animate={chosenFaces.length < 3 ? "disabled" : "visible"}
-            >
-              Проверить
-            </motion.button>
+                  <motion.ul
+                    className={style.face_recognition__faces}
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    {random12.map((item, index) => {
+                      const isSelected = chosenFaces.includes(item);
+                      return (
+                        <motion.li
+                          key={index}
+                          onClick={() => toggleFaceSelection(item)}
+                          className={`${
+                            isSelected ? style.face_recognition__selected : ""
+                          }`}
+                          variants={faceItemVariants}
+                          initial="hidden"
+                          animate="visible"
+                          custom={index}
+                          whileHover="hover"
+                          whileTap="tap"
+                        >
+                          <img
+                            className={style.face_recognition__faces__img}
+                            src={item}
+                            alt=""
+                          />
+                        </motion.li>
+                      );
+                    })}
+                  </motion.ul>
+                </div>
+
+                {!showImage && (
+                  <motion.button
+                    className={
+                      chosenFaces.length < 3
+                        ? `${style.face_recognition__button}`
+                        : `${style.face_recognition__button} ${style.active}`
+                    }
+                    disabled={chosenFaces.length < 3}
+                    onClick={() =>
+                      navigate("/face-recognition/final", {
+                        state: {
+                          isWon: selected3.every((item) =>
+                            chosenFaces.includes(item)
+                          ),
+                          correct_item_count: selected3.filter((item) =>
+                            chosenFaces.includes(item)
+                          ).length,
+                        },
+                      })
+                    }
+                    variants={buttonVariants}
+                    initial="hidden"
+                    // whileHover={chosenFaces.length < 3 ? "disabled" : "hover"}
+                    whileTap={chosenFaces.length < 3 ? "disabled" : "tap"}
+                    // animate={chosenFaces.length < 3 ? "disabled" : "visible"}
+                  >
+                    Проверить
+                  </motion.button>
+                )}
+              </div>
+            </motion.div>
           )}
         </div>
       </div>

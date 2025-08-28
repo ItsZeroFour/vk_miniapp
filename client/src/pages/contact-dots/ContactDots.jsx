@@ -16,19 +16,24 @@ const ContactDots = React.memo(() => {
             </p>
           </div>
 
-          <div className={style.contact_dots__animation}>
-            <div className={style.svg_wrap}>
-              <StarAnimation />
+          <div className={style.contact_dots__main}>
+            <div className={style.contact_dots__animation}>
+              <div className={style.svg_wrap}>
+                <StarAnimation />
+              </div>
+
+              <p className={style.contact_dots__text}>
+                И только тогда вам откроется полная картина.
+              </p>
+
+              <Link
+                className={style.contact_dots__link}
+                to="/contact-dots/game"
+              >
+                Начать игру
+              </Link>
             </div>
           </div>
-
-          <p className={style.contact_dots__text}>
-            И только тогда вам откроется полная картина.
-          </p>
-
-          <Link className={style.contact_dots__link} to="/contact-dots/game">
-            Начать игру
-          </Link>
         </div>
       </div>
     </section>

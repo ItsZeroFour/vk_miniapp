@@ -48,6 +48,10 @@
   align-items: center;
 }
 
+.face_recognition__container__main {
+  margin-top: 80px;
+}
+
 .face_recognition__images {
   position: relative;
   width: 100%;
@@ -70,10 +74,13 @@
 }
 
 .face_recognition__button {
+  width: 100%;
   padding: 15px;
   background: none;
   border: 2px solid var(--color-gray);
   border-radius: 4px;
+
+  text-transform: uppercase;
 
   font-weight: 500;
   font-family: "Roboto-flex", sans-serif;
@@ -81,7 +88,7 @@
 
   color: var(--color-gray);
 
-  margin-top: 15px;
+  margin-top: 25px;
   transition: all 0.2s ease;
 }
 
@@ -90,6 +97,21 @@
   border: 2px solid var(--color-white);
   color: #000;
   transition: all 0.2s ease;
+}
+
+.face_recognition__items {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+
+  gap: 10px;
+  border: 1px solid #303030;
+  padding: 10px;
+
+  & > p {
+    margin-top: 0;
+  }
 }
 
 .face_recognition__faces {

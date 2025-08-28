@@ -43,14 +43,14 @@
   }
 
   .home__link {
-    width: 100%;
+    // width: 100%;
 
     a {
       border: 2px solid var(--color-white);
       color: var(--color-white);
       background: none;
       border-radius: 5px;
-      padding: 15px;
+      padding: 15px 75px;
       width: 100%;
       display: block;
       text-align: center;

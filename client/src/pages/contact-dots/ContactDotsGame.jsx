@@ -462,56 +462,57 @@ const ContactDotsGame = React.memo(() => {
             <p>Соберите объект по точкам</p>
           </div>
 
-          <div className={style.game__main}>
-            <p>
-              {progress} / {OBJECTS.length}
-            </p>
+          <div className={style.game__content}>
+            <div className={style.game__main}>
+              <p>
+                {progress} / {OBJECTS.length}
+              </p>
 
-            <div className={style.game__canvas}>
-              <div className={style.responsiveWrapper}>
-                <div className={style.game__img__container}>
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  >
-                    <img
-                      className={style.game__image}
-                      src={current.img}
-                      alt={`Объект ${current.id}`}
+              <div className={style.game__canvas}>
+                <div className={style.responsiveWrapper}>
+                  <div className={style.game__img__container}>
+                    <div
                       style={{
+                        position: "relative",
                         width: "100%",
                         height: "100%",
-                        display: "block",
-                        transform: zoomed
-                          ? `scale(${current.zoom})`
-                          : "scale(1)",
-                        transformOrigin: `${
-                          (cx / current.svg_params.proportions.width) * 100
-                        }% ${
-                          (cy / current.svg_params.proportions.height) * 100
-                        }%`,
                       }}
-                    />
+                    >
+                      <img
+                        className={style.game__image}
+                        src={current.img}
+                        alt={`Объект ${current.id}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          display: "block",
+                          transform: zoomed
+                            ? `scale(${current.zoom})`
+                            : "scale(1)",
+                          transformOrigin: `${
+                            (cx / current.svg_params.proportions.width) * 100
+                          }% ${
+                            (cy / current.svg_params.proportions.height) * 100
+                          }%`,
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                {current && current.points && (
-                  <svg
-                    ref={svgRef}
-                    className={style.svg}
-                    viewBox={`0 0 ${current.svg_params.proportions.width} ${current.svg_params.proportions.height}`}
-                    preserveAspectRatio="xMidYMid meet"
-                    style={{ position: "absolute", top: 0 }}
-                  >
-                    <g
-                      ref={gRef}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        transform: `
+                  {current && current.points && (
+                    <svg
+                      ref={svgRef}
+                      className={style.svg}
+                      viewBox={`0 0 ${current.svg_params.proportions.width} ${current.svg_params.proportions.height}`}
+                      preserveAspectRatio="xMidYMid meet"
+                      style={{ position: "absolute", top: 0 }}
+                    >
+                      <g
+                        ref={gRef}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          transform: `
                           translate(${
                             completed
                               ? (current.svg_params.final.position.left / 445) *
@@ -539,112 +540,116 @@ const ContactDotsGame = React.memo(() => {
                               : current.svg_params.rotate
                           }deg)
                         `,
-                        transformOrigin: "center center",
-                        transition: "all 0.6s ease",
-                        touchAction: "none",
-                      }}
-                    >
-                      {/* Мелкие фоновые точки (цели) */}
-                      {bgPoints.map((p, i) =>
-                        p ? (
-                          <circle
-                            key={`bg-${i}`}
-                            cx={p.x}
-                            cy={p.y}
-                            r={2}
-                            fill="#ffffff"
-                            opacity="0.9"
-                          />
-                        ) : null
-                      )}
-
-                      {/* Текущая «нить» между контактными точками */}
-                      <path
-                        d={pathString}
-                        fill="none"
-                        stroke="#f4a623"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        opacity="0.95"
-                      />
-
-                      {contactPoints.map((p, i) => {
-                        const bg = bgPoints[i];
-                        if (!p || !bg) return null;
-
-                        return (
-                          <line
-                            key={`line-${i}`}
-                            x1={p.x}
-                            y1={p.y}
-                            x2={bg.x}
-                            y2={bg.y}
-                            stroke="#f4a623"
-                            strokeWidth="1"
-                          />
-                        );
-                      })}
-
-                      {/* Контактные точки (перетаскиваемые) */}
-                      {contactPoints.map((p, i) => {
-                        const bg = bgPoints[i];
-                        if (!p || !bg) return null;
-
-                        // Логика цвета
-                        let fillColor = "#1A1A1A";
-                        if (locks[i] >= 0) {
-                          fillColor = locks[i] === i ? "#f4a623" : "#FFFFFF";
-                        }
-
-                        return (
-                          <g key={`c-${i}`}>
+                          transformOrigin: "center center",
+                          transition: "all 0.6s ease",
+                          touchAction: "none",
+                        }}
+                      >
+                        {/* Мелкие фоновые точки (цели) */}
+                        {bgPoints.map((p, i) =>
+                          p ? (
                             <circle
+                              key={`bg-${i}`}
                               cx={p.x}
                               cy={p.y}
-                              r={HANDLE_R}
-                              fill={fillColor}
+                              r={2}
+                              fill="#ffffff"
+                              opacity="0.9"
+                            />
+                          ) : null
+                        )}
+
+                        {/* Текущая «нить» между контактными точками */}
+                        <path
+                          d={pathString}
+                          fill="none"
+                          stroke="#f4a623"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          opacity="0.95"
+                        />
+
+                        {contactPoints.map((p, i) => {
+                          const bg = bgPoints[i];
+                          if (!p || !bg) return null;
+
+                          return (
+                            <line
+                              key={`line-${i}`}
+                              x1={p.x}
+                              y1={p.y}
+                              x2={bg.x}
+                              y2={bg.y}
                               stroke="#f4a623"
                               strokeWidth="1"
-                              className={style.handle}
-                              onPointerDown={onPointerDown(i)}
                             />
-                          </g>
-                        );
-                      })}
+                          );
+                        })}
 
-                      {/* Итоговая заливка (как в StarAnimation) */}
-                      <defs>
-                        <linearGradient
-                          id="starGrad"
-                          x1="0"
-                          y1="0"
-                          x2="0"
-                          y2="1"
-                        >
-                          <stop offset="30%" stopColor="rgba(39,39,39,0)" />
-                          <stop offset="200%" stopColor="rgba(175,125,44,1)" />
-                        </linearGradient>
-                      </defs>
+                        {/* Контактные точки (перетаскиваемые) */}
+                        {contactPoints.map((p, i) => {
+                          const bg = bgPoints[i];
+                          if (!p || !bg) return null;
 
-                      {showFill && (
-                        <path
-                          d={polyPath(bgPoints)}
-                          fill="url(#starGrad)"
-                          stroke="none"
-                          className={style.fillFadeIn}
-                        />
-                      )}
-                    </g>
-                  </svg>
-                )}
+                          // Логика цвета
+                          let fillColor = "#1A1A1A";
+                          if (locks[i] >= 0) {
+                            fillColor = locks[i] === i ? "#f4a623" : "#FFFFFF";
+                          }
+
+                          return (
+                            <g key={`c-${i}`}>
+                              <circle
+                                cx={p.x}
+                                cy={p.y}
+                                r={HANDLE_R}
+                                fill={fillColor}
+                                stroke="#f4a623"
+                                strokeWidth="1"
+                                className={style.handle}
+                                onPointerDown={onPointerDown(i)}
+                              />
+                            </g>
+                          );
+                        })}
+
+                        {/* Итоговая заливка (как в StarAnimation) */}
+                        <defs>
+                          <linearGradient
+                            id="starGrad"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop offset="30%" stopColor="rgba(39,39,39,0)" />
+                            <stop
+                              offset="200%"
+                              stopColor="rgba(175,125,44,1)"
+                            />
+                          </linearGradient>
+                        </defs>
+
+                        {showFill && (
+                          <path
+                            d={polyPath(bgPoints)}
+                            fill="url(#starGrad)"
+                            stroke="none"
+                            className={style.fillFadeIn}
+                          />
+                        )}
+                      </g>
+                    </svg>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
-          <button className={style.nextBtn} onClick={handleNext}>
-            {progress === 3 ? "Завершить" : "Следующий объект"}
-          </button>
+            <button className={style.nextBtn} onClick={handleNext}>
+              {progress === 3 ? "Завершить" : "Следующий объект"}
+            </button>
+          </div>
         </div>
       </div>
     </section>

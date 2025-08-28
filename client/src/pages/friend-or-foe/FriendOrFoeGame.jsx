@@ -125,32 +125,34 @@ const FriendOrFoeGame = React.memo(() => {
             <p>Выберите и отметьте, кто из этих двоих - свой</p>
           </div>
 
-          <div className={style.game__main}>
-            <p>
-              {answers.length + 1} / {items.length}
-            </p>
+          <div className={style.game__content}>
+            <div className={style.game__main}>
+              <p>
+                {answers.length + 1} / {items.length}
+              </p>
 
-            <div className={style.game__main__cards}>
-              {currentPair.map((card, index) => (
-                <div
-                  key={index}
-                  className={`${style.card} ${
-                    selected === index ? style.active : ""
-                  }`}
-                  onClick={() => handleSelect(index)}
-                >
-                  <img src={card.img} alt="" />
-                </div>
-              ))}
+              <div className={style.game__main__cards}>
+                {currentPair.map((card, index) => (
+                  <div
+                    key={index}
+                    className={`${style.card} ${
+                      selected === index ? style.active : ""
+                    }`}
+                    onClick={() => handleSelect(index)}
+                  >
+                    <img src={card.img} alt="" />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <button
-            onClick={selected !== null ? handleSubmit : () => {}}
-            disabled={selected === null}
-          >
-            Отправить запрос в картотеку
-          </button>
+            <button
+              onClick={selected !== null ? handleSubmit : () => {}}
+              disabled={selected === null}
+            >
+              Отправить запрос в картотеку
+            </button>
+          </div>
         </div>
       </div>
     </section>
