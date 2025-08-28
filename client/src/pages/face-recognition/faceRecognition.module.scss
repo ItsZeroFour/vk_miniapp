@@ -6,7 +6,7 @@
   height: 100%;
 
   h1 {
-    font-size: 64px;
+    font-size: 56px;
     color: var(--color-orange);
     font-weight: 500;
     text-align: center;
@@ -105,8 +105,11 @@
   justify-content: start;
   align-items: start;
 
+  margin-top: 80px;
+
   gap: 10px;
   border: 1px solid #303030;
+  border-radius: 5px;
   padding: 10px;
 
   & > p {
@@ -117,12 +120,12 @@
 .face_recognition__faces {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  width: 360px;
+  gap: 15px;
+  width: 423px;
 
   .face_recognition__faces__img {
-    width: 84px;
-    height: 106px;
+    width: 94px;
+    height: 136px;
     border-radius: 4px;
     object-fit: cover;
 
@@ -130,6 +133,11 @@
       width: 64px;
       height: 96px;
     }
+  }
+
+  @media (max-width: 720px) {
+    gap: 8px;
+    width: 400px;
   }
 
   @media (max-width: 460px) {
