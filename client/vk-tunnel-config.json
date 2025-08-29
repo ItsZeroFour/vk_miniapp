@@ -1,4 +1,4 @@
 {
   "app_id": 53994595,
-  "endpoints": ["mobile", "web"]
+  "endpoints": ["mobile", "mvk", "web"]
 }
