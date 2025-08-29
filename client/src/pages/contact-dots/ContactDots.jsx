@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import style from "./ContactDots.module.scss";
-import StarAnimation from "../../components/star-animation/StarAnimation";
 import { Link } from "react-router-dom";
+import lottie from "lottie-web";
 
 const ContactDots = React.memo(() => {
+  const container = useRef(null);
+
+  useEffect(() => {
+    lottie.loadAnimation({
+      container: container.current,
+      renderer: "svg",
+      loop: true,
+      autoplay: true,
+      animationData: require("../../assets/animations/star.json"),
+    });
+
+    return () => lottie.destroy();
+  }, []);
+
   return (
     <section className={style.contact_dots}>
       <div className="container">
@@ -18,9 +32,11 @@ const ContactDots = React.memo(() => {
 
           <div className={style.contact_dots__main}>
             <div className={style.contact_dots__animation}>
-              <div className={style.svg_wrap}>
-                <StarAnimation />
-              </div>
+              <div
+                className={style.svg_wrap}
+                ref={container}
+                style={{ width: 300, height: 300 }}
+              ></div>
 
               <p className={style.contact_dots__text}>
                 И только тогда вам откроется полная картина.
