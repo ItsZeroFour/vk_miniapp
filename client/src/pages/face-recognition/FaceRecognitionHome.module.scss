@@ -4,12 +4,25 @@
 }
 
 .home__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   h1 {
-    font-size: 32px;
+    font-size: 64px;
     color: var(--color-orange);
     font-weight: 500;
     text-align: center;
     text-transform: uppercase;
+
+    @media (max-width: 1024px) {
+      font-size: 32px;
+    }
+
+    @media (max-width: 475px) {
+      font-size: 24px;
+    }
   }
 
   & > p {
@@ -17,6 +30,12 @@
     font-weight: 500;
     font-size: 20px;
     text-align: center;
+    width: 60%;
+
+    @media (max-width: 620px) {
+      width: 100%;
+      font-size: 16px;
+    }
 
     @media (max-width: 475px) {
       font-size: 16px;
@@ -24,21 +43,26 @@
   }
 
   .home__link {
-    border: 2px solid var(--color-white);
-    color: var(--color-white);
-    background: none;
-    border-radius: 5px;
-    padding: 15px;
-    width: 100%;
-    display: block;
-    text-align: center;
-    margin-top: 40px;
+    // width: 100%;
 
-    transition: all 0.3s ease;
+    a {
+      border: 2px solid var(--color-white);
+      color: var(--color-white);
+      background: none;
+      border-radius: 5px;
+      padding: 15px 75px;
+      width: 100%;
+      display: block;
+      text-align: center;
+      margin-top: 40px;
+      text-transform: uppercase;
 
-    &:hover {
-      background: var(--color-white);
-      color: #000;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: var(--color-white);
+        color: #000;
+      }
     }
   }
 }
@@ -47,7 +71,7 @@
   width: 100%;
   overflow: hidden;
   position: relative;
-  margin-top: 10px;
+  margin-top: 20px;
 
   ul {
     display: flex;
@@ -62,8 +86,8 @@
 
       img {
         display: block;
-        width: 94px;
-        height: 126px;
+        width: 124px;
+        height: 186px;
         object-fit: cover;
         border-radius: 4px;
 
@@ -78,8 +102,8 @@
   &::before {
     content: "";
     position: absolute;
-    width: 94px;
-    height: 126px;
+    width: 124px;
+    height: 186px;
     border: 2px solid var(--color-orange);
     border-radius: 4px;
     background: linear-gradient(

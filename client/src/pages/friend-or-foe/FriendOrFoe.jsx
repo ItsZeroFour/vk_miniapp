@@ -12,23 +12,25 @@ const FriendOrFoe = React.memo(() => {
             <p>Задача СМЕРШа – делать неочевидное очевидным</p>
           </div>
 
-          <img
-            className={style.friend_or_foe__img}
-            src="/images/friend-or-foe/8.webp"
-            alt="main img"
-          />
+          <div className={style.friend_or_foe__main}>
+            <img
+              className={style.friend_or_foe__img}
+              src="/images/friend-or-foe/8.webp"
+              alt="main img"
+            />
 
-          <p>
-            А вы сможете определить, кто здесь – свой, а кто – шпион?
-            Полагайтесь на интуицию!
-          </p>
+            <p>
+              А вы сможете определить, кто здесь – свой, а кто – шпион?
+              Полагайтесь на интуицию!
+            </p>
 
-          <Link
-            className={style.friend_or_foe__start}
-            to="/friend-or-foe/start"
-          >
-            Начать игру
-          </Link>
+            <Link
+              className={style.friend_or_foe__start}
+              to="/friend-or-foe/start"
+            >
+              Начать игру
+            </Link>
+          </div>
         </div>
       </div>
     </section>

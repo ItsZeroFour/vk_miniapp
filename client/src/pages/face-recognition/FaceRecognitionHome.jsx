@@ -107,8 +107,9 @@ const FaceRecognitionHome = React.memo(() => {
             whileHover="hover"
             whileTap="tap"
             transition={{ delay: animationDelays.button }}
+            className={style.home__link}
           >
-            <Link className={style.home__link} to="/face-recognition/game">
+            <Link to="/face-recognition/game">
               Начать игру
             </Link>
           </motion.div>

@@ -29,8 +29,14 @@
       background-size: cover;
 
       width: 350px;
-      height: 220px;
+      height: 190px;
+
       position: relative;
+
+      @media (max-width: 1520px) {
+        width: 250px;
+        height: 140px;
+      }
 
       h3,
       p {
@@ -44,6 +50,10 @@
         color: #a6a9a6;
 
         @media (max-width: 650px) {
+          font-size: 16px;
+        }
+
+        @media (max-width: 1520px) {
           font-size: 16px;
         }
       }
@@ -66,6 +76,7 @@
       img {
         padding: 10px;
         position: relative;
+        width: 27%;
         // position: absolute;
         // left: 65%;
         // top: 10%;
@@ -82,7 +93,7 @@
 
         margin-top: auto;
 
-        @media (max-width: 825px) {
+        @media (max-width: 1520px) {
           font-size: 16px;
         }
 
@@ -111,7 +122,7 @@
         z-index: 1;
       }
 
-      @media (max-width: 1120px) {
+      @media (max-width: 540px) {
         width: 45vw;
       }
 

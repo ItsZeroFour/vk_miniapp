@@ -68,7 +68,8 @@ const Task = React.memo(
       if (isSubscribe) {
         navigate(item.path);
       } else {
-        setShowPopup(true);
+        navigate(item.path);
+        // setShowPopup(true);
       }
     };
 

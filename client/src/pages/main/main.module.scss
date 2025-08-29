@@ -36,7 +36,7 @@
         button {
           background: none;
           color: var(--color-white);
-          font-size: 18px;
+          font-size: 16px;
           text-transform: uppercase;
           letter-spacing: 1.2px;
 
@@ -137,6 +137,12 @@
 @media (max-width: 1320px) {
   .video {
     transform: scale(1.35);
+  }
+}
+
+@media (min-height: 800px) {
+  .video {
+    transform: scale(1.4);
   }
 }
 

@@ -65,12 +65,16 @@ footer {
   max-width: 1120px;
   padding: 0 10px;
   margin: 0 auto;
+
+  @media (max-width: 1520px) {
+    max-width: 920px;
+  }
 }
 
 .wrapper-container {
   max-width: 845px;
   min-height: 100vh;
-  padding: 10px;
+  padding: 0px 10px 10px 10px;
   margin: 0 auto;
   // border: 1px solid #2e2e2e;
   border-radius: 2px;

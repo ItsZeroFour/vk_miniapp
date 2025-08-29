@@ -1,15 +1,15 @@
 .head {
-  margin-top: 60px;
+  margin-top: 40px;
 
   @media (max-width: 465px) {
-    margin-top: 40px;
+    margin-top: 20px;
   }
 }
 
 .head__wrapper {
   display: flex;
   flex-direction: column;
-  gap: 70px;
+  gap: 40px;
 
   @media (max-width: 465px) {
     gap: 30px;
@@ -23,12 +23,12 @@
   align-items: center;
 
   h1 {
-    font-size: 72px;
+    font-size: 54px;
     font-weight: 500;
     color: var(--color-orange);
 
     @media (max-width: 1020px) {
-      font-size: 56px;
+      font-size: 48px;
     }
 
     @media (max-width: 825px) {
@@ -45,9 +45,9 @@
   }
 
   p {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 500;
-    line-height: 46px;
+    line-height: 36px;
     text-align: center;
     color: #bbbbbb;
 
@@ -83,7 +83,7 @@
     @media (max-width: 425px) {
       display: block;
     }
-  
+
     @media (max-width: 355px) {
       font-size: 13px;
     }
@@ -99,23 +99,19 @@
   width: 100%;
 
   h4 {
-    font-size: 22px;
+    font-size: 20px;
     text-transform: uppercase;
     font-weight: 500;
 
     @media (max-width: 1020px) {
-      font-size: 20px;
-    }
-
-    @media (max-width: 825px) {
       font-size: 18px;
     }
 
-    @media (max-width: 465px) {
+    @media (max-width: 825px) {
       font-size: 16px;
     }
 
-    @media (max-width: 390px) {
+    @media (max-width: 465px) {
       font-size: 14px;
     }
   }
@@ -123,12 +119,12 @@
   button {
     margin-top: 20px;
     background: #0073f4;
-    width: 100%;
+    width: 80%;
     text-align: center;
     padding: 10px;
     border-radius: 10px;
 
-    font-size: 20px;
+    font-size: 18px;
     color: var(--color-white);
     font-weight: 500;
 
@@ -138,6 +134,11 @@
     gap: 20px;
 
     transition: all 0.2s ease;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
 
     &:hover {
       box-shadow: 0px 0px 15px rgba(0, 114, 244, 0.2);

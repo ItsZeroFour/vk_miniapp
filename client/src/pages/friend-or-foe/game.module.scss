@@ -1,24 +1,37 @@
 .game__top {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
   margin-top: 15px;
 
   h1 {
-    font-size: 28px;
+    font-size: 52px;
     color: var(--color-orange);
     font-weight: 500;
     text-align: center;
+    text-transform: uppercase;
 
-    @media (max-width: 520px) {
+    @media (max-width: 1024px) {
+      font-size: 32px;
+    }
+
+    @media (max-width: 475px) {
       font-size: 24px;
     }
   }
 
   p {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 500;
     text-align: center;
+    width: 55%;
+
+    @media (max-width: 810px) {
+      font-size: 20px;
+      width: 100%;
+    }
 
     @media (max-width: 520px) {
       font-size: 14px;
@@ -34,7 +47,7 @@
   width: 100%;
   padding: 15px;
   border: 1px solid #2c2c2c;
-  margin-top: 20px;
+  margin-top: 15px;
   border-radius: 10px;
 
   p {
@@ -53,11 +66,12 @@
   }
 
   .card {
-    width: 100%;
-    height: auto;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    width: fit-content;
+    height: fit-content;
 
     &.active {
       position: relative;
@@ -86,12 +100,11 @@
   }
 
   img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 5px;
     display: block;
+    width: 100%; // картинка занимает всю ширину карточки
+    aspect-ratio: 6 / 10; // прямоугольное соотношение (можно менять, например 16/9 или 4/5)
+    object-fit: cover; // сохраняем заполнение
+    border-radius: 5px;
 
     @media (max-width: 620px) {
       aspect-ratio: 1 / 2;
@@ -104,11 +117,17 @@
 }
 
 .game__wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   button {
     width: 100%;
-    margin-top: 60px;
+    margin-top: 20px;
     padding: 20px;
     background: none;
+    text-transform: uppercase;
     border-radius: 5px;
     border: 2px solid var(--color-white);
     color: var(--color-white);
@@ -290,6 +309,7 @@
   padding: 15px;
   border-radius: 5px;
   background: none;
+  text-transform: uppercase;
   border: 2px solid var(--color-white);
   color: var(--color-white);
   font-weight: 500;
@@ -299,5 +319,18 @@
   &:hover {
     background: var(--color-white);
     color: #000;
+  }
+}
+
+.game__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 60%;
+
+  @media (max-width: 720px) {
+    width: 100%;
   }
 }

@@ -34,7 +34,7 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
     markGameAsComplete();
   }, [finalUserId, completeGame]);
   const videoSrc =
-    friendCount > items.length
+    friendCount >= items.length
       ? "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239019&hd=2&autoplay=1"
       : "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239020&hd=2&autoplay=1";
 
@@ -59,15 +59,17 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
             )}
           </div>
 
-          <div className={style.end__video}>
-            <Video src={videoSrc} />
-          </div>
+          <div className={style.end__main}>
+            <div className={style.end__video}>
+              <Video src={videoSrc} />
+            </div>
 
-          <div className={style.end__buttons}>
-            <Link to="/friend-or-foe/start">Начать игру заново</Link>
-            <Link to="/" state={{ hiddenVideo: true }}>
-              Вернуться в главное меню
-            </Link>
+            <div className={style.end__buttons}>
+              <Link to="/friend-or-foe/start">Начать игру заново</Link>
+              <Link to="/" state={{ hiddenVideo: true }}>
+                Вернуться в главное меню
+              </Link>
+            </div>
           </div>
         </div>
       </div>
