@@ -50,6 +50,10 @@
 
 .face_recognition__container__main {
   margin-top: 80px;
+
+  @media (max-width: 620px) {
+    margin-top: 45px;
+  }
 }
 
 .face_recognition__images {

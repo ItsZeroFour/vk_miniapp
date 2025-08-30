@@ -57,6 +57,10 @@
 .friend_or_foe__main {
   width: 50%;
   height: 100%;
+
+  @media (max-width: 620px) {
+    width: 100%;
+  }
 }
 
 .friend_or_foe__main {
