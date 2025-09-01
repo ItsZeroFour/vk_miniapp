@@ -453,13 +453,15 @@ const ContactDotsGame = React.memo(() => {
     });
   }, [reclampAllPoints, waitForCTMStableAnd]);
 
+  console.log(completed, current);
+
   return (
     <section className={style.game}>
       <div className="container">
         <div className={style.game__wrapper}>
           <div className={style.game__top}>
             <h1>ТОЧКИ КОНТАКТА</h1>
-            <p>Соберите объект по точкам</p>
+            <p>{completed ? current.text : "Соберите объект по точкам"}</p>
           </div>
 
           <div className={style.game__content}>

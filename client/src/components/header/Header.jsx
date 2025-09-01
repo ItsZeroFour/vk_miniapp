@@ -75,15 +75,15 @@ const Header = ({ finalUserId, user }) => {
         <nav className={style.header__nav}>
           <ul>
             <li>
-              <Link to="/">СЕРГЕЙ БЕЗРУКОВ</Link>
+              <p>СЕРГЕЙ БЕЗРУКОВ</p>
             </li>
 
             <li>
-              <Link to="/">НИКИТА КОЛОГРИВЫЙ</Link>
+              <p>НИКИТА КОЛОГРИВЫЙ</p>
             </li>
 
             <li>
-              <Link to="/">ПАВЕЛ ТАБАКОВ</Link>
+              <p>ПАВЕЛ ТАБАКОВ</p>
             </li>
           </ul>
         </nav>

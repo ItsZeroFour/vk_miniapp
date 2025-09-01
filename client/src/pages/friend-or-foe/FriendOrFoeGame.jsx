@@ -99,9 +99,9 @@ const FriendOrFoeGame = React.memo(() => {
                 className={style.task__popup__close}
                 onClick={closePopup}
               ></motion.button>
-              <motion.p className={style.task__popup__text__main}>
+              {/* <motion.p className={style.task__popup__text__main}>
                 {isCorrect ? "Верно!" : "Неверно"}
-              </motion.p>
+              </motion.p> */}
               <motion.p className={style.task__popup__text}>
                 Осталось {items.length - answers.length}{" "}
                 {getCorrectWordForm(items.length - answers.length)}

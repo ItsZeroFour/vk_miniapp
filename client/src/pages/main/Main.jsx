@@ -18,8 +18,16 @@ import {
   navButtonVariants,
 } from "../../animations/main";
 
+function textToBoolean(text) {
+  return text.toLowerCase().trim() === "true";
+}
+
 const Main = React.memo(
   ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
+    // const [showVideo, setShowVideo] = useState(() => {
+    //   const savedValue = localStorage.getItem("showVideo");
+    //   return savedValue !== null ? JSON.parse(savedValue) : true;
+    // });
     const [showVideo, setShowVideo] = useState(true);
     const [isClosing, setIsClosing] = useState(false);
     const [showPage, setShowPage] = useState("main");
@@ -66,6 +74,10 @@ const Main = React.memo(
       }
     }, [location]);
 
+    useEffect(() => {
+      localStorage.setItem("showVideo", "false");
+    }, []);
+
     useDisableScroll(showVideo);
 
     const handleSkipTrailer = () => {
@@ -105,7 +117,7 @@ const Main = React.memo(
                 user={user}
                 finalUserId={finalUserId}
               />
-              <Trailer src="https://vkvideo.ru/video-232235882_456239021" />
+              <Trailer src="https://vkvideo.ru/video-217350474_456243968" />
             </motion.div>
           );
         case "trailer":
@@ -157,30 +169,32 @@ const Main = React.memo(
 
         <AnimatePresence mode="wait">
           {showVideo ? (
-            <motion.div
-              key="video-block"
-              className={style.main__video}
-              variants={videoVariants}
-              initial="initial"
-              animate={isClosing ? "exit" : "animate"}
-              exit="exit"
-            >
-              <video
-                ref={videoRef}
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                className={style.video}
+            <div className={style.main__video__container}>
+              <motion.div
+                key="video-block"
+                className={style.main__video}
+                variants={videoVariants}
+                initial="initial"
+                animate={isClosing ? "exit" : "animate"}
+                exit="exit"
               >
-                <source src={trailer} type="video/mp4" />
-              </video>
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className={style.video}
+                >
+                  <source src={trailer} type="video/mp4" />
+                </video>
+              </motion.div>
 
               <motion.button
-                variants={buttonVariants}
-                initial="initial"
-                animate="animate"
+                // variants={buttonVariants}
+                // initial="initial"
+                // animate="animate"
                 whileHover="hover"
                 whileTap="tap"
                 onClick={handleSkipTrailer}
@@ -188,7 +202,7 @@ const Main = React.memo(
               >
                 пропустить заставку
               </motion.button>
-            </motion.div>
+            </div>
           ) : (
             <motion.div
               key="content-block"

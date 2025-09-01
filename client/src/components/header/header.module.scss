@@ -42,14 +42,9 @@
       display: flex;
       gap: 20px;
       li {
-        a {
+        p {
           font-size: 14px;
           font-weight: 500;
-          transition: opacity 0.2s ease;
-
-          &:hover {
-            opacity: 0.4;
-          }
 
           @media (max-width: 465px) {
             font-size: 16px;
