@@ -12,6 +12,7 @@ import useVKAuth from "../../hooks/useVKAuth";
 import { menuItems } from "../../data/menu";
 import useVkEnvironment from "../../hooks/useVkEnvironment";
 import { partners } from "../../data/partners";
+import close from "../../assets/icons/close-2.svg";
 
 const Header = ({ finalUserId, user }) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -91,7 +92,10 @@ const Header = ({ finalUserId, user }) => {
         <div className={style.header__buttons}>
           <button>КУПИТЬ БИЛЕТЫ</button>
 
-          <button onClick={() => setOpenMenu(!openMenu)}></button>
+          {/* <button onClick={() => setOpenMenu(!openMenu)}></button> */}
+          <button onClick={() => navigate("/")}>
+            <img src={close} alt="close" />
+          </button>
         </div>
       </div>
 
