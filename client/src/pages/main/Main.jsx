@@ -24,11 +24,10 @@ function textToBoolean(text) {
 
 const Main = React.memo(
   ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
-    // const [showVideo, setShowVideo] = useState(() => {
-    //   const savedValue = localStorage.getItem("showVideo");
-    //   return savedValue !== null ? JSON.parse(savedValue) : true;
-    // });
-    const [showVideo, setShowVideo] = useState(true);
+    const [showVideo, setShowVideo] = useState(() => {
+      const savedValue = localStorage.getItem("showVideo");
+      return savedValue !== null ? JSON.parse(savedValue) : true;
+    });
     const [isClosing, setIsClosing] = useState(false);
     const [showPage, setShowPage] = useState("main");
     const [hideButton, setHideButton] = useState(false);
@@ -87,8 +86,6 @@ const Main = React.memo(
         setIsClosing(false);
       }, 800);
     };
-
-    // console.log(user);
 
     useEffect(() => {
       if (user) {
