@@ -31,7 +31,7 @@ const FaceRecognition = React.memo(() => {
 
   const allImages = useMemo(() => {
     return Array.from(
-      { length: 12 },
+      { length: 30 },
       (_, i) => `/images/face-recognition/${i + 1}.jpg`
     );
   }, []);

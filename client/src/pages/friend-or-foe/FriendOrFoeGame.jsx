@@ -89,7 +89,7 @@ const FriendOrFoeGame = React.memo(() => {
   return (
     <section className={style.game}>
       <AnimatePresence>
-        {showPopup && (
+        {currentIndex <= 1 && showPopup && (
           <motion.div className={style.task__popup} {...popupAnimation}>
             <motion.div
               className={style.task__popup__wrapper}

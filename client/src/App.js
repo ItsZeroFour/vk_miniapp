@@ -10,6 +10,7 @@ import useRepostStatus from "./hooks/useRepostStatus";
 import Header from "./components/header/Header";
 import ToggleVolume from "./components/toggle_volume/ToggleVolume";
 import { useGetUserInfo } from "./hooks/useGetUserInfo";
+import { OBJECTS } from "./data/contact-dots";
 
 const FaceRecognition = React.lazy(() =>
   import("./pages/face-recognition/FaceRecognition")
@@ -43,6 +44,15 @@ const ContactDotsEnd = React.lazy(() =>
 
 const Main = React.lazy(() => import("./pages/main/Main"));
 
+function usePreloadImages() {
+  useEffect(() => {
+    OBJECTS.forEach((obj) => {
+      const img = new Image();
+      img.src = obj.img;
+    });
+  }, []);
+}
+
 function App() {
   const { userId, userData } = useUser();
 
@@ -65,6 +75,8 @@ function App() {
   const isShared = useRepostStatus(accessToken, finalUserId, userData);
 
   const { loading, userInfo } = useGetUserInfo(finalUserId);
+
+  usePreloadImages();
 
   return (
     <div className="App">

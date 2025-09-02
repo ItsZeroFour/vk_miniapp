@@ -65,11 +65,10 @@ const Task = React.memo(
     const handleItemClick = (item, e) => {
       e.preventDefault();
 
-      if (isSubscribe) {
+      if (finalUserId) {
         navigate(item.path);
       } else {
-        navigate(item.path);
-        // setShowPopup(true);
+        setShowPopup(true);
       }
     };
 

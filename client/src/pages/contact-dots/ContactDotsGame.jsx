@@ -45,11 +45,13 @@ const ContactDotsGame = React.memo(() => {
   const [completed, setCompleted] = useState(false);
   const [showFill, setShowFill] = useState(false);
   const [zoomed, setZoomed] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const isDraggingRef = useRef(false);
   const svgRef = useRef(null);
   const gRef = useRef(null);
   const draggingIdxRef = useRef(-1);
+  const initialRender = useRef(true);
 
   const navigate = useNavigate();
 
@@ -92,6 +94,10 @@ const ContactDotsGame = React.memo(() => {
   useLayoutEffect(() => {
     localStorage.setItem("progress", progress);
   }, [progress]);
+
+  useLayoutEffect(() => {
+    initialRender.current = false;
+  }, []);
 
   // Кламп точки: работаем в экранных координатах, чтобы гарантированно держать "ручку" в пределах видимой области SVG
   const clampLocalWithCTM = (local) => {
@@ -504,6 +510,9 @@ const ContactDotsGame = React.memo(() => {
                           }% ${
                             (cy / current.svg_params.proportions.height) * 100
                           }%`,
+                          transition: initialRender.current
+                            ? "none"
+                            : "transform 0.6s ease",
                         }}
                       />
                     </div>
