@@ -16,7 +16,7 @@ gsap.registerPlugin(Draggable);
 // ---------- Вспомогательные функции ----------
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
-let currentIndex = 0;
+let currentIndex = parseInt(localStorage.getItem("progress") || "1", 10) - 1;
 
 function getNextObject() {
   if (currentIndex < OBJECTS.length) {
@@ -38,7 +38,10 @@ const HANDLE_R = window.innerWidth <= 768 ? 15 : 10;
 
 const ContactDotsGame = React.memo(() => {
   const [current, setCurrent] = useState(() => getNextObject());
-  const [progress, setProgress] = useState(1);
+  const [progress, setProgress] = useState(() => {
+    const saved = localStorage.getItem("progress");
+    return saved ? parseInt(saved, 10) : 1;
+  });
   const [completed, setCompleted] = useState(false);
   const [showFill, setShowFill] = useState(false);
   const [zoomed, setZoomed] = useState(true);
@@ -85,6 +88,10 @@ const ContactDotsGame = React.memo(() => {
     const localPt = pt.matrixTransform(invM);
     return { x: localPt.x, y: localPt.y };
   };
+
+  useLayoutEffect(() => {
+    localStorage.setItem("progress", progress);
+  }, [progress]);
 
   // Кламп точки: работаем в экранных координатах, чтобы гарантированно держать "ручку" в пределах видимой области SVG
   const clampLocalWithCTM = (local) => {
@@ -429,6 +436,7 @@ const ContactDotsGame = React.memo(() => {
       const next = getNextObject();
 
       if (!next) {
+        localStorage.removeItem("progress");
         navigate("/contact-dots/end", { state: { isCompleted: true } });
         return;
       }
