@@ -82,7 +82,7 @@ const Drawing = React.memo(() => {
             </ul>
           </div>
 
-          <Trailer />
+          <Trailer src="https://vkvideo.ru/video_ext.php?oid=-217350474&id=456243968&hd=2&autoplay=1" />
         </div>
       </div>
     </section>

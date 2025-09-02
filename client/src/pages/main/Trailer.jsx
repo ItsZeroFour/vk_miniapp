@@ -14,7 +14,12 @@ const TrailerBottom = React.memo(({ src }) => {
       <h3>«Август» в кино с 25 сентября</h3>
 
       <div className={style.trailer__video}>
-        <Video src={src || "https://vkvideo.ru/video-232235882_456239021"} />
+        <Video
+          src={
+            src ||
+            "https://vkvideo.ru/video_ext.php?oid=-217350474&id=456243968&hd=2&autoplay=1"
+          }
+        />
       </div>
 
       <Link className={style.trailer__tickets} to="/">
