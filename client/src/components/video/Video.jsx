@@ -25,7 +25,7 @@ const Video = ({ src }) => {
   }, []);
 
   return (
-    <div ref={ref}>
+    <div className={style.video__container} ref={ref}>
       {isVisible && (
         <iframe
           className={style.video}

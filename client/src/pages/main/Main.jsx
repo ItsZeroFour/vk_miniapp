@@ -114,7 +114,9 @@ const Main = React.memo(
                 user={user}
                 finalUserId={finalUserId}
               />
-              <Trailer src="https://vkvideo.ru/video_ext.php?oid=-217350474&id=456243968&hd=2&autoplay=1" />
+              <div className={style.trailer__container}>
+                <Trailer src="https://vkvideo.ru/video_ext.php?oid=-217350474&id=456243968&hd=2&autoplay=1" />
+              </div>
             </motion.div>
           );
         case "trailer":
