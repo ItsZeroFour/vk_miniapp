@@ -19,9 +19,21 @@ const Task = React.memo(({ user, finalUserId }) => {
   const { userId, userData } = useUser();
   const { accessToken } = useVKAuth(userId);
 
-  const isCommented = useCommentStatus(accessToken, finalUserId, user);
-  const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, user);
-  const isShared = useRepostStatus(accessToken, finalUserId, user);
+  const { isCommented, refresh: refreshComments } = useCommentStatus(
+    accessToken,
+    finalUserId,
+    userData
+  );
+  const { isShared, refresh: refreshRepost } = useRepostStatus(
+    accessToken,
+    finalUserId,
+    userData
+  );
+  const { isSubscribe, refresh: refreshSubscribe } = useSubscriptionStatus(
+    accessToken,
+    finalUserId,
+    userData
+  );
 
   const items = [
     {
@@ -48,21 +60,21 @@ const Task = React.memo(({ user, finalUserId }) => {
     {
       bg: "/images/main/tasks/bg/bg-4.webp",
       img: "/images/main/tasks/task-4.png",
-      isDone: isCommented,
+      isDone: user?.targeted_actions?.comment || isCommented,
       title: "вопрос \\ на засыпку",
       path: "https://vk.com/club232395157?from=groups&w=wall-232395157_1",
     },
     {
       bg: "/images/main/tasks/bg/bg-5.webp",
       img: "/images/main/tasks/task-5.png",
-      isDone: isSubscribe,
+      isDone: user?.targeted_actions?.subscribe || isSubscribe,
       title: "подписка на паблик",
       path: "https://vk.com/club232395157",
     },
     {
       bg: "/images/main/tasks/bg/bg-6.webp",
       img: "/images/main/tasks/task-6.png",
-      isDone: isShared,
+      isDone: user?.targeted_actions?.share || isShared,
       title: "репост записи в группе",
       path: "https://vk.com/club232395157?from=groups&w=wall-232395157_2",
     },

@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
 import { isVkMiniApp } from "../utils/isVkMiniApp";
 
 export default function useCommentStatus(accessToken, userId, userData) {
   const [commentStatus, setCommentStatus] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const refresh = useCallback(() => {
+    setRefreshKey((prev) => prev + 1);
+  }, []);
 
   useEffect(() => {
     if (userData?.targeted_actions?.comment) {
@@ -64,7 +69,7 @@ export default function useCommentStatus(accessToken, userId, userData) {
     }
 
     checkComments();
-  }, [accessToken, userId, userData, commentStatus]);
+  }, [accessToken, userId, userData, commentStatus, refreshKey]);
 
-  return commentStatus;
+  return { isCommented: commentStatus, refresh };
 }

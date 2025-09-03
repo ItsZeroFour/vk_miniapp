@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import style from "./style.module.scss";
 import { Link } from "react-router-dom";
 import useCommentStatus from "../../hooks/useCommentStatus";
 import useSubscriptionStatus from "../../hooks/useSubscriptionStatus";
 import useRepostStatus from "../../hooks/useRepostStatus";
 import success from "../../assets/icons/success.svg";
+import unsuccess from "../../assets/icons/unsuccess.svg";
 
 const TargetActionsPopup = ({
   targetAction,
@@ -14,13 +15,25 @@ const TargetActionsPopup = ({
   finalUserId,
   userData,
 }) => {
-  const isCommented = useCommentStatus(accessToken, finalUserId, userData);
-  const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, userData);
-  const isShared = useRepostStatus(accessToken, finalUserId, userData);
+  const { isCommented, refresh: refreshComments } = useCommentStatus(
+    accessToken,
+    finalUserId,
+    userData
+  );
+  const { isShared, refresh: refreshRepost } = useRepostStatus(
+    accessToken,
+    finalUserId,
+    userData
+  );
+  const { isSubscribe, refresh: refreshSubscribe } = useSubscriptionStatus(
+    accessToken,
+    finalUserId,
+    userData
+  );
+
+  const [checkResult, setCheckResult] = useState(null);
 
   const wrapperRef = useRef(null);
-
-  console.log(isCommented, isSubscribe, isShared);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -46,6 +59,19 @@ const TargetActionsPopup = ({
     };
   }, [targetAction, setOpenTargetActionModel]);
 
+  const handleCheck = () => {
+    if (targetAction === "comment") refreshComments();
+    if (targetAction === "subscribe") refreshSubscribe();
+    if (targetAction === "share") refreshRepost();
+
+    setCheckResult(true);
+  };
+
+  const isDone =
+    (targetAction === "comment" && isCommented) ||
+    (targetAction === "subscribe" && isSubscribe) ||
+    (targetAction === "share" && isShared);
+
   return (
     <section className={style.target_actions}>
       <div className="container">
@@ -55,9 +81,10 @@ const TargetActionsPopup = ({
             onClick={() => setOpenTargetActionModel("")}
           ></button>
 
-          {(targetAction === "comment" && !isCommented) ||
-          (targetAction === "subscribe" && !isSubscribe) ||
-          (targetAction === "share" && !isShared) ? (
+          {!checkResult &&
+          ((targetAction === "comment" && !isCommented) ||
+            (targetAction === "subscribe" && !isSubscribe) ||
+            (targetAction === "share" && !isShared)) ? (
             <>
               <p className={style.target_actions__text}>
                 {targetAction === "subscribe" ? (
@@ -87,14 +114,26 @@ const TargetActionsPopup = ({
                 )}
               </p>
 
-              <button className={style.target_actions__check}>Проверить</button>
+              <button
+                className={style.target_actions__check}
+                onClick={handleCheck}
+              >
+                Проверить
+              </button>
             </>
           ) : (
             <>
-              <p className={style.target_actions__success}>
-                <img src={success} alt="success" />
-                Задание выполнено
-              </p>
+              {checkResult && !isDone ? (
+                <p className={style.target_actions__unsuccess}>
+                  <img src={unsuccess} alt="unsuccess" />
+                  Задание не выполнено
+                </p>
+              ) : (
+                <p className={style.target_actions__success}>
+                  <img src={success} alt="success" />
+                  Задание выполнено
+                </p>
+              )}
             </>
           )}
         </div>

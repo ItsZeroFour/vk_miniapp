@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
 import { isVkMiniApp } from "../utils/isVkMiniApp";
 
 export default function useRepostStatus(accessToken, userId, userData) {
   const [isShared, setIsShared] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const refresh = useCallback(() => {
+    setRefreshKey((prev) => prev + 1);
+  }, []);
 
   useEffect(() => {
     if (userData?.targeted_actions?.share === true) {
@@ -77,7 +82,7 @@ export default function useRepostStatus(accessToken, userId, userData) {
     }
 
     checkRepost();
-  }, [userId, userData, isShared]);
+  }, [userId, userData, isShared, refreshKey]);
 
-  return isShared;
+  return { isShared, refresh };
 }

@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
 import { isVkMiniApp } from "../utils/isVkMiniApp";
 
 export default function useSubscriptionStatus(accessToken, userId, userData) {
   const [isSubscribe, setIsSubscribe] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const refresh = useCallback(() => {
+    setRefreshKey((prev) => prev + 1);
+  }, []);
 
   useEffect(() => {
     if (userData?.targeted_actions?.subscribe === true) {
@@ -60,7 +65,7 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
     }
 
     checkSubscription();
-  }, [accessToken, userId, userData, isSubscribe]);
+  }, [accessToken, userId, userData, isSubscribe, refreshKey]);
 
-  return isSubscribe;
+  return { isSubscribe, refresh };
 }
