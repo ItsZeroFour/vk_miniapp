@@ -146,6 +146,7 @@ function App() {
               user_id={user_id}
               user={!loading && userInfo}
               finalUserId={finalUserId}
+              accessToken={accessToken}
             />
           }
         />

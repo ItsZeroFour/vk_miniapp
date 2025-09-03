@@ -88,6 +88,92 @@ export const OBJECTS = [
 
   {
     id: 3,
+    img: "/images/contact-dots/2.webp",
+    text: "Война прошла, но следы её повсюду. И чёрный ворон (тоже артист, его зовут Бран) охраняет обломки прошлого.",
+    points: [
+      { x: 380, y: 130 },
+      { x: 345, y: 125 },
+      { x: 210, y: 158 },
+      { x: 150, y: 170 },
+      { x: 30, y: 225 },
+      { x: 40, y: 280 },
+      { x: 170, y: 220 },
+      { x: 235, y: 190 },
+      { x: 275, y: 250 },
+      { x: 275, y: 170 },
+      { x: 375, y: 150 },
+    ],
+    cx: 380,
+    cy: 240,
+    zoom: 1.7,
+
+    svg_params: {
+      position: {
+        top: 325,
+        left: -64,
+      },
+
+      proportions: {
+        width: 380,
+        height: 380,
+      },
+
+      scale: 1,
+      rotate: 10,
+
+      final: {
+        position: { top: 305, left: 310 },
+        proportions: { width: 100, height: 100 },
+        rotate: 10,
+        scale: 0.6,
+      },
+    },
+  },
+
+  {
+    id: 4,
+    img: "/images/contact-dots/4.webp",
+    text: "Война прошла, но следы её повсюду. И чёрный ворон (тоже артист, его зовут Бран) охраняет обломки прошлого.",
+    points: [
+      { x: 60, y: 95 },
+      { x: 280, y: 75 },
+      { x: 315, y: 95 },
+      { x: 300, y: 215 },
+      { x: 250, y: 225 },
+      { x: 215, y: 160 },
+      { x: 175, y: 160 },
+      { x: 160, y: 130 },
+      { x: 60, y: 135 },
+    ],
+    cx: 40,
+    cy: 240,
+    zoom: 4.5,
+
+    svg_params: {
+      position: {
+        top: 125,
+        left: -64,
+      },
+
+      proportions: {
+        width: 380,
+        height: 380,
+      },
+
+      scale: 1,
+      rotate: 10,
+
+      final: {
+        position: { top: 235, left: -530 },
+        proportions: { width: 100, height: 100 },
+        rotate: 10,
+        scale: 0.22,
+      },
+    },
+  },
+
+  {
+    id: 5,
     img: "/images/contact-dots/5.webp",
     text: "Война прошла, но следы её повсюду. И чёрный ворон (тоже артист, его зовут Бран) охраняет обломки прошлого.",
     points: [

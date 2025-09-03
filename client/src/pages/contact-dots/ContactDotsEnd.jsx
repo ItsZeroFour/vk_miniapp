@@ -43,7 +43,11 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
 
           <div className={style.contact_dots_end__main}>
             <div className={style.contact_dots_end__video}>
-              <Video />
+              <Video
+                src={
+                  "https://vkvideo.ru/video_ext.php?oid=-217350474&id=456243968&hd=2&autoplay=1"
+                }
+              />
             </div>
 
             <div className={style.contact_dots_end__buttons}>

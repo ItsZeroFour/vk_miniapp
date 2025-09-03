@@ -12,18 +12,13 @@ import Drawing from "./Drawing";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   videoVariants,
-  buttonVariants,
   contentVariants,
   pageVariants,
   navButtonVariants,
 } from "../../animations/main";
 
-function textToBoolean(text) {
-  return text.toLowerCase().trim() === "true";
-}
-
 const Main = React.memo(
-  ({ isSubscribe, isCommented, isShared, user, finalUserId }) => {
+  ({ isSubscribe, isCommented, isShared, user, finalUserId, accessToken }) => {
     const [showVideo, setShowVideo] = useState(() => {
       const savedValue = localStorage.getItem("showVideo");
       return savedValue !== null ? JSON.parse(savedValue) : true;
@@ -113,6 +108,7 @@ const Main = React.memo(
                 isShared={isShared}
                 user={user}
                 finalUserId={finalUserId}
+                accessToken={accessToken}
               />
               <div className={style.trailer__container}>
                 <Trailer src="https://vkvideo.ru/video_ext.php?oid=-217350474&id=456243968&hd=2&autoplay=1" />
