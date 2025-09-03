@@ -32,7 +32,7 @@ export async function checkComment(req, res) {
       {
         params: {
           owner_id: -Number(process.env.VK_GROUP_ID),
-          post_id: Number(process.env.VK_POST_ID),
+          post_id: Number(process.env.POST_ID_COMMENT),
           count: 100,
           v: "5.131",
           access_token: process.env.VK_SERVICE_TOKEN_AUTH,

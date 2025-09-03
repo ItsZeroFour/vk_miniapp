@@ -24,7 +24,7 @@ export default function useCommentStatus(accessToken, userId, userData) {
             method: "wall.getComments",
             params: {
               owner_id: -Number(process.env.REACT_APP_GROUP_ID),
-              post_id: Number(process.env.REACT_APP_POST_ID),
+              post_id: Number(process.env.REACT_APP_POST_ID_COMMENT),
               count: 100,
               v: "5.131",
               access_token: accessToken,

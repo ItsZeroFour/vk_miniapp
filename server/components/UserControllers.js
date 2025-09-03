@@ -39,8 +39,6 @@ export const updateTargetStatus = async (req, res) => {
 
     const acceptTarget = ["subscribe", "comment", "share"];
 
-    console.log(targetName, acceptTarget.includes(targetName));
-
     if (!targetName || !acceptTarget.includes(targetName)) {
       return res.status(401).json({
         message: "Некорректное имя целевого действия",
