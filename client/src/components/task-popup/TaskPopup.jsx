@@ -199,7 +199,7 @@ const TaskPopup = ({
                   <img src={vklogo} alt="vklogo" /> Войти через VK
                 </motion.button>
 
-                {/* <motion.button
+                <motion.button
                   className={style.task__popup__continue}
                   onClick={continueOnClick}
                   // whileHover={{ scale: 1.05 }}
@@ -211,7 +211,7 @@ const TaskPopup = ({
                   // }}
                 >
                   Играть без призов
-                </motion.button> */}
+                </motion.button>
               </>
             )}
           </motion.div>
