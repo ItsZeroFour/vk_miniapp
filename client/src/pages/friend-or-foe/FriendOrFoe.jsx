@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import style from "./home.module.scss";
 import { Link } from "react-router-dom";
-import video from "../../assets/videos/friend-or-foe.webm";
+import video from "../../assets/videos/friend-or-foe.mp4";
 
 const FriendOrFoe = React.memo(() => {
   const videoRef = useRef(null);
