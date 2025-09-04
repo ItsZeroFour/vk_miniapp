@@ -51,7 +51,12 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
             </div>
 
             <div className={style.contact_dots_end__buttons}>
-              <Link to="/contact-dots">НАЧАТЬ ИГРУ ЗАНОВО</Link>
+              <Link
+                to="/menu/hub/game2"
+                onClick={() => localStorage.removeItem("progress")}
+              >
+                НАЧАТЬ ИГРУ ЗАНОВО
+              </Link>
               <Link to="/" state={{ hiddenVideo: true }}>
                 ДРУГИЕ ИГРЫ
               </Link>

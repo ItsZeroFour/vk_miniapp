@@ -16,17 +16,6 @@ gsap.registerPlugin(Draggable);
 // ---------- Вспомогательные функции ----------
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
-let currentIndex = parseInt(localStorage.getItem("progress") || "1", 10) - 1;
-
-function getNextObject() {
-  if (currentIndex < OBJECTS.length) {
-    const next = OBJECTS[currentIndex];
-    currentIndex++;
-    return next;
-  }
-  return null;
-}
-
 function polyPath(pts) {
   return pts.length ? `M ${pts.map((p) => `${p.x},${p.y}`).join(" L ")} Z` : "";
 }
@@ -37,6 +26,19 @@ const MAX_SNAP = 20;
 const HANDLE_R = window.innerWidth <= 768 ? 15 : 10;
 
 const ContactDotsGame = React.memo(() => {
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    return parseInt(localStorage.getItem("progress") || "1", 10) - 1;
+  });
+
+  const getNextObject = useCallback(() => {
+    if (currentIndex < OBJECTS.length) {
+      const next = OBJECTS[currentIndex];
+      setCurrentIndex((i) => i + 1);
+      return next;
+    }
+    return null;
+  }, [currentIndex]);
+
   const [current, setCurrent] = useState(() => getNextObject());
   const [progress, setProgress] = useState(() => {
     const saved = localStorage.getItem("progress");
@@ -179,9 +181,11 @@ const ContactDotsGame = React.memo(() => {
   function initPointsForObject(obj) {
     console.log(obj);
 
-    let freeCount = 1; // по умолчанию 1
-    if (obj.id === 2) freeCount = 3; // для второго объекта
-    if (obj.id === 3) freeCount = 4; // для третьего объекта
+    let freeCount = 1;
+    if (obj.id === 2) freeCount = 3;
+    if (obj.id === 3) freeCount = 4;
+    if (obj.id === 4) freeCount = 3;
+    if (obj.id === 5) freeCount = 4;
 
     const total = obj.points.length;
     const indices = [...Array(total).keys()];
@@ -443,7 +447,7 @@ const ContactDotsGame = React.memo(() => {
 
       if (!next) {
         localStorage.removeItem("progress");
-        navigate("/contact-dots/end", { state: { isCompleted: true } });
+        navigate("/menu/hub/game2/end", { state: { isCompleted: true } });
         return;
       }
 
