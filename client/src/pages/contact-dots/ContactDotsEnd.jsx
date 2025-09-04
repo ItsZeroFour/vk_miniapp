@@ -52,7 +52,7 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
 
             <div className={style.contact_dots_end__buttons}>
               <Link
-                to="/menu/hub/game2"
+                to="/contact-dots"
                 onClick={() => localStorage.removeItem("progress")}
               >
                 НАЧАТЬ ИГРУ ЗАНОВО

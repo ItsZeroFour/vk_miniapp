@@ -447,7 +447,7 @@ const ContactDotsGame = React.memo(() => {
 
       if (!next) {
         localStorage.removeItem("progress");
-        navigate("/menu/hub/game2/end", { state: { isCompleted: true } });
+        navigate("/contact-dots/end", { state: { isCompleted: true } });
         return;
       }
 
