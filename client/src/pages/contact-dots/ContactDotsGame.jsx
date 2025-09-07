@@ -179,8 +179,6 @@ const ContactDotsGame = React.memo(() => {
   }, [setContactPoints]);
 
   function initPointsForObject(obj) {
-    console.log(obj);
-
     let freeCount = 1;
     if (obj.id === 2) freeCount = 3;
     if (obj.id === 3) freeCount = 4;
@@ -470,8 +468,6 @@ const ContactDotsGame = React.memo(() => {
       reclampAllPoints();
     });
   }, [reclampAllPoints, waitForCTMStableAnd]);
-
-  console.log(completed, current);
 
   return (
     <section className={style.game}>

@@ -7,8 +7,6 @@ import Video from "../../components/video/Video";
 import { partners2 } from "../../data/partners-2";
 
 const TrailerBottom = React.memo(({ src }) => {
-  console.log(src);
-
   return (
     <div className={style.trailer}>
       <h3>«Август» в кино с 25 сентября</h3>
