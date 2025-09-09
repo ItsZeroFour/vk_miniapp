@@ -191,10 +191,11 @@
   padding-left: 5px;
   padding-right: 5px;
 
-  p {
+  p,
+  a {
     font-size: 24px;
     font-weight: 500;
-    width: 80%;
+    // width: 80%;
 
     @media (max-width: 720px) {
       font-size: 20px;
@@ -211,9 +212,18 @@
 }
 
 .drawing__faq__answer {
-  p {
+  display: flex;
+  justify-content: start;
+  gap: 6px;
+  width: 80%;
+
+  p,
+  a {
     opacity: 0.7;
-    width: 80%;
+  }
+
+  a {
+    text-decoration: underline;
   }
 }
 

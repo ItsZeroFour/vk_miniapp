@@ -54,7 +54,7 @@ const Drawing = React.memo(() => {
             <h2>Частые вопросы</h2>
 
             <ul>
-              {faq.map(({ question, answer }, index) => (
+              {faq.map(({ question, answer, link }, index) => (
                 <li key={question} className={style.drawing__faq__item}>
                   <div className={style.drawing__faq__top}>
                     <p onClick={() => toggleFaq(index)}>{question}</p>
@@ -74,6 +74,15 @@ const Drawing = React.memo(() => {
                         transition={{ duration: 0.3 }}
                       >
                         <p>{answer}</p>
+                        {link && (
+                          <a
+                            href={link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            ссылке
+                          </a>
+                        )}
                       </motion.div>
                     )}
                   </AnimatePresence>
