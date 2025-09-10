@@ -14,6 +14,10 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
   useEffect(() => {
     if (isCompleted === undefined || (isCompleted === null && !isCompleted)) {
       return navigate("/");
+    } else {
+      if (window.ym) {
+        window.ym(103806192, "reachGoal", "game2_success");
+      }
     }
   }, [isCompleted, navigate]);
 
@@ -53,7 +57,13 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
             <div className={style.contact_dots_end__buttons}>
               <Link
                 to="/contact-dots"
-                onClick={() => localStorage.removeItem("progress")}
+                onClick={async () => {
+                  if (window.ym) {
+                    await window.ym(103806192, "reachGoal", "game2_replay");
+                  }
+
+                  localStorage.removeItem("progress");
+                }}
               >
                 НАЧАТЬ ИГРУ ЗАНОВО
               </Link>

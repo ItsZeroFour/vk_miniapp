@@ -16,6 +16,10 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
   useEffect(() => {
     if (!isEnd) {
       return navigate("/");
+    } else {
+      if (window.ym) {
+        window.ym(103806192, "reachGoal", "game3_success");
+      }
     }
   }, [isEnd, navigate]);
 
@@ -65,7 +69,16 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
             </div>
 
             <div className={style.end__buttons}>
-              <Link to="/friend-or-foe/start">Начать игру заново</Link>
+              <Link
+                to="/friend-or-foe/start"
+                onClick={async () => {
+                  if (window.ym) {
+                    await window.ym(103806192, "reachGoal", "game3_replay");
+                  }
+                }}
+              >
+                Начать игру заново
+              </Link>
               <Link to="/" state={{ hiddenVideo: true }}>
                 Вернуться в главное меню
               </Link>

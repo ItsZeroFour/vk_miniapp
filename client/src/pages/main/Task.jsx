@@ -141,7 +141,7 @@ const Task = React.memo(({ user, finalUserId }) => {
                   backgroundPosition: "center",
                   cursor: "pointer",
                 }}
-                onClick={(e) => {
+                onClick={async (e) => {
                   if (index < 3) {
                     setNavigateItemClick(path);
                     handleItemClick({ path }, e);
@@ -153,6 +153,28 @@ const Task = React.memo(({ user, finalUserId }) => {
                         ? "subscribe"
                         : "share"
                     );
+
+                    if (index === 3) {
+                      if (window.ym) {
+                        await window.ym(
+                          103806192,
+                          "reachGoal",
+                          "vkq_modal_open"
+                        );
+                      }
+                    } else if (index === 4) {
+                      if (window.ym) {
+                        await window.ym(
+                          103806192,
+                          "reachGoal",
+                          "vks_modal_open"
+                        );
+                      }
+                    } else {
+                      if (window.ym) {
+                        await window.ym(103806192, "reachGoal", "vkr_start");
+                      }
+                    }
                   }
                 }}
               >

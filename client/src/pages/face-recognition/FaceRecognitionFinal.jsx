@@ -39,6 +39,19 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
     markGameAsComplete();
   }, [finalUserId, completeGame]);
 
+  // YM
+  useEffect(() => {
+    if (isWon) {
+      if (window.ym) {
+        window.ym(103806192, "reachGoal", "game1_success");
+      }
+    } else {
+      if (window.ym) {
+        window.ym(103806192, "reachGoal", "game1_fail");
+      }
+    }
+  }, []);
+
   const videoSrc = isWon
     ? "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239018&hd=2&autoplay=1"
     : "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239020&hd=2&autoplay=1";
@@ -100,6 +113,11 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
               <Link
                 className={style.final__buttons__first}
                 to="/face-recognition"
+                onClick={async () => {
+                  if (window.ym) {
+                    await window.ym(103806192, "reachGoal", "game1_replay");
+                  }
+                }}
               >
                 Начать игру заново
               </Link>

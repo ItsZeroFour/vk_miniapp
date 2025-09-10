@@ -45,6 +45,11 @@ const ContactDots = React.memo(() => {
               <Link
                 className={style.contact_dots__link}
                 to="/contact-dots/game"
+                onClick={async () => {
+                  if (window.ym) {
+                    await window.ym(103806192, "reachGoal", "game2_start");
+                  }
+                }}
               >
                 Начать игру
               </Link>
