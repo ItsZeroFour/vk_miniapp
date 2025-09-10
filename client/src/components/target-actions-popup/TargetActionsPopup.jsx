@@ -59,10 +59,28 @@ const TargetActionsPopup = ({
     };
   }, [targetAction, setOpenTargetActionModel]);
 
-  const handleCheck = () => {
-    if (targetAction === "comment") refreshComments();
-    if (targetAction === "subscribe") refreshSubscribe();
-    if (targetAction === "share") refreshRepost();
+  const handleCheck = async () => {
+    if (targetAction === "comment") {
+      refreshComments();
+
+      if (window.ym) {
+        await window.ym(103806192, "reachGoal", "vkq_check_click");
+      }
+    }
+    if (targetAction === "subscribe") {
+      refreshSubscribe();
+
+      if (window.ym) {
+        await window.ym(103806192, "reachGoal", "vks_check_click");
+      }
+    }
+    if (targetAction === "share") {
+      refreshRepost();
+
+      if (window.ym) {
+        await window.ym(103806192, "reachGoal", "vkr_check_click");
+      }
+    }
 
     setCheckResult(true);
   };
@@ -71,6 +89,23 @@ const TargetActionsPopup = ({
     (targetAction === "comment" && isCommented) ||
     (targetAction === "subscribe" && isSubscribe) ||
     (targetAction === "share" && isShared);
+
+  // YM
+  useEffect(() => {
+    if (targetAction === "comment" && isDone) {
+      if (window.ym) {
+        window.ym(103806192, "reachGoal", "vkq_check_success");
+      }
+    } else if (targetAction === "subscribe" && isDone) {
+      if (window.ym) {
+        window.ym(103806192, "reachGoal", "vks_check_success");
+      }
+    } else if (targetAction === "share" && isDone) {
+      if (window.ym) {
+        window.ym(103806192, "reachGoal", "vkr_check_success");
+      }
+    }
+  }, [isDone]);
 
   return (
     <section className={style.target_actions}>
@@ -90,7 +125,19 @@ const TargetActionsPopup = ({
                 {targetAction === "subscribe" ? (
                   <>
                     Для выполнения задачи подпишитесь на{" "}
-                    <Link to={link} target="_blank">
+                    <Link
+                      to={link}
+                      target="_blank"
+                      onClick={async () => {
+                        if (window.ym) {
+                          await window.ym(
+                            103806192,
+                            "reachGoal",
+                            "vks_check_success"
+                          );
+                        }
+                      }}
+                    >
                       Central Partnership
                     </Link>{" "}
                     в VK
@@ -98,7 +145,19 @@ const TargetActionsPopup = ({
                 ) : targetAction === "comment" ? (
                   <>
                     Для выполнения задачи оставьте комментарий в{" "}
-                    <Link to={link} target="_blank">
+                    <Link
+                      to={link}
+                      target="_blank"
+                      onClick={async () => {
+                        if (window.ym) {
+                          await window.ym(
+                            103806192,
+                            "reachGoal",
+                            "vkq_open_post_click"
+                          );
+                        }
+                      }}
+                    >
                       Central Partnership
                     </Link>{" "}
                     в VK
@@ -106,7 +165,19 @@ const TargetActionsPopup = ({
                 ) : (
                   <>
                     Для выполнения задачи поделитесь записью{" "}
-                    <Link to={link} target="_blank">
+                    <Link
+                      to={link}
+                      target="_blank"
+                      onClick={async () => {
+                        if (window.ym) {
+                          await window.ym(
+                            103806192,
+                            "reachGoal",
+                            "vkr_check_success"
+                          );
+                        }
+                      }}
+                    >
                       Central Partnership
                     </Link>{" "}
                     в VK

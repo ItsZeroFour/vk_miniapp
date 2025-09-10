@@ -50,6 +50,11 @@ const FriendOrFoe = React.memo(() => {
             <Link
               className={style.friend_or_foe__start}
               to="/friend-or-foe/start"
+              onClick={async () => {
+                if (window.ym) {
+                  await window.ym(103806192, "reachGoal", "game3_start");
+                }
+              }}
             >
               Начать игру
             </Link>

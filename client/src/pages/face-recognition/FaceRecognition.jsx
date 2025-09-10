@@ -36,7 +36,11 @@ const FaceRecognition = React.memo(() => {
     );
   }, []);
 
-  const random12 = useMemo(() => {
+  const random12 = useMemo(async () => {
+    if (window.ym) {
+      await window.ym(103806192, "reachGoal", "game1_slideshow");
+    }
+
     return shuffleArray(allImages).slice(0, 12);
   }, [allImages]);
 
@@ -46,6 +50,10 @@ const FaceRecognition = React.memo(() => {
 
   useEffect(() => {
     if (currentIndex >= selected3.length) {
+      if (window.ym) {
+        window.ym(103806192, "reachGoal", "game1_portrait");
+      }
+
       setShowImage(false);
       return;
     }
@@ -220,7 +228,7 @@ const FaceRecognition = React.memo(() => {
                         : `${style.face_recognition__button} ${style.active}`
                     }
                     disabled={chosenFaces.length < 3}
-                    onClick={() =>
+                    onClick={async () => {
                       navigate("/face-recognition/final", {
                         state: {
                           isWon: selected3.every((item) =>
@@ -230,8 +238,16 @@ const FaceRecognition = React.memo(() => {
                             chosenFaces.includes(item)
                           ).length,
                         },
-                      })
-                    }
+                      });
+
+                      if (window.ym) {
+                        await window.ym(
+                          103806192,
+                          "reachGoal",
+                          "game1_portrait_check"
+                        );
+                      }
+                    }}
                     variants={buttonVariants}
                     initial="hidden"
                     // whileHover={chosenFaces.length < 3 ? "disabled" : "hover"}

@@ -109,7 +109,14 @@ const FaceRecognitionHome = React.memo(() => {
             transition={{ delay: animationDelays.button }}
             className={style.home__link}
           >
-            <Link to="/face-recognition/game">
+            <Link
+              to="/face-recognition/game"
+              onClick={async () => {
+                if (window.ym) {
+                  await window.ym(103806192, "reachGoal", "game1_start");
+                }
+              }}
+            >
               Начать игру
             </Link>
           </motion.div>
