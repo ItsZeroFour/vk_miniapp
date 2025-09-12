@@ -35,14 +35,15 @@
   margin-top: 30px;
   width: 100%;
   padding: 15px;
-  border: 2px solid var(--color-white);
+  border: 2px solid #f60001;
   border-radius: 5px;
+  color: #f60001;
 
   transition: all 0.2s ease;
 
   &:hover {
-    background: var(--color-white);
-    color: #000;
+    background: #f60001;
+    color: #fff;
   }
 }
 

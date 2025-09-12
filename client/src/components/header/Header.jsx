@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import style from "./header.module.scss";
 import logo from "../../assets/logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ToggleVolume from "../toggle_volume/ToggleVolume";
 import { motion, AnimatePresence } from "framer-motion";
 import useDisableScroll from "../../hooks/useDisableScroll";
@@ -23,6 +23,7 @@ const Header = ({ finalUserId, user }) => {
   const { isMiniApp } = useVkEnvironment();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { userId } = useUser();
   const { accessToken } = useVKAuth(userId);
@@ -90,10 +91,26 @@ const Header = ({ finalUserId, user }) => {
         </nav>
 
         <div className={style.header__buttons}>
-          <button>КУПИТЬ БИЛЕТЫ</button>
+          <button
+            onClick={() =>
+              (window.location.href = "https://www.kinopoisk.ru/film/1234808")
+            }
+          >
+            КУПИТЬ БИЛЕТЫ
+          </button>
 
           {/* <button onClick={() => setOpenMenu(!openMenu)}></button> */}
-          <button onClick={() => navigate("/")}>
+          <button
+            onClick={() => {
+              if (location.pathname === "/") {
+                window.location.href = "https://augustmovie.ru";
+              } else if (location.pathname === "/menu/hub") {
+                window.location.href = "https://augustmovie.ru";
+              } else {
+                window.location.href = "/";
+              }
+            }}
+          >
             <img src={close} alt="close" />
           </button>
         </div>

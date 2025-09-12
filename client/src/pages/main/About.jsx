@@ -24,7 +24,11 @@ const About = React.memo(() => {
           <Video src="https://vkvideo.ru/video_ext.php?oid=-217350474&id=456243968&hd=2&autoplay=1" />
         </div>
 
-        <Link className={style.about__tickets} to="/">
+        <Link
+          className={style.about__tickets}
+          to="https://www.kinopoisk.ru/film/1234808"
+          target="_blank"
+        >
           КУПИТЬ БИЛЕТЫ
         </Link>
 
