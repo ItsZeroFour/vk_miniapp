@@ -272,3 +272,13 @@
     gap: 10px;
   }
 }
+
+.header__menu__nav {
+  ul {
+    li {
+      a {
+        text-transform: uppercase;
+      }
+    }
+  }
+}

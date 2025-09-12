@@ -101,15 +101,16 @@ const Header = ({ finalUserId, user }) => {
 
           {/* <button onClick={() => setOpenMenu(!openMenu)}></button> */}
           <button
-            onClick={() => {
-              if (location.pathname === "/") {
-                window.location.href = "https://augustmovie.ru";
-              } else if (location.pathname === "/menu/hub") {
-                window.location.href = "https://augustmovie.ru";
-              } else {
-                window.location.href = "/";
-              }
-            }}
+            onClick={() => setOpenMenu(!openMenu)}
+            // onClick={() => {
+            //   if (location.pathname === "/") {
+            //     window.location.href = "https://augustmovie.ru";
+            //   } else if (location.pathname === "/menu/hub") {
+            //     window.location.href = "https://augustmovie.ru";
+            //   } else {
+            //     window.location.href = "/";
+            //   }
+            // }}
           >
             <img src={close} alt="close" />
           </button>
@@ -159,12 +160,12 @@ const Header = ({ finalUserId, user }) => {
                 </motion.ul>
               </nav>
             ) : (
-              <nav>
+              <nav className={style.header__menu__nav}>
                 <motion.ul>
                   {[
                     {
-                      title: "КОДЕКС СМЕРШ",
-                      path: "/",
+                      title: "Главная",
+                      path: "https://augustmovie.ru",
                     },
 
                     {
@@ -173,27 +174,27 @@ const Header = ({ finalUserId, user }) => {
                     },
 
                     {
-                      title: "КОМАНДА",
-                      path: "/",
+                      title: "Работа СМЕРШа",
+                      path: "https://augustmovie.ru/work.html",
                     },
 
                     {
-                      title: "МИССИЯ",
-                      path: "/",
+                      title: "Команда",
+                      path: "https://augustmovie.ru/team.html",
                     },
 
                     {
-                      title: "СЕКРЕТНЫЕ МАТЕРИАЛЫ",
-                      path: "/",
+                      title: "Миссия",
+                      path: "https://augustmovie.ru/mission.html",
                     },
 
                     {
-                      title: "КУПИТЬ БИЛЕТЫ",
-                      path: "/",
+                      title: "Секретные материалы",
+                      path: "https://augustmovie.ru/materials.html",
                     },
                   ].map(({ title, path }, index) => (
                     <motion.li key={index} variants={itemVariants}>
-                      {index === 1 ? (
+                      {index === -1 ? (
                         <button onClick={() => setShowOtherLinks(true)}>
                           {title}
                         </button>
