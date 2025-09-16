@@ -3,7 +3,7 @@ import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
 import { isVkMiniApp } from "../utils/isVkMiniApp";
 
-export default function useSubscriptionStatus(accessToken, userId, userData) {
+export function useSubscriptionStatus(accessToken, userId, userData) {
   const [isSubscribe, setIsSubscribe] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -72,7 +72,7 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
   return { isSubscribe, refresh };
 }
 
-export default function useCommentStatus(accessToken, userId, userData) {
+export function useCommentStatus(accessToken, userId, userData) {
   const [commentStatus, setCommentStatus] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -145,7 +145,6 @@ export default function useCommentStatus(accessToken, userId, userData) {
   return { isCommented: commentStatus, refresh };
 }
 
-
 export async function checkRepost(req, res) {
   try {
     const userId = req.userId;
@@ -204,4 +203,3 @@ export async function getToken(req, res) {
     return res.status(500).json({ error: "Ошибка получения токена" });
   }
 }
-
