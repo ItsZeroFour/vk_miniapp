@@ -29,7 +29,7 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
     const markGameAsComplete = async () => {
       if (isEnd) {
         const gameResults = {
-          friendCount: friendCount < items.length,
+          friendCount: friendCount,
           isEnd: isEnd,
         };
 
