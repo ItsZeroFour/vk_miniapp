@@ -3,10 +3,17 @@ import User from "../models/User.js";
 export const authUser = async (req, res) => {
   try {
     const user_id = req.body.user_id;
+    const sessionUserId = req.session.userId;
 
     if (!user_id) {
       return res.status(404).json({
         message: "Поле user_id обязательно",
+      });
+    }
+
+    if (sessionUserId && user_id !== sessionUserId.toString()) {
+      return res.status(403).json({
+        message: "Доступ запрещен. Нельзя получить данные другого пользователя",
       });
     }
 

@@ -11,7 +11,7 @@ import ensureAuth from "../utils/ensureAuth.js";
 
 const router = express.Router();
 
-router.post("/auth", authUser);
+router.post("/auth", ensureAuth, authUser);
 router.post("/update-target", updateTargetStatus);
 router.post("/complete-first-game", completeFirstGame);
 router.post("/complete-second-game", completeSecondGame);
