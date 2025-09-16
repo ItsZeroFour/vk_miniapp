@@ -1,4 +1,7 @@
 import crypto from "crypto";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 function verifyMiniAppSign(params) {
   if (!params.sign) return false;
@@ -10,7 +13,7 @@ function verifyMiniAppSign(params) {
     .join("&");
 
   const hash = crypto
-    .createHmac("sha256", process.env.VK_APP_SECRET)
+    .createHmac("sha256", process.env.VK_CLIENT_SECRET)
     .update(ordered)
     .digest()
     .toString("base64")
