@@ -37,7 +37,11 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
           subscribed = res.response === 1;
         } else {
           try {
-            const res = await axios.get(`/vk/check-subscribe`);
+            // Получаем launchParams для авторизации
+            const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+            const res = await axios.get(`/vk/check-subscribe`, {
+              params: launchParams // ← ДОБАВЛЕНО: передаем параметры авторизации
+            });
             subscribed = res.data.isMember === 1;
           } catch (error) {
             console.log(error);
@@ -49,10 +53,15 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.subscribe === false) {
             try {
-              await axios.post("/user/update-target", {
-                user_id: userId,
-                target_name: "subscribe",
-                target_value: true,
+              // Получаем launchParams для авторизации
+              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+              await axios.post("/user/update-target", {}, {
+                params: launchParams, // ← ДОБАВЛЕНО: передаем параметры авторизации
+                data: {
+                  user_id: userId,
+                  target_name: "subscribe",
+                  target_value: true,
+                }
               });
             } catch (error) {
               console.log(error);

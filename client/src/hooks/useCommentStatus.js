@@ -41,7 +41,11 @@ export default function useCommentStatus(accessToken, userId, userData) {
           );
         } else {
           try {
-            const res = await axios.get(`/vk/check-comment`);
+            // Получаем launchParams для авторизации
+            const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+            const res = await axios.get(`/vk/check-comment`, {
+              params: launchParams // ← ДОБАВЛЕНО: передаем параметры авторизации
+            });
             userHasCommented = res.data.hasCommented;
           } catch (error) {
             console.log(error);
@@ -53,10 +57,15 @@ export default function useCommentStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.comment === false) {
             try {
-              await axios.post("/user/update-target", {
-                user_id: userId,
-                target_name: "comment",
-                target_value: true,
+              // Получаем launchParams для авторизации
+              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+              await axios.post("/user/update-target", {}, {
+                params: launchParams, // ← ДОБАВЛЕНО: передаем параметры авторизации
+                data: {
+                  user_id: userId,
+                  target_name: "comment",
+                  target_value: true,
+                }
               });
             } catch (error) {
               console.log(error);

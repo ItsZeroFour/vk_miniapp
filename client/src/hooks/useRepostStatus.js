@@ -53,7 +53,11 @@ export default function useRepostStatus(accessToken, userId, userData) {
           });
         } else {
           try {
-            const res = await axios.get(`/vk/check-repost`);
+            // Получаем launchParams для авторизации
+            const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+            const res = await axios.get(`/vk/check-repost`, {
+              params: launchParams // ← ДОБАВЛЕНО: передаем параметры авторизации
+            });
             reposted = res.data.shared;
           } catch (error) {
             console.log(error);
@@ -65,10 +69,15 @@ export default function useRepostStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.share === false) {
             try {
-              await axios.post("/user/update-target", {
-                user_id: userId,
-                target_name: "share",
-                target_value: true,
+              // Получаем launchParams для авторизации
+              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+              await axios.post("/user/update-target", {}, {
+                params: launchParams, // ← ДОБАВЛЕНО: передаем параметры авторизации
+                data: {
+                  user_id: userId,
+                  target_name: "share",
+                  target_value: true,
+                }
               });
             } catch (error) {
               console.log(error);
