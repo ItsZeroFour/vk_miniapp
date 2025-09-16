@@ -76,6 +76,8 @@ function App() {
 
   const { loading, userInfo } = useGetUserInfo(finalUserId);
 
+  console.log(userInfo);
+
   usePreloadImages();
 
   return (
