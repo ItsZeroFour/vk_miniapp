@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "../utils/axios";
 
-export const useGetUserInfo = (userId) => {
+export const useGetUserInfo = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!userId) return;
-
     const getUser = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`/user/get/${userId}`);
+        const response = await axios.get(`/user/get`);
         if (response.status === 200) {
           setUserInfo(response.data);
         }
@@ -25,7 +23,7 @@ export const useGetUserInfo = (userId) => {
     };
 
     getUser();
-  }, [userId]);
+  }, []);
 
   return { userInfo, loading, error };
 };

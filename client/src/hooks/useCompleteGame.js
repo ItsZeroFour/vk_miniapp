@@ -2,10 +2,9 @@ import { useCallback } from "react";
 import axios from "../utils/axios";
 
 const useCompleteGame = () => {
-  const completeGame = useCallback(async (userId, gameName) => {
+  const completeGame = useCallback(async (gameName) => {
     try {
       await axios.post("/user/complete-game", {
-        userId,
         gameName,
       });
 

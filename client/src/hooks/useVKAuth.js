@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "../utils/axios";
 
-export default function useVKAuth(userId) {
+export default function useVKAuth() {
   const [accessToken, setAccessToken] = useState(null);
 
   useEffect(() => {
-    if (!userId) return;
-
     const authVk = async () => {
       await axios
-        .get(`/vk/get-token/${userId}`)
+        .get(`/vk/get-token`)
         .then((res) => setAccessToken(res.data.token))
         .catch(console.error);
     };
 
     authVk();
-  }, [userId]);
+  }, []);
 
   return { accessToken };
 }

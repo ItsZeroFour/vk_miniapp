@@ -23,7 +23,7 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      const result = await completeGame(finalUserId, "third_game");
+      const result = await completeGame("third_game");
 
       if (!result.success) {
         console.error("Failed to complete game:", result.error);

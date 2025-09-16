@@ -5,12 +5,13 @@ import {
   getUser,
   updateTargetStatus,
 } from "../components/UserControllers.js";
+import ensureAuth from "../utils/ensureAuth.js";
 
 const router = express.Router();
 
 router.post("/auth", authUser);
 router.post("/update-target", updateTargetStatus);
 router.post("/complete-game", completeGame);
-router.get("/get/:userId", getUser);
+router.get("/get/:userId", ensureAuth, getUser);
 
 export default router;

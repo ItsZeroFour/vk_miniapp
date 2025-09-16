@@ -53,7 +53,7 @@ export default function useRepostStatus(accessToken, userId, userData) {
           });
         } else {
           try {
-            const res = await axios.get(`/vk/check-repost/${userId}`);
+            const res = await axios.get(`/vk/check-repost`);
             reposted = res.data.shared;
           } catch (error) {
             console.log(error);

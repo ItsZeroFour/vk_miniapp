@@ -29,7 +29,7 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      const result = await completeGame(finalUserId, "first_game");
+      const result = await completeGame("first_game");
 
       if (!result.success) {
         console.error("Failed to complete game:", result.error);

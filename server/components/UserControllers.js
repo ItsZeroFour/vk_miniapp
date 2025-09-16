@@ -109,11 +109,11 @@ export const completeGame = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const user_id = req.params.userId;
+    const user_id = req.session.userId;
 
     if (!user_id) {
-      return res.status(404).json({
-        message: "Поле user_id обязательно",
+      return res.status(401).json({
+        message: "Пользователь не авторизован",
       });
     }
 
@@ -121,7 +121,7 @@ export const getUser = async (req, res) => {
 
     if (!user) {
       return res.status(404).json({
-        message: "Не удалось получить пользователя",
+        message: "Пользователь не найден",
       });
     }
 
@@ -129,7 +129,7 @@ export const getUser = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      message: "Не удалось пролучить пользователя",
+      message: "Не удалось получить пользователя",
     });
   }
 };

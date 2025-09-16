@@ -28,7 +28,7 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      const result = await completeGame(finalUserId, "second_game");
+      const result = await completeGame("second_game");
 
       if (!result.success) {
         console.error("Failed to complete game:", result.error);
