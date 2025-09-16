@@ -12,6 +12,6 @@ const router = express.Router();
 router.post("/auth", authUser);
 router.post("/update-target", updateTargetStatus);
 router.post("/complete-game", completeGame);
-router.get("/get/:userId", ensureAuth, getUser);
+router.get("/get", ensureAuth, getUser);
 
 export default router;
