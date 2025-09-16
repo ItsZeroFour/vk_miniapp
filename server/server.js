@@ -41,6 +41,12 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  console.log("RAW URL:", req.originalUrl);
+  console.log("QUERY PARSED:", req.query);
+  next();
+});
+
 /* VK AUTH */
 
 app.use(
