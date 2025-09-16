@@ -20,11 +20,9 @@ export default function useVKAuth() {
           await axios.post("/user/auth", {}, { params: launchParams });
         }
 
-        const tokenRes = await axios.get(
-          "/vk/get-token",
-          {},
-          { params: launchParams }
-        );
+        const tokenRes = await axios.get("/vk/get-token", {
+          params: launchParams,
+        });
 
         console.log(tokenRes);
 
