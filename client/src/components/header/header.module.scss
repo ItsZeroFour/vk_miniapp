@@ -94,27 +94,27 @@
   gap: 10px;
 
   button {
+    // &:first-child {
+    //   padding: 15px 30px;
+    //   border-radius: 5px;
+    //   border: 2px solid #f60001;
+    //   background: none;
+    //   color: #f60001;
+    //   font-size: 14px;
+
+    //   transition: all 0.2s ease;
+
+    //   &:hover {
+    //     background: #f60001;
+    //     color: #fff;
+    //   }
+
+    //   @media (max-width: 980px) {
+    //     display: none;
+    //   }
+    // }
+
     &:first-child {
-      padding: 15px 30px;
-      border-radius: 5px;
-      border: 2px solid #f60001;
-      background: none;
-      color: #f60001;
-      font-size: 14px;
-
-      transition: all 0.2s ease;
-
-      &:hover {
-        background: #f60001;
-        color: #fff;
-      }
-
-      @media (max-width: 980px) {
-        display: none;
-      }
-    }
-
-    &:last-child {
       width: 50px;
       height: 50px;
       border-radius: 4px;
