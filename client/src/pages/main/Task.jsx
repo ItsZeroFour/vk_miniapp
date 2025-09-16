@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import style from "./task.module.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import useDisableScroll from "../../hooks/useDisableScroll";
 import useUser from "../../hooks/useUser";
 import useVKAuth from "../../hooks/useVKAuth";
@@ -15,6 +15,7 @@ const Task = React.memo(({ user, finalUserId }) => {
   const [navigateItemClick, setNavigateItemClick] = useState("");
   const [openTargetActionModel, setOpenTargetActionModel] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { userId, userData } = useUser();
   const { accessToken } = useVKAuth(userId);
@@ -39,6 +40,8 @@ const Task = React.memo(({ user, finalUserId }) => {
     refreshComments();
     refreshRepost();
     refreshSubscribe();
+
+    console.log("refresh!");
   }, [location.pathname]);
 
   const items = [
