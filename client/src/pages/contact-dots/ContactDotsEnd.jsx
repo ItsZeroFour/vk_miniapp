@@ -12,6 +12,8 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
 
   const { isMiniApp } = useVkEnvironment();
 
+  console.log(isMiniApp);
+
   const isCompleted = location.state?.isCompleted;
 
   useEffect(() => {
