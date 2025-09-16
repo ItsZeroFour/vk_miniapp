@@ -52,7 +52,7 @@ export const useGetUserInfo = () => {
 
       getUser();
     }
-  }, []);
+  }, [isMiniApp]);
 
   return { userInfo, loading, error };
 };
