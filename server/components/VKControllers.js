@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function checkSubscribe(req, res) {
   try {
-    const userId = req.session.userId;
+    const userId = req.userId;
 
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -28,7 +28,9 @@ export async function checkSubscribe(req, res) {
 
 export async function checkComment(req, res) {
   try {
-    const userId = req.session.userId;
+    const userId = req.userId;
+
+    console.log(userId);
 
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -59,7 +61,7 @@ export async function checkComment(req, res) {
 
 export async function checkRepost(req, res) {
   try {
-    const userId = req.session.userId;
+    const userId = req.userId;
 
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -93,7 +95,7 @@ export async function checkRepost(req, res) {
 
 export async function getToken(req, res) {
   try {
-    const userId = req.session.userId;
+    const userId = req.userId;
 
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });

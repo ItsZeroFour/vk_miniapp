@@ -25,8 +25,6 @@ function verifyMiniAppSign(params) {
 }
 
 export default function ensureAuth(req, res, next) {
-  console.log("query: ", req.query.user_id);
-
   if (verifyMiniAppSign(req.query)) {
     req.userId = req.query.vk_user_id || req.query.user_id;
     return next();
