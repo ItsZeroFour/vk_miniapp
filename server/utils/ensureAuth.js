@@ -1,12 +1,12 @@
 import crypto from "crypto";
 
-function verifyMiniAppSign(query) {
-  if (!query.sign) return false;
+function verifyMiniAppSign(params) {
+  if (!params.sign) return false;
 
-  const ordered = Object.keys(query)
+  const ordered = Object.keys(params)
     .filter((k) => k.startsWith("vk_"))
     .sort()
-    .map((k) => `${k}=${query[k]}`)
+    .map((k) => `${k}=${params[k]}`)
     .join("&");
 
   const hash = crypto
@@ -18,7 +18,7 @@ function verifyMiniAppSign(query) {
     .replace(/\//g, "_")
     .replace(/=+$/, "");
 
-  return hash === query.sign;
+  return hash === params.sign;
 }
 
 export default function ensureAuth(req, res, next) {
@@ -27,7 +27,13 @@ export default function ensureAuth(req, res, next) {
 
   if (verifyMiniAppSign(req.query)) {
     req.userId = req.query.vk_user_id;
-    console.log("✅ VK Mini App userId:", req.userId);
+    console.log("✅ VK Mini App userId (query):", req.userId);
+    return next();
+  }
+
+  if (verifyMiniAppSign(req.body)) {
+    req.userId = req.body.vk_user_id;
+    console.log("✅ VK Mini App userId (body):", req.userId);
     return next();
   }
 
