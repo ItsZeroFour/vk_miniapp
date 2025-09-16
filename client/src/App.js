@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useSearchParams } from "react-router-dom";
+import { Routes, Route, useSearchParams, useLocation } from "react-router-dom";
 
 import useUser from "./hooks/useUser";
 import useVKAuth from "./hooks/useVKAuth";
@@ -57,6 +57,7 @@ function App() {
   const { userId, userData } = useUser();
 
   const [searchParams] = useSearchParams();
+  const location = useLocation();
 
   useEffect(() => {
     if (searchParams.get("userId")) {
@@ -74,11 +75,13 @@ function App() {
   const isSubscribe = useSubscriptionStatus(accessToken, finalUserId, userData);
   const isShared = useRepostStatus(accessToken, finalUserId, userData);
 
-  const { loading, userInfo } = useGetUserInfo(finalUserId);
-
-  console.log(userInfo);
+  const { loading, userInfo, refresh } = useGetUserInfo(finalUserId);
 
   usePreloadImages();
+
+  useEffect(() => {
+    refresh();
+  }, [location.pathname]);
 
   return (
     <div className="App">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "../utils/axios";
 import useVkEnvironment from "./useVkEnvironment";
 import bridge from "@vkontakte/vk-bridge";
@@ -7,8 +7,13 @@ export const useGetUserInfo = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const { isMiniApp } = useVkEnvironment();
+
+  const refresh = useCallback(() => {
+    setRefreshTrigger((prev) => prev + 1);
+  }, []);
 
   useEffect(() => {
     if (isMiniApp) {
@@ -52,7 +57,7 @@ export const useGetUserInfo = () => {
 
       getUser();
     }
-  }, [isMiniApp]);
+  }, [isMiniApp, refreshTrigger]);
 
-  return { userInfo, loading, error };
+  return { userInfo, loading, error, refresh };
 };
