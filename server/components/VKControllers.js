@@ -30,7 +30,10 @@ export async function checkComment(req, res) {
   try {
     const userId = req.userId;
 
-    console.log(userId);
+    console.log(
+      "========================USER ID========================",
+      userId
+    );
 
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
