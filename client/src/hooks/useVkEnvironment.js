@@ -1,9 +1,3 @@
-// React hook — определяет, где запущено приложение: в VK Mini App или в обычном WEB-браузере.
-// Алгоритм:
-// 1) Быстрая синхронная проверка по URL, referrer и userAgent.
-// 2) Попытка динамически импортировать @vkontakte/vk-bridge и инициализировать его — если это сработает, считаем, что это Mini App.
-// 3) Возвращает объект { environment, isMiniApp, isBridgeAvailable }.
-
 import { useEffect, useState, useRef } from "react";
 
 export default function useVkEnvironment() {
