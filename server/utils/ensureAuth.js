@@ -4,7 +4,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 function verifyMiniAppSign(params) {
-  if (!params.sign) return false;
+  console.log("ensureAuth query:", req.query);
+  console.log("ensureAuth body:", req.body);
+
+  if (!params || !params.sign) return false;
 
   const ordered = Object.keys(params)
     .filter((k) => k.startsWith("vk_"))
