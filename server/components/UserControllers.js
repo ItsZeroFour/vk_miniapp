@@ -79,30 +79,42 @@ export const updateTargetStatus = async (req, res) => {
   }
 };
 
-export const completeGame = async (req, res) => {
-  try {
-    const { userId, gameName } = req.body;
+export const completeFirstGame = async (req, res) => {
+  async function checkIfUserWon(current_item_count, isWon) {
+    if (current_item_count === 3 && isWon) {
+      return true;
+    }
 
-    if (!["first_game", "second_game", "third_game"].includes(gameName)) {
-      return res.status(400).json({ message: "Некорректное название игры" });
+    return false;
+  }
+
+  try {
+    const userId = req.session.userId;
+    const { current_item_count, isWon } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Не авторизован" });
+    }
+
+    const isWin = await checkIfUserWon(current_item_count, isWon);
+
+    if (!isWin) {
+      return res.status(403).json({ message: "Условия победы не выполнены." });
     }
 
     const updatedUser = await User.findOneAndUpdate(
       { user_id: userId },
-      { $set: { [`gamesComplete.${gameName}`]: true } },
+      { $set: { "gamesComplete.first_game": true } },
       { new: true }
     );
 
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Пользователь не найден" });
-    }
-
     res.json({
-      message: `Игра ${gameName} успешно завершена`,
+      success: true,
+      message: `Игра first_game успешно завершена!`,
       gamesComplete: updatedUser.gamesComplete,
     });
   } catch (error) {
-    console.error("Ошибка при обновлении игры:", error);
+    console.error("Ошибка при завершении first_game:", error);
     res.status(500).json({ message: "Ошибка сервера" });
   }
 };

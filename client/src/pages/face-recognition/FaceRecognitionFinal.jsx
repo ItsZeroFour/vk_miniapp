@@ -11,14 +11,13 @@ import {
   animationDelays,
 } from "../../animations/face-recognition-final";
 import { motion } from "framer-motion";
-import useCompleteGame from "../../hooks/useCompleteGame";
+import axios from "../../utils/axios";
 
 const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
   const location = useLocation();
   const correct_item_count = location.state?.correct_item_count;
   const isWon = location.state?.isWon;
 
-  const completeGame = useCompleteGame();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,15 +28,26 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      const result = await completeGame("first_game");
+      if (isWon) {
+        const gameResults = {
+          isWon: isWon,
+          current_item_count: correct_item_count,
+        };
 
-      if (!result.success) {
-        console.error("Failed to complete game:", result.error);
+        axios
+          .post("/user/complete-first-game", gameResults)
+          .then((response) => {
+            if (response.data.success) {
+              console.log("Победа засчитана");
+            } else {
+              console.log("Вы еще не победили");
+            }
+          });
       }
     };
 
     markGameAsComplete();
-  }, [finalUserId, completeGame]);
+  }, [finalUserId]);
 
   // YM
   useEffect(() => {

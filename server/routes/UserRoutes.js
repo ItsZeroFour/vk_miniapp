@@ -1,7 +1,7 @@
 import express from "express";
 import {
   authUser,
-  completeGame,
+  completeFirstGame,
   getUser,
   updateTargetStatus,
 } from "../components/UserControllers.js";
@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post("/auth", authUser);
 router.post("/update-target", updateTargetStatus);
-router.post("/complete-game", completeGame);
+router.post("/complete-first-game", completeFirstGame);
 router.get("/get", ensureAuth, getUser);
 
 export default router;
