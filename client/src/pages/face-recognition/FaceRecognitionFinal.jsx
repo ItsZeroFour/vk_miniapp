@@ -13,6 +13,7 @@ import {
 import { motion } from "framer-motion";
 import axios from "../../utils/axios";
 import bridge from "@vkontakte/vk-bridge";
+import useVkEnvironment from "../../hooks/useVkEnvironment";
 
 const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
   const location = useLocation();
@@ -20,6 +21,8 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
   const isWon = location.state?.isWon;
 
   const navigate = useNavigate();
+
+  const { isMiniApp } = useVkEnvironment();
 
   useEffect(() => {
     if (typeof isWon !== "boolean") {
@@ -29,7 +32,7 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      if (isEnd) {
+      if (isWon) {
         if (isMiniApp) {
           const launchParams = await bridge.send("VKWebAppGetLaunchParams");
 
@@ -51,8 +54,8 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
             });
         } else {
           const gameResults = {
-            friendCount: friendCount,
-            isEnd: isEnd,
+            isWon: isWon,
+            current_item_count: correct_item_count,
           };
 
           axios

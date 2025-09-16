@@ -4,10 +4,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Video from "../../components/video/Video";
 import axios from "../../utils/axios";
 import bridge from "@vkontakte/vk-bridge";
+import useVkEnvironment from "../../hooks/useVkEnvironment";
 
 const ContactDotsEnd = React.memo(({ finalUserId }) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { isMiniApp } = useVkEnvironment();
 
   const isCompleted = location.state?.isCompleted;
 
@@ -23,9 +26,11 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      if (isEnd) {
+      if (isCompleted) {
         if (isMiniApp) {
           const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+
+          console.log("Launch params:", launchParams);
 
           const gameResults = {
             isCompleted: isCompleted,
@@ -44,8 +49,7 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
             });
         } else {
           const gameResults = {
-            friendCount: friendCount,
-            isEnd: isEnd,
+            isCompleted: isCompleted,
           };
 
           axios
