@@ -691,7 +691,7 @@ const ContactDotsGame = React.memo(() => {
             </div>
 
             <button className={style.nextBtn} onClick={handleNext}>
-              {progress === 3 ? "Завершить" : "Следующий объект"}
+              {progress === 5 ? "Завершить" : "Следующий объект"}
             </button>
           </div>
         </div>
