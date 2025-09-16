@@ -32,13 +32,11 @@ export default function ensureAuth(req, res, next) {
 
   if (verifyMiniAppSign(req.body)) {
     req.userId = req.body.vk_user_id || req.query.user_id;
-    console.log("✅ VK Mini App userId (body):", req.userId);
     return next();
   }
 
   if (req.session && req.session.userId) {
     req.userId = req.session.userId;
-    console.log("✅ Web user via session:", req.userId);
     return next();
   }
 

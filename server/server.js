@@ -41,12 +41,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  console.log("RAW URL:", req.originalUrl);
-  console.log("QUERY PARSED:", req.query);
-  next();
-});
-
 /* VK AUTH */
 
 app.use(
@@ -102,7 +96,7 @@ app.get("/auth/vk/callback", async (req, res) => {
     req.session.accessToken = tokens.accessToken;
 
     console.log("Successfully authenticated user:", tokens.userId);
-    console.log('Saved to session:', req.session.userId);
+    console.log("Saved to session:", req.session.userId);
 
     try {
       const user_id = tokens.userId;
