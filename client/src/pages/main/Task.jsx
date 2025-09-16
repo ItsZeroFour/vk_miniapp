@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import style from "./task.module.scss";
 import { useNavigate } from "react-router-dom";
 import useDisableScroll from "../../hooks/useDisableScroll";
@@ -34,6 +34,12 @@ const Task = React.memo(({ user, finalUserId }) => {
     finalUserId,
     userData
   );
+
+  useEffect(() => {
+    refreshComments();
+    refreshRepost();
+    refreshSubscribe();
+  }, []);
 
   const items = [
     {
