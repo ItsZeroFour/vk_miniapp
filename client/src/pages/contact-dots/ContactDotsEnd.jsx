@@ -22,7 +22,7 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      if (isWon) {
+      if (isCompleted) {
         const gameResults = {
           isCompleted: isCompleted,
         };
