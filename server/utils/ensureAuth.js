@@ -13,7 +13,7 @@ function verifyMiniAppSign(params) {
     .join("&");
 
   const hash = crypto
-    .createHmac("sha256", process.env.VK_CLIENT_SECRET)
+    .createHmac("sha256", process.env.VK_SERVICE_TOKEN)
     .update(ordered)
     .digest()
     .toString("base64")
