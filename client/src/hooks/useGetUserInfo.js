@@ -17,6 +17,8 @@ export const useGetUserInfo = () => {
         try {
           const launchParams = await bridge.send("VKWebAppGetLaunchParams");
 
+          console.log("Launch params:", launchParams);
+
           const response = await axios.get(`/user/get`, {
             params: launchParams,
           });
