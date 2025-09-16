@@ -4,9 +4,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 function verifyMiniAppSign(params) {
-  console.log("ensureAuth query:", req.query);
-  console.log("ensureAuth body:", req.body);
-
   if (!params || !params.sign) return false;
 
   const ordered = Object.keys(params)
@@ -28,8 +25,8 @@ function verifyMiniAppSign(params) {
 }
 
 export default function ensureAuth(req, res, next) {
-  console.log("=== AUTH DEBUG ===");
-  console.log("URL:", req.url);
+  console.log("ensureAuth query:", req.query);
+  console.log("ensureAuth body:", req.body);
 
   if (verifyMiniAppSign(req.query)) {
     req.userId = req.query.vk_user_id;
