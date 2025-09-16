@@ -72,7 +72,7 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
     };
 
     markGameAsComplete();
-  }, [finalUserId]);
+  }, [finalUserId, isMiniApp]);
 
   // YM
   useEffect(() => {

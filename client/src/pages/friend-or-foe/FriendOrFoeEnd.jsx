@@ -71,7 +71,7 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
     };
 
     markGameAsComplete();
-  }, [finalUserId]);
+  }, [finalUserId, isMiniApp]);
 
   const videoSrc =
     friendCount >= items.length

@@ -12,8 +12,6 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
 
   const { isMiniApp } = useVkEnvironment();
 
-  console.log(isMiniApp);
-
   const isCompleted = location.state?.isCompleted;
 
   useEffect(() => {
@@ -68,7 +66,7 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
     };
 
     markGameAsComplete();
-  }, [finalUserId]);
+  }, [finalUserId, isMiniApp]);
 
   return (
     <section className={style.contact_dots_end}>
