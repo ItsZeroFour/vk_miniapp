@@ -30,7 +30,6 @@ export default function ensureAuth(req, res, next) {
 
   if (verifyMiniAppSign(req.query)) {
     req.userId = req.query.vk_user_id;
-    console.log("✅ VK Mini App userId (query):", req.userId);
     return next();
   }
 
