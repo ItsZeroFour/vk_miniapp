@@ -25,6 +25,7 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
         let subscribed = false;
 
         if (isVkMiniApp()) {
+          // Проверка через VK Bridge
           const res = await bridge.send("VKWebAppCallAPIMethod", {
             method: "groups.isMember",
             params: {
@@ -36,12 +37,12 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
           });
           subscribed = res.response === 1;
         } else {
-          try {
-            const res = await axios.get(`/vk/check-subscribe`);
-            subscribed = res.data.isMember === 1;
-          } catch (error) {
-            console.log(error);
-          }
+          // Проверка через сервер
+          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+          const res = await axios.get("/vk/check-subscribe", {
+            params: launchParams,
+          });
+          subscribed = res.data.isMember === 1;
         }
 
         if (subscribed && !isSubscribe) {
@@ -49,11 +50,12 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.subscribe === false) {
             try {
-              await axios.post("/user/update-target", {
-                user_id: userId,
-                target_name: "subscribe",
-                target_value: true,
-              });
+              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+              await axios.post(
+                "/user/update-target",
+                { target_name: "subscribe", target_value: true },
+                { params: launchParams }
+              );
             } catch (error) {
               console.log(error);
             }
