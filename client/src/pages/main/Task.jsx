@@ -39,7 +39,7 @@ const Task = React.memo(({ user, finalUserId }) => {
     refreshComments();
     refreshRepost();
     refreshSubscribe();
-  }, []);
+  }, [location.pathname]);
 
   const items = [
     {
