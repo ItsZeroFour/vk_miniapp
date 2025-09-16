@@ -159,6 +159,46 @@ export const completeSecondGame = async (req, res) => {
   }
 };
 
+export const completeThirdGame = async (req, res) => {
+  async function checkIfUserWon(isCompleted) {
+    if (isCompleted) {
+      return true;
+    }
+
+    return false;
+  }
+
+  try {
+    const userId = req.session.userId;
+    const { isCompleted } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Не авторизован" });
+    }
+
+    const isWin = await checkIfUserWon(isCompleted);
+
+    if (!isWin) {
+      return res.status(403).json({ message: "Условия победы не выполнены." });
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { user_id: userId },
+      { $set: { "gamesComplete.third_game": true } },
+      { new: true }
+    );
+
+    res.json({
+      success: true,
+      message: `Игра third_game успешно завершена!`,
+      gamesComplete: updatedUser.gamesComplete,
+    });
+  } catch (error) {
+    console.error("Ошибка при завершении third_game:", error);
+    res.status(500).json({ message: "Ошибка сервера" });
+  }
+};
+
 export const getUser = async (req, res) => {
   try {
     const user_id = req.session.userId;

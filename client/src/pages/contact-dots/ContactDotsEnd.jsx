@@ -2,12 +2,11 @@ import React, { useEffect } from "react";
 import style from "./ContactDotsEnd.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Video from "../../components/video/Video";
-import useCompleteGame from "../../hooks/useCompleteGame";
+import axios from "../../utils/axios";
 
 const ContactDotsEnd = React.memo(({ finalUserId }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const completeGame = useCompleteGame();
 
   const isCompleted = location.state?.isCompleted;
 
@@ -23,15 +22,25 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      const result = await completeGame("third_game");
+      if (isWon) {
+        const gameResults = {
+          isCompleted: isCompleted,
+        };
 
-      if (!result.success) {
-        console.error("Failed to complete game:", result.error);
+        axios
+          .post("/user/complete-third-game", gameResults)
+          .then((response) => {
+            if (response.data.success) {
+              console.log("Победа засчитана");
+            } else {
+              console.log("Вы еще не победили");
+            }
+          });
       }
     };
 
     markGameAsComplete();
-  }, [finalUserId, completeGame]);
+  }, [finalUserId]);
 
   return (
     <section className={style.contact_dots_end}>
