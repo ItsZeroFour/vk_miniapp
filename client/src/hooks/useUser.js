@@ -5,26 +5,36 @@ import axios from "../utils/axios";
 export default function useUser() {
   const [userId, setUserId] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    bridge
-      .send("VKWebAppGetUserInfo")
-      .then((data) => setUserId(data.id))
-      .catch(console.error);
-  }, []);
+    const init = async () => {
+      try {
+        const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+        const { vk_user_id } = launchParams;
 
-  useEffect(() => {
-    if (!userId) return;
+        if (vk_user_id) {
+          setUserId(vk_user_id);
 
-    const authUser = async () => {
-      await axios
-        .post("/user/auth", { user_id: userId })
-        .then((res) => setUserData(res.data))
-        .catch(console.error);
+          const res = await axios.post(
+            "/user/auth",
+            {},
+            { params: launchParams }
+          );
+
+          setUserData(res.data);
+        }
+      } catch (err) {
+        console.error("Ошибка авторизации:", err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    authUser();
-  }, [userId]);
+    init();
+  }, []);
 
-  return { userId, userData };
+  return { userId, userData, loading, error };
 }
