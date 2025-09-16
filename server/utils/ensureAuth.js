@@ -25,15 +25,15 @@ function verifyMiniAppSign(params) {
 }
 
 export default function ensureAuth(req, res, next) {
-  console.log("query: ", req.query);
+  console.log("query: ", req.query.user_id);
 
   if (verifyMiniAppSign(req.query)) {
-    req.userId = req.query.vk_user_id;
+    req.userId = req.query.vk_user_id || req.query.user_id;
     return next();
   }
 
   if (verifyMiniAppSign(req.body)) {
-    req.userId = req.body.vk_user_id;
+    req.userId = req.body.vk_user_id || req.query.user_id;
     console.log("✅ VK Mini App userId (body):", req.userId);
     return next();
   }
