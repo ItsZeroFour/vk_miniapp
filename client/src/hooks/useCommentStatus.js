@@ -25,7 +25,6 @@ export default function useCommentStatus(accessToken, userId, userData) {
         let userHasCommented = false;
 
         if (isVkMiniApp()) {
-          // Проверка через VK Bridge
           const response = await bridge.send("VKWebAppCallAPIMethod", {
             method: "wall.getComments",
             params: {
@@ -41,12 +40,12 @@ export default function useCommentStatus(accessToken, userId, userData) {
             (c) => c.from_id === Number(userId)
           );
         } else {
-          // Проверка через сервер
-          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-          const res = await axios.get("/vk/check-comment", {
-            params: launchParams,
-          });
-          userHasCommented = res.data.hasCommented;
+          try {
+            const res = await axios.get(`/vk/check-comment`);
+            userHasCommented = res.data.hasCommented;
+          } catch (error) {
+            console.log(error);
+          }
         }
 
         if (userHasCommented && !commentStatus) {
@@ -54,12 +53,11 @@ export default function useCommentStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.comment === false) {
             try {
-              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-              await axios.post(
-                "/user/update-target",
-                { target_name: "comment", target_value: true },
-                { params: launchParams }
-              );
+              await axios.post("/user/update-target", {
+                user_id: userId,
+                target_name: "comment",
+                target_value: true,
+              });
             } catch (error) {
               console.log(error);
             }

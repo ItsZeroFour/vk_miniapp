@@ -12,7 +12,7 @@ export default function useRepostStatus(accessToken, userId, userData) {
   }, []);
 
   useEffect(() => {
-    if (userData?.targeted_actions?.share) {
+    if (userData?.targeted_actions?.share === true) {
       setIsShared(true);
     }
   }, [userData]);
@@ -25,31 +25,39 @@ export default function useRepostStatus(accessToken, userId, userData) {
         let reposted = false;
 
         if (isVkMiniApp()) {
-          // Проверка через VK Bridge
-          const groupId = -Number(process.env.REACT_APP_GROUP_ID);
-          const postId = Number(process.env.REACT_APP_POST_ID);
+          const userInfo = await bridge.send("VKWebAppGetUserInfo");
+          const auth = await bridge.send("VKWebAppGetAuthToken", {
+            app_id: Number(process.env.REACT_APP_APP_ID),
+            scope: "wall",
+          });
 
           const response = await bridge.send("VKWebAppCallAPIMethod", {
-            method: "wall.getReposts",
+            method: "wall.get",
             params: {
-              owner_id: groupId,
-              post_id: postId,
+              owner_id: userInfo.id,
               count: 100,
+              filter: "owner",
+              access_token: auth.access_token,
               v: "5.131",
-              access_token: accessToken,
             },
           });
 
-          reposted = response.response.items.some(
-            (r) => r.from_id === Number(userId)
-          );
-        } else {
-          // Проверка через сервер
-          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-          const res = await axios.get("/vk/check-repost", {
-            params: launchParams,
+          const groupId = -Number(process.env.REACT_APP_GROUP_ID);
+          const postId = Number(process.env.REACT_APP_POST_ID);
+
+          reposted = response.response.items.some((item) => {
+            const original = item.copy_history?.[0];
+            return (
+              original && original.from_id === groupId && original.id === postId
+            );
           });
-          reposted = res.data.shared;
+        } else {
+          try {
+            const res = await axios.get(`/vk/check-repost`);
+            reposted = res.data.shared;
+          } catch (error) {
+            console.log(error);
+          }
         }
 
         if (reposted && !isShared) {
@@ -57,24 +65,24 @@ export default function useRepostStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.share === false) {
             try {
-              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-              await axios.post(
-                "/user/update-target",
-                { target_name: "share", target_value: true },
-                { params: launchParams }
-              );
+              await axios.post("/user/update-target", {
+                user_id: userId,
+                target_name: "share",
+                target_value: true,
+              });
             } catch (error) {
               console.log(error);
             }
           }
         }
-      } catch (err) {
-        console.error("Ошибка проверки репоста:", err);
+      } catch (e) {
+        console.error("Ошибка при проверке репоста:", e);
+        setIsShared(false);
       }
     }
 
     checkRepost();
-  }, [accessToken, userId, userData, isShared, refreshKey]);
+  }, [userId, userData, isShared, refreshKey]);
 
   return { isShared, refresh };
 }
