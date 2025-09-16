@@ -3,6 +3,7 @@ import style from "./FriendOrFoeEnd.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { items } from "../../data/friend-or-foe";
 import Video from "../../components/video/Video";
+import axios from "../../utils/axios";
 
 const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
   const location = useLocation();
