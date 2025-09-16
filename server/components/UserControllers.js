@@ -11,6 +11,12 @@ export const authUser = async (req, res) => {
       });
     }
 
+    if (!user_id || isNaN(parseInt(user_id))) {
+      return res.status(400).json({
+        message: "Некорректный user_id",
+      });
+    }
+
     if (sessionUserId && user_id !== sessionUserId.toString()) {
       return res.status(403).json({
         message: "Доступ запрещен. Нельзя получить данные другого пользователя",
