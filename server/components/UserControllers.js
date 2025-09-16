@@ -2,7 +2,7 @@ import User from "../models/User.js";
 
 export const authUser = async (req, res) => {
   try {
-    const user_id = req.session?.userId || req.vkUserId;
+    const user_id = req.userId;
     const sessionUserId = req.session.userId;
 
     if (!user_id) {
@@ -47,7 +47,7 @@ export const authUser = async (req, res) => {
 export const updateTargetStatus = async (req, res) => {
   try {
     const targetName = req.body.target_name;
-    const user_id = req.session?.userId || req.vkUserId;
+    const user_id = req.userId;
     const targetValue = req.body.target_value;
 
     const acceptTarget = ["subscribe", "comment", "share"];
@@ -102,7 +102,7 @@ export const completeFirstGame = async (req, res) => {
   }
 
   try {
-    const userId = req.session?.userId || req.vkUserId;
+    const userId = req.userId;
     const { current_item_count, isWon } = req.body;
 
     if (!userId) {
@@ -142,7 +142,7 @@ export const completeSecondGame = async (req, res) => {
   }
 
   try {
-    const userId = req.session?.userId || req.vkUserId;
+    const userId = req.userId;
     const { friendCount, isEnd } = req.body;
 
     if (!userId) {
@@ -182,7 +182,7 @@ export const completeThirdGame = async (req, res) => {
   }
 
   try {
-    const userId = req.session?.userId || req.vkUserId;
+    const userId = req.userId;
     const { isCompleted } = req.body;
 
     if (!userId) {
@@ -214,7 +214,7 @@ export const completeThirdGame = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const user_id = req.session?.userId || req.vkUserId;
+    const user_id = req.userId;
 
     if (!user_id) {
       return res.status(401).json({
