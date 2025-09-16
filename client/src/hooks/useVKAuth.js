@@ -17,9 +17,7 @@ export default function useVKAuth() {
         if (vk_user_id && sign) {
           setUserId(vk_user_id);
 
-          await axios.post(
-            `/user/auth?${new URLSearchParams(launchParams).toString()}`
-          );
+          await axios.post("/user/auth", {}, { params: launchParams });
         }
 
         const tokenRes = await axios.get("/vk/get-token", {
