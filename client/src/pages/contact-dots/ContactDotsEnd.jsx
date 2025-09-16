@@ -3,6 +3,7 @@ import style from "./ContactDotsEnd.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Video from "../../components/video/Video";
 import axios from "../../utils/axios";
+import bridge from "@vkontakte/vk-bridge";
 
 const ContactDotsEnd = React.memo(({ finalUserId }) => {
   const navigate = useNavigate();
@@ -22,20 +23,41 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      if (isCompleted) {
-        const gameResults = {
-          isCompleted: isCompleted,
-        };
+      if (isEnd) {
+        if (isMiniApp) {
+          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
 
-        axios
-          .post("/user/complete-third-game", gameResults)
-          .then((response) => {
-            if (response.data.success) {
-              console.log("Победа засчитана");
-            } else {
-              console.log("Вы еще не победили");
-            }
-          });
+          const gameResults = {
+            isCompleted: isCompleted,
+          };
+
+          axios
+            .post("/user/complete-third-game", gameResults, {
+              params: launchParams,
+            })
+            .then((response) => {
+              if (response.data.success) {
+                console.log("Победа засчитана");
+              } else {
+                console.log("Вы еще не победили");
+              }
+            });
+        } else {
+          const gameResults = {
+            friendCount: friendCount,
+            isEnd: isEnd,
+          };
+
+          axios
+            .post("/user/complete-third-game", gameResults)
+            .then((response) => {
+              if (response.data.success) {
+                console.log("Победа засчитана");
+              } else {
+                console.log("Вы еще не победили");
+              }
+            });
+        }
       }
     };
 

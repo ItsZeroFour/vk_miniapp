@@ -100,7 +100,7 @@ const Header = ({ finalUserId, user }) => {
           </button>
 
           {/* <button onClick={() => setOpenMenu(!openMenu)}></button> */}
-          <button
+          {/* <button
             onClick={() => setOpenMenu(!openMenu)}
             // onClick={() => {
             //   if (location.pathname === "/") {
@@ -113,7 +113,7 @@ const Header = ({ finalUserId, user }) => {
             // }}
           >
             <img src={close} alt="close" />
-          </button>
+          </button> */}
         </div>
       </div>
 

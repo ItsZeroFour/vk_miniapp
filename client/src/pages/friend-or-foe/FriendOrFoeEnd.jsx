@@ -4,10 +4,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { items } from "../../data/friend-or-foe";
 import Video from "../../components/video/Video";
 import axios from "../../utils/axios";
+import useVkEnvironment from "../../hooks/useVkEnvironment";
+import bridge from "@vkontakte/vk-bridge";
 
 const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { isMiniApp } = useVkEnvironment();
 
   const answers = location.state?.answers;
   const isEnd = location.state?.isEnd;
@@ -28,20 +32,41 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
   useEffect(() => {
     const markGameAsComplete = async () => {
       if (isEnd) {
-        const gameResults = {
-          friendCount: friendCount,
-          isEnd: isEnd,
-        };
+        if (isMiniApp) {
+          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
 
-        axios
-          .post("/user/complete-second-game", gameResults)
-          .then((response) => {
-            if (response.data.success) {
-              console.log("Победа засчитана");
-            } else {
-              console.log("Вы еще не победили");
-            }
-          });
+          const gameResults = {
+            friendCount: friendCount,
+            isEnd: isEnd,
+          };
+
+          axios
+            .post("/user/complete-second-game", gameResults, {
+              params: launchParams,
+            })
+            .then((response) => {
+              if (response.data.success) {
+                console.log("Победа засчитана");
+              } else {
+                console.log("Вы еще не победили");
+              }
+            });
+        } else {
+          const gameResults = {
+            friendCount: friendCount,
+            isEnd: isEnd,
+          };
+
+          axios
+            .post("/user/complete-second-game", gameResults)
+            .then((response) => {
+              if (response.data.success) {
+                console.log("Победа засчитана");
+              } else {
+                console.log("Вы еще не победили");
+              }
+            });
+        }
       }
     };
 

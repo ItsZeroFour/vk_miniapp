@@ -12,6 +12,7 @@ import {
 } from "../../animations/face-recognition-final";
 import { motion } from "framer-motion";
 import axios from "../../utils/axios";
+import bridge from "@vkontakte/vk-bridge";
 
 const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
   const location = useLocation();
@@ -28,21 +29,42 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
 
   useEffect(() => {
     const markGameAsComplete = async () => {
-      if (isWon) {
-        const gameResults = {
-          isWon: isWon,
-          current_item_count: correct_item_count,
-        };
+      if (isEnd) {
+        if (isMiniApp) {
+          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
 
-        axios
-          .post("/user/complete-first-game", gameResults)
-          .then((response) => {
-            if (response.data.success) {
-              console.log("Победа засчитана");
-            } else {
-              console.log("Вы еще не победили");
-            }
-          });
+          const gameResults = {
+            isWon: isWon,
+            current_item_count: correct_item_count,
+          };
+
+          axios
+            .post("/user/complete-first-game", gameResults, {
+              params: launchParams,
+            })
+            .then((response) => {
+              if (response.data.success) {
+                console.log("Победа засчитана");
+              } else {
+                console.log("Вы еще не победили");
+              }
+            });
+        } else {
+          const gameResults = {
+            friendCount: friendCount,
+            isEnd: isEnd,
+          };
+
+          axios
+            .post("/user/complete-first-game", gameResults)
+            .then((response) => {
+              if (response.data.success) {
+                console.log("Победа засчитана");
+              } else {
+                console.log("Вы еще не победили");
+              }
+            });
+        }
       }
     };
 
