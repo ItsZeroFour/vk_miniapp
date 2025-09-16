@@ -96,6 +96,7 @@ app.get("/auth/vk/callback", async (req, res) => {
     req.session.accessToken = tokens.accessToken;
 
     console.log("Successfully authenticated user:", tokens.userId);
+    console.log('Saved to session:', req.session.userId);
 
     try {
       const user_id = tokens.userId;
