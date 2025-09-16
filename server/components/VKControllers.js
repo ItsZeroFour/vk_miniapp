@@ -4,6 +4,11 @@ export async function checkSubscribe(req, res) {
   try {
     const userId = req.userId;
 
+    console.log(
+      "========================USER ID========================",
+      userId
+    );
+
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
     }
@@ -65,6 +70,11 @@ export async function checkComment(req, res) {
 export async function checkRepost(req, res) {
   try {
     const userId = req.userId;
+
+    console.log(
+      "========================USER ID========================",
+      userId
+    );
 
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
