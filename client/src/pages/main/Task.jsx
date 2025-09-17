@@ -40,9 +40,7 @@ const Task = React.memo(({ user, finalUserId }) => {
     refreshComments();
     refreshRepost();
     refreshSubscribe();
-
-    console.log("refresh!");
-  }, [location.pathname]);
+  }, [location.pathname, openTargetActionModel]);
 
   const items = [
     {

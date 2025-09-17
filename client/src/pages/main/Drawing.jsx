@@ -59,7 +59,11 @@ const Drawing = React.memo(() => {
                   <div className={style.drawing__faq__top}>
                     <p onClick={() => toggleFaq(index)}>{question}</p>
                     <button
-                      className={style.drawing__faq__button}
+                      className={`${style.drawing__faq__button} ${
+                        openIndex === index
+                          ? style.drawing__faq__button_active
+                          : ""
+                      }`}
                       onClick={() => toggleFaq(index)}
                     ></button>
                   </div>

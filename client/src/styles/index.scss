@@ -104,6 +104,10 @@ a {
   line-height: 140%;
 }
 
+a {
+  outline: none !important;
+}
+
 ul,
 li {
   list-style-type: none;

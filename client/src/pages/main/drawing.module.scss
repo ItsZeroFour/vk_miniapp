@@ -175,12 +175,20 @@
       width: 100%;
       height: 3px;
       background: var(--color-white);
+
+      transition: all 0.2s ease;
     }
 
     @media (max-width: 475px) {
       width: 30px;
       height: 30px;
     }
+  }
+}
+
+.drawing__faq__button_active {
+  &::after {
+    transform: rotate(0deg) !important;
   }
 }
 
