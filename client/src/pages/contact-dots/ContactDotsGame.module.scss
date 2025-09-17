@@ -6,6 +6,10 @@
   width: 90%;
   user-select: none;
 
+  @media (max-width: 940px) {
+    width: 80%;
+  }
+
   @media (max-width: 475px) {
     width: 100%;
   }
@@ -45,7 +49,6 @@
 
     @media (max-width: 940px) {
       font-size: 28px;
-      margin-top: 5px;
     }
 
     @media (max-width: 480px) {
@@ -78,7 +81,7 @@
   }
 
   p {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 10px;
   }
 }
@@ -107,6 +110,10 @@
     &:hover {
       background: var(--color-white);
       color: #000;
+    }
+
+    @media (max-width: 940px) {
+      margin-top: 15px;
     }
 
     @media (max-width: 480px) {
