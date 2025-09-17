@@ -17,6 +17,10 @@
       font-size: 32px;
     }
 
+    @media (max-width: 940px) {
+      font-size: 28px;
+    }
+
     @media (max-width: 475px) {
       font-size: 24px;
     }
@@ -28,13 +32,12 @@
     text-align: center;
     width: 55%;
 
-    @media (max-width: 810px) {
-      font-size: 20px;
-      width: 100%;
+    @media (max-width: 940px) {
+      font-size: 14px;
     }
 
-    @media (max-width: 520px) {
-      font-size: 14px;
+    @media (max-width: 810px) {
+      width: 100%;
     }
   }
 
@@ -139,6 +142,10 @@
     &:hover {
       background: var(--color-white);
       color: #000;
+    }
+
+    @media (max-width: 940px) {
+      font-size: 16px;
     }
 
     @media (max-width: 520px) {

@@ -16,6 +16,10 @@
       font-size: 32px;
     }
 
+    @media (max-width: 940px) {
+      font-size: 28px;
+    }
+
     @media (max-width: 475px) {
       font-size: 24px;
     }
@@ -27,13 +31,18 @@
     font-size: 20px;
     text-align: center;
 
-    @media (max-width: 620px) {
+    @media (max-width: 940px) {
       font-size: 16px;
+      margin-top: 5px;
     }
 
     @media (max-width: 475px) {
       font-size: 14px;
     }
+  }
+
+  @media (max-width: 940px) {
+    margin-top: 5px;
   }
 }
 
@@ -46,10 +55,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 940px) {
+    margin-top: 5px;
+  }
 }
 
 .face_recognition__container__main {
   margin-top: 80px;
+
+  @media (max-width: 940px) {
+    margin-top: 65px;
+  }
 
   @media (max-width: 620px) {
     margin-top: 45px;
