@@ -72,6 +72,8 @@
   }
 
   .head__text__desctop {
+    line-height: 115%;
+
     @media (max-width: 425px) {
       display: none;
     }
@@ -79,6 +81,7 @@
 
   .head__text__mobile {
     display: none;
+    line-height: 115%;
 
     @media (max-width: 425px) {
       display: block;

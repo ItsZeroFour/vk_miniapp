@@ -72,3 +72,20 @@
     gap: 10px;
   }
 }
+
+.trailer__footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+  padding-bottom: 20px;
+  margin-top: 10px;
+
+  p {
+    font-size: 12px;
+    text-align: center;
+    opacity: 0.8;
+  }
+}
