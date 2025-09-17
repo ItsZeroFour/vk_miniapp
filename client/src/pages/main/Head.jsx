@@ -8,7 +8,6 @@ import {
   buttonVariants,
 } from "../../animations/main-head";
 import useVkEnvironment from "../../hooks/useVkEnvironment";
-import { Link } from "react-router-dom";
 
 const Head = React.memo(({ hideButton, setShowPage }) => {
   const { environment } = useVkEnvironment();

@@ -41,10 +41,9 @@ export default function useCommentStatus(accessToken, userId, userData) {
           );
         } else {
           try {
-            // Получаем launchParams для авторизации
             const launchParams = await bridge.send("VKWebAppGetLaunchParams");
             const res = await axios.get(`/vk/check-comment`, {
-              params: launchParams // ← ДОБАВЛЕНО: передаем параметры авторизации
+              params: launchParams
             });
             userHasCommented = res.data.hasCommented;
           } catch (error) {
@@ -57,10 +56,9 @@ export default function useCommentStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.comment === false) {
             try {
-              // Получаем launchParams для авторизации
               const launchParams = await bridge.send("VKWebAppGetLaunchParams");
               await axios.post("/user/update-target", {}, {
-                params: launchParams, // ← ДОБАВЛЕНО: передаем параметры авторизации
+                params: launchParams,
                 data: {
                   user_id: userId,
                   target_name: "comment",
