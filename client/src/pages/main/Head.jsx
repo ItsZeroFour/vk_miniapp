@@ -8,8 +8,9 @@ import {
   buttonVariants,
 } from "../../animations/main-head";
 import useVkEnvironment from "../../hooks/useVkEnvironment";
+import { Link } from "react-router-dom";
 
-const Head = React.memo(({ hideButton }) => {
+const Head = React.memo(({ hideButton, setShowPage }) => {
   const { environment } = useVkEnvironment();
 
   const handleRedirect = () => {
@@ -37,8 +38,8 @@ const Head = React.memo(({ hideButton }) => {
             Выполните все 6 спецзаданий и получите шанс выиграть одну из наград
             с символикой фильма "Август". А среди самых быстрых и находчивых
             будут разыграны колонки Яндекс Street в лимитированном дизайне.
-            Итоги 6 октября 2025. Подробнее в разделе О розыгрыше” (клик на
-            кнопку О розыгрыше переводит на раздел Розыгрыш)
+            Итоги 6 октября 2025. Подробнее в разделе{" "}
+            <button onClick={() => setShowPage("drawing")}>О розыгрыше</button>
           </motion.p>
 
           <motion.p
@@ -50,8 +51,8 @@ const Head = React.memo(({ hideButton }) => {
             Выполните все 6 спецзаданий и получите шанс выиграть одну из наград
             с символикой фильма "Август". А среди самых быстрых и находчивых
             будут разыграны колонки Яндекс Street в лимитированном дизайне.
-            Итоги 6 октября 2025. Подробнее в разделе О розыгрыше” (клик на
-            кнопку О розыгрыше переводит на раздел Розыгрыш)
+            Итоги 6 октября 2025. Подробнее в разделе{" "}
+            <button onClick={() => setShowPage("drawing")}>О розыгрыше</button>
           </motion.p>
         </div>
 

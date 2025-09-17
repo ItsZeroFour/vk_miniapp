@@ -74,6 +74,14 @@
   .head__text__desctop {
     line-height: 115%;
 
+    button {
+      background: none;
+      padding: 0;
+      color: var(--color-orange);
+      font-weight: bold;
+      text-decoration: underline;
+    }
+
     @media (max-width: 425px) {
       display: none;
     }
@@ -82,6 +90,14 @@
   .head__text__mobile {
     display: none;
     line-height: 115%;
+
+    button {
+      background: none;
+      padding: 0;
+      color: var(--color-orange);
+      font-weight: bold;
+      text-decoration: underline;
+    }
 
     @media (max-width: 425px) {
       display: block;

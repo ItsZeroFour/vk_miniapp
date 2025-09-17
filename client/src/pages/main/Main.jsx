@@ -101,7 +101,7 @@ const Main = React.memo(
               animate="animate"
               exit="exit"
             >
-              <Head hideButton={hideButton} />
+              <Head hideButton={hideButton} setShowPage={setShowPage} />
               <Task
                 isSubscribe={isSubscribe}
                 isCommented={isCommented}
