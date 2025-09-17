@@ -43,7 +43,7 @@ export default function useCommentStatus(accessToken, userId, userData) {
           try {
             const launchParams = await bridge.send("VKWebAppGetLaunchParams");
             const res = await axios.get(`/vk/check-comment`, {
-              params: launchParams
+              params: launchParams,
             });
             userHasCommented = res.data.hasCommented;
           } catch (error) {
@@ -57,14 +57,17 @@ export default function useCommentStatus(accessToken, userId, userData) {
           if (userData?.targeted_actions?.comment === false) {
             try {
               const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-              await axios.post("/user/update-target", {}, {
-                params: launchParams,
-                data: {
+              await axios.post(
+                "/user/update-target",
+                {
                   user_id: userId,
                   target_name: "comment",
                   target_value: true,
+                },
+                {
+                  params: launchParams,
                 }
-              });
+              );
             } catch (error) {
               console.log(error);
             }

@@ -56,7 +56,7 @@ export default function useRepostStatus(accessToken, userId, userData) {
             // Получаем launchParams для авторизации
             const launchParams = await bridge.send("VKWebAppGetLaunchParams");
             const res = await axios.get(`/vk/check-repost`, {
-              params: launchParams // ← ДОБАВЛЕНО: передаем параметры авторизации
+              params: launchParams, // ← ДОБАВЛЕНО: передаем параметры авторизации
             });
             reposted = res.data.shared;
           } catch (error) {
@@ -69,16 +69,18 @@ export default function useRepostStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.share === false) {
             try {
-              // Получаем launchParams для авторизации
               const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-              await axios.post("/user/update-target", {}, {
-                params: launchParams, // ← ДОБАВЛЕНО: передаем параметры авторизации
-                data: {
+              await axios.post(
+                "/user/update-target",
+                {
                   user_id: userId,
                   target_name: "share",
                   target_value: true,
+                },
+                {
+                  params: launchParams,
                 }
-              });
+              );
             } catch (error) {
               console.log(error);
             }
