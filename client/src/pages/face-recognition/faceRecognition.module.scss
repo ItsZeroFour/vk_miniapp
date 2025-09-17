@@ -142,11 +142,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  width: 400px;
+  width: 353px;
 
   .face_recognition__faces__img {
-    width: 94px;
-    height: 116px;
+    width: 84px;
+    height: 106px;
     border-radius: 4px;
     object-fit: cover;
 
@@ -158,7 +158,7 @@
 
   @media (max-width: 720px) {
     gap: 8px;
-    width: 400px;
+    width: 360px;
   }
 
   @media (max-width: 460px) {
