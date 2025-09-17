@@ -13,6 +13,7 @@ import { menuItems } from "../../data/menu";
 import useVkEnvironment from "../../hooks/useVkEnvironment";
 import { partners } from "../../data/partners";
 import close from "../../assets/icons/close-2.svg";
+import bridge from "@vkontakte/vk-bridge";
 
 const Header = ({ finalUserId, user }) => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -44,6 +45,16 @@ const Header = ({ finalUserId, user }) => {
   };
 
   useDisableScroll(openMenu);
+
+  const openLink = async () => {
+    if (isMiniApp) {
+      await bridge.send("VKWebAppOpenURL", {
+        url: "https://www.kinopoisk.ru/film/1234808",
+      });
+    } else {
+      window.location.href = "https://www.kinopoisk.ru/film/1234808";
+    }
+  };
 
   return (
     <header className={style.header}>
@@ -91,13 +102,7 @@ const Header = ({ finalUserId, user }) => {
         </nav>
 
         <div className={style.header__buttons}>
-          <button
-            onClick={() =>
-              (window.location.href = "https://www.kinopoisk.ru/film/1234808")
-            }
-          >
-            КУПИТЬ БИЛЕТЫ
-          </button>
+          <button onClick={openLink}>КУПИТЬ БИЛЕТЫ</button>
 
           {/* <button onClick={() => setOpenMenu(!openMenu)}></button> */}
           {/* <button
