@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import _1kanal from "../../assets/icons/logos/1kanal-2.svg";
 import kinopoisk from "../../assets/icons/logos/kinopoisk-2.svg";
 import Video from "../../components/video/Video";
+import { partners2 } from "../../data/partners-2";
 
 const About = React.memo(() => {
   return (
@@ -36,17 +37,13 @@ const About = React.memo(() => {
           <p>Следите за нами</p>
 
           <ul>
-            <li>
-              <Link to="">
-                <img src={_1kanal} alt="1  канал" />
-              </Link>
-            </li>
-
-            <li>
-              <Link to="">
-                <img src={kinopoisk} alt="Кинопоиск" />
-              </Link>
-            </li>
+            {partners2.map(({ title, logo, link }) => (
+              <li>
+                <Link to={link} target="_blank">
+                  <img src={logo} alt={title} />
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
