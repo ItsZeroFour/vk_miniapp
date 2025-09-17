@@ -31,7 +31,7 @@ const Video = ({ src }) => {
           className={style.video}
           src={src || "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239021&hd=2&autoplay=1"}
           width="100%"
-          allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+          allow="encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
           frameborder="0"
           allowfullscreen
           title="Август"
