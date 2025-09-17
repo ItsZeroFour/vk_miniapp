@@ -63,6 +63,8 @@
         justify-content: space-between;
 
         p {
+          z-index: 9;
+
           @media (max-width: 460px) {
             font-size: 12px;
           }

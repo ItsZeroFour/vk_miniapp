@@ -188,8 +188,23 @@ const Task = React.memo(({ user, finalUserId }) => {
                 <div className={style.task__top}>
                   <p
                     style={isDone ? { color: "#1BDB65" } : { color: "#A6A9A6" }}
+                    onClick={(event) => {
+                      if (index >= 3) {
+                        event.stopPropagation();
+
+                        refreshComments();
+                        refreshRepost();
+                        refreshSubscribe();
+                      }
+                    }}
                   >
-                    {isDone ? "Выполнено" : "Не выполнено"}
+                    {index >= 3
+                      ? isDone
+                        ? "Выполнено"
+                        : "Нажмите для проверки"
+                      : isDone
+                      ? "Выполнено"
+                      : "Не выполнено"}
                   </p>
                   <img src={img} alt={title} />
                 </div>
