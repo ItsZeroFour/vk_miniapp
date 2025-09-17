@@ -47,11 +47,20 @@ const Header = ({ finalUserId, user }) => {
   useDisableScroll(openMenu);
 
   const openLink = async () => {
-    if (isMiniApp) {
-      await bridge.send("VKWebAppOpenURL", {
-        url: "https://www.kinopoisk.ru/film/1234808",
-      });
-    } else {
+    try {
+      const url = "https://www.kinopoisk.ru/film/1234808";
+
+      if (isMiniApp) {
+        const newWin = window.open(url, "_blank", "noopener,noreferrer");
+
+        if (!newWin) {
+          window.location.href = url;
+        }
+      } else {
+        window.location.href = url;
+      }
+    } catch (e) {
+      console.error("Ошибка при открытии ссылки:", e);
       window.location.href = "https://www.kinopoisk.ru/film/1234808";
     }
   };
