@@ -188,10 +188,8 @@ const Task = React.memo(({ user, finalUserId }) => {
                 <div className={style.task__top}>
                   <p
                     style={isDone ? { color: "#1BDB65" } : { color: "#A6A9A6" }}
-                    onClick={(event) => {
+                    onClick={() => {
                       if (index >= 3) {
-                        event.stopPropagation();
-
                         refreshComments();
                         refreshRepost();
                         refreshSubscribe();

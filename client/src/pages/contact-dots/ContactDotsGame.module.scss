@@ -118,6 +118,7 @@
 
     @media (max-width: 480px) {
       margin-top: 30px;
+      font-size: 14px;
     }
   }
 }
@@ -183,6 +184,10 @@ svg {
   width: 100%;
   max-width: 445px;
   height: 100%;
+
+  @media (max-width: 445px) {
+    max-width: 280px;
+  }
 }
 
 // .game__image {

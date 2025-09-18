@@ -107,6 +107,14 @@ const TargetActionsPopup = ({
     }
   }, [isDone]);
 
+  useEffect(() => {
+    refreshComments();
+    refreshRepost();
+    refreshSubscribe();
+
+    console.log(123);
+  }, [targetAction]);
+
   return (
     <section className={style.target_actions}>
       <div className="container">
