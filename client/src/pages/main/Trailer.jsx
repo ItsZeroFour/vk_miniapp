@@ -28,7 +28,7 @@ const TrailerBottom = React.memo(({ src }) => {
         КУПИТЬ БИЛЕТЫ
       </Link>
 
-      <div className={style.trailer__socials}>
+      {/* <div className={style.trailer__socials}>
         <p>Следите за нами</p>
 
         <ul>
@@ -40,7 +40,7 @@ const TrailerBottom = React.memo(({ src }) => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
 
       <div className={style.trailer__footer}>
         <p>© АО "Дирекция Кино", 16+. Все права защищены.</p>

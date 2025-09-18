@@ -33,7 +33,7 @@ const About = React.memo(() => {
           КУПИТЬ БИЛЕТЫ
         </Link>
 
-        <div className={style.about__socials}>
+        {/* <div className={style.about__socials}>
           <p>Следите за нами</p>
 
           <ul>
@@ -45,7 +45,7 @@ const About = React.memo(() => {
               </li>
             ))}
           </ul>
-        </div>
+        </div> */}
 
         <div className={style.trailer__footer}>
           <p>© АО "Дирекция Кино", 16+. Все права защищены.</p>

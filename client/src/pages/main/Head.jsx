@@ -26,7 +26,7 @@ const Head = React.memo(({ hideButton, setShowPage }) => {
             variants={titleVariants}
             className={style.animatedTitle}
           >
-            Курсы разведчика
+            Курс разведчика
           </motion.h1>
           <motion.p
             initial="hidden"

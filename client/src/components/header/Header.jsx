@@ -91,7 +91,14 @@ const Header = ({ finalUserId, user }) => {
           <ToggleVolume />
         </div>
 
-        <Link className={style.header__logo} to="/">
+        <Link
+          className={
+            location.pathname === "/"
+              ? `${style.header__logo} ${style.home}`
+              : `${style.header__logo}`
+          }
+          to="/"
+        >
           <img src={logo} alt="logo" />
           <p>в кино с 25 сентября</p>
         </Link>
@@ -113,7 +120,18 @@ const Header = ({ finalUserId, user }) => {
         </nav>
 
         <div className={style.header__buttons}>
-          <button onClick={openLink}>КУПИТЬ БИЛЕТЫ</button>
+          {location.pathname === "/" ? (
+            <button className={style.header__buttons__link} onClick={openLink}>
+              КУПИТЬ БИЛЕТЫ
+            </button>
+          ) : (
+            <button
+              className={style.header__buttons__close}
+              onClick={() => navigate("/")}
+            >
+              <img src={close} alt="close" />
+            </button>
+          )}
 
           {/* <button onClick={() => setOpenMenu(!openMenu)}></button> */}
           {/* <button
