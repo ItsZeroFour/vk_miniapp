@@ -8,7 +8,7 @@ import useSubscriptionStatus from "./hooks/useSubscriptionStatus";
 import useRepostStatus from "./hooks/useRepostStatus";
 
 import Header from "./components/header/Header";
-import ToggleVolume from "./components/toggle_volume/ToggleVolume";
+// import ToggleVolume from "./components/toggle_volume/ToggleVolume";
 import { useGetUserInfo } from "./hooks/useGetUserInfo";
 import { OBJECTS } from "./data/contact-dots";
 
@@ -132,10 +132,10 @@ function App() {
                 </Routes>
               </div>
 
-              <div className="volume">
+              {/* <div className="volume">
                 <ToggleVolume />
                 <p>ВЫКЛЮЧИТЬ ЗВУК</p>
-              </div>
+              </div> */}
             </div>
           }
         />

@@ -34,16 +34,16 @@
       }
     }
 
-    &.home {
-      @media (max-width: 980px) {
-        margin-left: 110px;
-      }
+    // &.home {
+    //   @media (max-width: 980px) {
+    //     margin-left: 110px;
+    //   }
 
-      @media (max-width: 670px) {
-        margin-left: 0px;
-        margin-right: 60px;
-      }
-    }
+    //   @media (max-width: 670px) {
+    //     margin-left: 0px;
+    //     margin-right: 60px;
+    //   }
+    // }
   }
 
   .header__nav {
@@ -97,6 +97,11 @@
   //   flex-direction: column;
   //   position: relative;
   // }
+
+  @media (max-width: 670px) {
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .header__buttons {
