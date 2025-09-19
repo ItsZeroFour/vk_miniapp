@@ -22,7 +22,7 @@ function polyPath(pts) {
 }
 
 const MAX_SNAP = 20;
-const SAFE_MARGIN = 20;
+const SAFE_MARGIN = 10;
 
 // Радиус "ручки" точки — держим её ПОЛНОСТЬЮ в пределах вьюпорта
 const HANDLE_R = window.innerWidth <= 768 ? 15 : 10;
