@@ -30,8 +30,6 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
         if (isMiniApp) {
           const launchParams = await bridge.send("VKWebAppGetLaunchParams");
 
-          console.log("Launch params:", launchParams);
-
           const gameResults = {
             isCompleted: isCompleted,
           };

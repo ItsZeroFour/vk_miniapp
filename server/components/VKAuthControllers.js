@@ -221,7 +221,6 @@ export async function getUserInfo(userId) {
     });
 
     const userData = response.data.user;
-    console.log(userData, userId);
 
     const updatedUser = await User.findOneAndUpdate(
       { user_id: userId },

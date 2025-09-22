@@ -111,8 +111,6 @@ const TargetActionsPopup = ({
     refreshComments();
     refreshRepost();
     refreshSubscribe();
-
-    console.log(123);
   }, [targetAction]);
 
   return (

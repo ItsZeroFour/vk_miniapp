@@ -24,8 +24,6 @@ export default function useVKAuth() {
           params: launchParams,
         });
 
-        console.log(tokenRes);
-
         if (tokenRes.data?.token) {
           setAccessToken(tokenRes.data.token);
         }
