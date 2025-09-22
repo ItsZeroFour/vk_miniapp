@@ -82,23 +82,20 @@ const Header = ({ finalUserId, user }) => {
       <div
         style={isMiniApp ? { paddingTop: 35 } : { paddingTop: 0 }}
         className={
-          openMenu
-            ? `${style.header__wrapper} ${style.active}`
-            : style.header__wrapper
+          // openMenu
+          //   ? `${style.header__wrapper} ${style.active}`
+          //   : style.header__wrapper
+
+          location.pathname === "/"
+            ? `${style.header__wrapper}`
+            : `${style.header__wrapper} ${style.games}`
         }
       >
         {/* <div className={style.header__volume}>
           <ToggleVolume />
         </div> */}
 
-        <Link
-          className={
-            location.pathname === "/"
-              ? `${style.header__logo} ${style.home}`
-              : `${style.header__logo}`
-          }
-          to="/"
-        >
+        <Link className={style.header__logo} to="/">
           <img src={logo} alt="logo" />
           <p>в кино с 25 сентября</p>
         </Link>

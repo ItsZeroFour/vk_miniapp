@@ -9,7 +9,7 @@ import React, {
 import style from "./ContactDotsGame.module.scss";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
-import { OBJECTS } from "../../data/contact-dots";
+import { OBJECTS, FIXED_POINTS } from "../../data/contact-dots";
 import { useNavigate } from "react-router-dom";
 
 gsap.registerPlugin(Draggable);
@@ -22,6 +22,7 @@ function polyPath(pts) {
 }
 
 const MAX_SNAP = 20;
+const SAFE_MARGIN = 10;
 
 // Радиус "ручки" точки — держим её ПОЛНОСТЬЮ в пределах вьюпорта
 const HANDLE_R = window.innerWidth <= 768 ? 15 : 10;
@@ -126,10 +127,9 @@ const ContactDotsGame = React.memo(() => {
     initialRender.current = false;
   }, []);
 
-  // Кламп точки: работаем в экранных координатах, чтобы гарантированно держать "ручку" в пределах видимой области SVG
-  const clampLocalWithCTM = (local) => {
+  const clampLocalWithCTM = (local, withSafeMargin = false) => {
     if (!local || typeof local.x !== "number" || typeof local.y !== "number") {
-      return { x: 0, y: 0 }; // дефолтная точка (или можно вернуть local как есть)
+      return { x: 0, y: 0 };
     }
 
     const svg = svgRef.current;
@@ -147,15 +147,17 @@ const ContactDotsGame = React.memo(() => {
     toScreen.y = local.y;
     const screenPt = toScreen.matrixTransform(m);
 
+    const margin = withSafeMargin ? SAFE_MARGIN : 0;
+
     const clampedScreenX = clamp(
       screenPt.x,
-      rect.left + HANDLE_R,
-      rect.right - HANDLE_R
+      rect.left + HANDLE_R + margin,
+      rect.right - HANDLE_R - margin
     );
     const clampedScreenY = clamp(
       screenPt.y,
-      rect.top + HANDLE_R,
-      rect.bottom - HANDLE_R
+      rect.top + HANDLE_R + margin,
+      rect.bottom - HANDLE_R - margin
     );
 
     const back = svg.createSVGPoint();
@@ -216,8 +218,19 @@ const ContactDotsGame = React.memo(() => {
     const shuffled = indices.sort(() => Math.random() - 0.5);
     const freeIndices = new Set(shuffled.slice(0, freeCount));
 
+    const fixedCoords = FIXED_POINTS[obj.id] || [];
+
     const nextLocks = Array(total).fill(-1);
     const nextContacts = obj.points.map((target, i) => {
+      const isFixed = fixedCoords.some(
+        (fp) => fp.x === target.x && fp.y === target.y
+      );
+
+      if (isFixed) {
+        nextLocks[i] = i;
+        return clampLocalWithCTM({ x: target.x, y: target.y });
+      }
+
       if (freeIndices.has(i)) {
         const angle = Math.random() * Math.PI * 2;
         const r = 35 + Math.random() * 35;
@@ -225,7 +238,7 @@ const ContactDotsGame = React.memo(() => {
           x: target.x + Math.cos(angle) * r,
           y: target.y + Math.sin(angle) * r,
         };
-        return clampLocalWithCTM(rawLocal);
+        return clampLocalWithCTM(rawLocal, true);
       } else {
         nextLocks[i] = i;
         return clampLocalWithCTM({ x: target.x, y: target.y });
@@ -241,11 +254,9 @@ const ContactDotsGame = React.memo(() => {
 
     waitForCTMStableAnd(() => {
       if (cancelled) return;
-      // Если точки уже есть — просто поджимаем их к актуальным границам
       reclampAllPoints();
     });
 
-    // Рекламп после окончания CSS-анимации transform
     const g = gRef.current;
     const onTransitionEnd = (e) => {
       if (e.propertyName === "transform") {
@@ -306,8 +317,10 @@ const ContactDotsGame = React.memo(() => {
   const onPointerDown = (idx) => (e) => {
     if (completed) return;
     if (e.pointerType === "mouse" && e.button !== 0) return;
-    const isCorrectlyAssembled = locks.every((t, i) => t === i);
 
+    if (locks[idx] === idx) return;
+
+    const isCorrectlyAssembled = locks.every((t, i) => t === i);
     if (isCorrectlyAssembled) return;
 
     e.preventDefault();
@@ -335,7 +348,7 @@ const ContactDotsGame = React.memo(() => {
     const { clientX, clientY } = getTouchPoint(e);
     const local = clientToLocal(clientX, clientY);
     if (local)
-      handlePointMove(draggingIdxRef.current, clampLocalWithCTM(local));
+      handlePointMove(draggingIdxRef.current, clampLocalWithCTM(local, true));
   };
 
   // Движение точки в ЛОКАЛЬНЫХ координатах группы <g>
@@ -392,7 +405,7 @@ const ContactDotsGame = React.memo(() => {
 
     // Берём текущую локальную позицию, клампим с учётом CTM и делаем снап
     setContactPoints((prevPts) => {
-      const pLocal = clampLocalWithCTM(prevPts[idx]);
+      const pLocal = clampLocalWithCTM(prevPts[idx], true);
 
       const occupied = new Set(locks.filter((t, j) => j !== idx && t >= 0));
       let bestTarget = -1;
@@ -415,7 +428,7 @@ const ContactDotsGame = React.memo(() => {
         next[idx] = clampLocalWithCTM({
           x: bgPoints[bestTarget].x,
           y: bgPoints[bestTarget].y,
-        });
+        }, true);
         setLocks((prev) => {
           const L = [...prev];
           L[idx] = bestTarget;
