@@ -122,7 +122,10 @@ const TargetActionsPopup = ({
             onClick={() => setOpenTargetActionModel("")}
           ></button>
 
-          {!checkResult &&
+          <h3>Задание пока не доступно!</h3>
+          <p>Возвращайтесь сюда позже.</p>
+
+          {/* {!checkResult &&
           ((targetAction === "comment" && !isCommented) ||
             (targetAction === "subscribe" && !isSubscribe) ||
             (targetAction === "share" && !isShared)) ? (
@@ -212,7 +215,7 @@ const TargetActionsPopup = ({
                 </p>
               )}
             </>
-          )}
+          )} */}
         </div>
       </div>
     </section>
