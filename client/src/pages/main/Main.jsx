@@ -16,6 +16,7 @@ import {
   pageVariants,
   navButtonVariants,
 } from "../../animations/main";
+import bridge from "@vkontakte/vk-bridge";
 
 const Main = React.memo(
   ({ isSubscribe, isCommented, isShared, user, finalUserId, accessToken }) => {
@@ -76,6 +77,14 @@ const Main = React.memo(
 
     const handleSkipTrailer = () => {
       setIsClosing(true);
+
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_click",
+        event: "transition_onboarding_screen",
+        screen: "main",
+        timezone: "3gtm",
+      });
+
       setTimeout(() => {
         setShowVideo(false);
         setIsClosing(false);
@@ -217,7 +226,9 @@ const Main = React.memo(
                   <motion.ul>
                     <motion.li variants={navButtonVariants}>
                       <motion.button
-                        onClick={() => setShowPage("main")}
+                        onClick={async () => {
+                          setShowPage("main");
+                        }}
                         whileHover="hover"
                         whileTap="tap"
                         className={showPage === "main" ? style.active : ""}
@@ -228,7 +239,15 @@ const Main = React.memo(
 
                     <motion.li variants={navButtonVariants}>
                       <motion.button
-                        onClick={() => setShowPage("trailer")}
+                        onClick={async () => {
+                          await bridge.send("VKWebAppSendCustomEvent", {
+                            type: "type_click",
+                            event: "movie_explore",
+                            screen: "main",
+                            timezone: "3gtm",
+                          });
+                          setShowPage("trailer");
+                        }}
                         whileHover="hover"
                         whileTap="tap"
                         className={showPage === "trailer" ? style.active : ""}
@@ -239,7 +258,15 @@ const Main = React.memo(
 
                     <motion.li variants={navButtonVariants}>
                       <motion.button
-                        onClick={() => setShowPage("drawing")}
+                        onClick={async () => {
+                          bridge.send("VKWebAppSendCustomEvent", {
+                            type: "type_click",
+                            event: "giveaway_explore",
+                            screen: "main",
+                            timezone: "3gtm",
+                          });
+                          setShowPage("drawing");
+                        }}
                         whileHover="hover"
                         whileTap="tap"
                         className={showPage === "drawing" ? style.active : ""}

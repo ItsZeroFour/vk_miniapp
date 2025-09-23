@@ -6,6 +6,7 @@ import useSubscriptionStatus from "../../hooks/useSubscriptionStatus";
 import useRepostStatus from "../../hooks/useRepostStatus";
 import success from "../../assets/icons/success.svg";
 import unsuccess from "../../assets/icons/unsuccess.svg";
+import bridge from "@vkontakte/vk-bridge";
 
 const TargetActionsPopup = ({
   targetAction,
@@ -63,6 +64,16 @@ const TargetActionsPopup = ({
     if (targetAction === "comment") {
       refreshComments();
 
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_click",
+        event: "task_сheck",
+        screen: "main",
+        timezone: "3gtm",
+        json: {
+          task: 4,
+        },
+      });
+
       if (window.ym) {
         await window.ym(103806192, "reachGoal", "vkq_check_click");
       }
@@ -70,12 +81,32 @@ const TargetActionsPopup = ({
     if (targetAction === "subscribe") {
       refreshSubscribe();
 
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_click",
+        event: "task_сheck",
+        screen: "main",
+        timezone: "3gtm",
+        json: {
+          task: 5,
+        },
+      });
+
       if (window.ym) {
         await window.ym(103806192, "reachGoal", "vks_check_click");
       }
     }
     if (targetAction === "share") {
       refreshRepost();
+
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_click",
+        event: "task_сheck",
+        screen: "main",
+        timezone: "3gtm",
+        json: {
+          task: 6,
+        },
+      });
 
       if (window.ym) {
         await window.ym(103806192, "reachGoal", "vkr_check_click");
@@ -93,14 +124,44 @@ const TargetActionsPopup = ({
   // YM
   useEffect(() => {
     if (targetAction === "comment" && isDone) {
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_action",
+        event: "task_done",
+        screen: "main",
+        timezone: "3gtm",
+        json: {
+          task: 4,
+        },
+      });
+
       if (window.ym) {
         window.ym(103806192, "reachGoal", "vkq_check_success");
       }
     } else if (targetAction === "subscribe" && isDone) {
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_action",
+        event: "task_done",
+        screen: "main",
+        timezone: "3gtm",
+        json: {
+          task: 5,
+        },
+      });
+
       if (window.ym) {
         window.ym(103806192, "reachGoal", "vks_check_success");
       }
     } else if (targetAction === "share" && isDone) {
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_action",
+        event: "task_done",
+        screen: "main",
+        timezone: "3gtm",
+        json: {
+          task: 6,
+        },
+      });
+
       if (window.ym) {
         window.ym(103806192, "reachGoal", "vkr_check_success");
       }
@@ -119,7 +180,23 @@ const TargetActionsPopup = ({
         <div className={style.target_actions__wrapper} ref={wrapperRef}>
           <button
             className={style.target_actions__close}
-            onClick={() => setOpenTargetActionModel("")}
+            onClick={() => {
+              bridge.send("VKWebAppSendCustomEvent", {
+                type: "type_click",
+                event: "task_close",
+                screen: "main",
+                timezone: "3gtm",
+                json: {
+                  task:
+                    targetAction === "comment"
+                      ? 4
+                      : targetAction === "subscribe"
+                      ? 5
+                      : 6,
+                },
+              });
+              setOpenTargetActionModel("");
+            }}
           ></button>
 
           <h3>Задание пока не доступно!</h3>
@@ -138,6 +215,21 @@ const TargetActionsPopup = ({
                       to={link}
                       target="_blank"
                       onClick={async () => {
+                        bridge.send("VKWebAppSendCustomEvent", {
+                          type: "type_click",
+                          event: "ticket_transition",
+                          screen: "main",
+                          timezone: "3gtm",
+                          json: {
+                            task:
+                              targetAction === "comment"
+                                ? 4
+                                : targetAction === "subscribe"
+                                ? 5
+                                : 6,
+                          },
+                        });
+
                         if (window.ym) {
                           await window.ym(
                             103806192,
@@ -158,6 +250,20 @@ const TargetActionsPopup = ({
                       to={link}
                       target="_blank"
                       onClick={async () => {
+                        bridge.send("VKWebAppSendCustomEvent", {
+                          type: "type_click",
+                          event: "ticket_transition",
+                          screen: "main",
+                          timezone: "3gtm",
+                          json: {
+                            task:
+                              targetAction === "comment"
+                                ? 4
+                                : targetAction === "subscribe"
+                                ? 5
+                                : 6,
+                          },
+                        });
                         if (window.ym) {
                           await window.ym(
                             103806192,
@@ -178,6 +284,20 @@ const TargetActionsPopup = ({
                       to={link}
                       target="_blank"
                       onClick={async () => {
+                        bridge.send("VKWebAppSendCustomEvent", {
+                          type: "type_click",
+                          event: "ticket_transition",
+                          screen: "main",
+                          timezone: "3gtm",
+                          json: {
+                            task:
+                              targetAction === "comment"
+                                ? 4
+                                : targetAction === "subscribe"
+                                ? 5
+                                : 6,
+                          },
+                        });
                         if (window.ym) {
                           await window.ym(
                             103806192,

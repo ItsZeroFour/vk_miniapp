@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import style from "./home.module.scss";
 import { Link } from "react-router-dom";
 import video from "../../assets/videos/friend-or-foe.mp4";
+import bridge from "@vkontakte/vk-bridge";
 
 const FriendOrFoe = React.memo(() => {
   const videoRef = useRef(null);
@@ -51,6 +52,16 @@ const FriendOrFoe = React.memo(() => {
               className={style.friend_or_foe__start}
               to="/friend-or-foe/start"
               onClick={async () => {
+                bridge.send("VKWebAppSendCustomEvent", {
+                  type: "type_click",
+                  event: "task_click",
+                  screen: "main",
+                  timezone: "3gtm",
+                  json: {
+                    task: 2,
+                  },
+                });
+
                 if (window.ym) {
                   await window.ym(103806192, "reachGoal", "game3_start");
                 }

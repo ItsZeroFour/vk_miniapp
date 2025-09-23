@@ -78,6 +78,20 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
       ? "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239019&hd=2&autoplay=1"
       : "https://vkvideo.ru/video_ext.php?oid=-232235882&id=456239020&hd=2&autoplay=1";
 
+  useEffect(() => {
+    if (friendCount > items.length) {
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_action",
+        event: "task_done",
+        screen: "main",
+        timezone: "3gtm",
+        json: {
+          task: 2,
+        },
+      });
+    }
+  }, [friendCount]);
+
   return (
     <section className={style.end}>
       <div className="container">
@@ -108,6 +122,16 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
               <Link
                 to="/friend-or-foe/start"
                 onClick={async () => {
+                  await bridge.send("VKWebAppSendCustomEvent", {
+                    type: "type_click",
+                    event: "task_repeat",
+                    screen: "main",
+                    timezone: "3gtm",
+                    json: {
+                      task: 2,
+                    },
+                  });
+
                   if (window.ym) {
                     await window.ym(103806192, "reachGoal", "game3_replay");
                   }
@@ -115,8 +139,22 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
               >
                 Начать игру заново
               </Link>
-              <Link to="/" state={{ hiddenVideo: true }}>
-                Вернуться в главное меню
+              <Link
+                to="/"
+                onClick={async () => {
+                  bridge.send("VKWebAppSendCustomEvent", {
+                    type: "type_click",
+                    event: "task_other",
+                    screen: "main",
+                    timezone: "3gtm",
+                    json: {
+                      task: 2,
+                    },
+                  });
+                }}
+                state={{ hiddenVideo: true }}
+              >
+                ДРУГИЕ ИГРЫ
               </Link>
             </div>
           </div>

@@ -11,6 +11,7 @@ import Header from "./components/header/Header";
 // import ToggleVolume from "./components/toggle_volume/ToggleVolume";
 import { useGetUserInfo } from "./hooks/useGetUserInfo";
 import { OBJECTS } from "./data/contact-dots";
+import bridge from "@vkontakte/vk-bridge";
 
 const FaceRecognition = React.lazy(() =>
   import("./pages/face-recognition/FaceRecognition")
@@ -82,6 +83,15 @@ function App() {
   useEffect(() => {
     refresh();
   }, [location.pathname]);
+
+  useEffect(() => {
+    bridge.send("VKWebAppSendCustomEvent", {
+      type: "type_view",
+      event: "launch",
+      screen: "main",
+      timezone: "3gtm",
+    });
+  }, []);
 
   return (
     <div className="App">

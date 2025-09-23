@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import style from "./ContactDots.module.scss";
 import { Link } from "react-router-dom";
 import lottie from "lottie-web";
+import bridge from "@vkontakte/vk-bridge";
 
 const ContactDots = React.memo(() => {
   const container = useRef(null);
@@ -46,6 +47,15 @@ const ContactDots = React.memo(() => {
                 className={style.contact_dots__link}
                 to="/contact-dots/game"
                 onClick={async () => {
+                  bridge.send("VKWebAppSendCustomEvent", {
+                    type: "type_click",
+                    event: "task_click",
+                    screen: "main",
+                    timezone: "3gtm",
+                    json: {
+                      task: 3,
+                    },
+                  });
                   if (window.ym) {
                     await window.ym(103806192, "reachGoal", "game2_start");
                   }

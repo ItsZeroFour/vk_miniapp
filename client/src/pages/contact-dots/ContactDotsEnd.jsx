@@ -27,6 +27,16 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
   useEffect(() => {
     const markGameAsComplete = async () => {
       if (isCompleted) {
+        bridge.send("VKWebAppSendCustomEvent", {
+          type: "type_action",
+          event: "task_done",
+          screen: "main",
+          timezone: "3gtm",
+          json: {
+            task: 3,
+          },
+        });
+
         if (isMiniApp) {
           const launchParams = await bridge.send("VKWebAppGetLaunchParams");
 
@@ -91,6 +101,16 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
               <Link
                 to="/contact-dots"
                 onClick={async () => {
+                  await bridge.send("VKWebAppSendCustomEvent", {
+                    type: "type_click",
+                    event: "task_repeat",
+                    screen: "main",
+                    timezone: "3gtm",
+                    json: {
+                      task: 3,
+                    },
+                  });
+
                   if (window.ym) {
                     await window.ym(103806192, "reachGoal", "game2_replay");
                   }
@@ -100,7 +120,21 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
               >
                 НАЧАТЬ ИГРУ ЗАНОВО
               </Link>
-              <Link to="/" state={{ hiddenVideo: true }}>
+              <Link
+                to="/"
+                onClick={async () => {
+                  bridge.send("VKWebAppSendCustomEvent", {
+                    type: "type_click",
+                    event: "task_other",
+                    screen: "main",
+                    timezone: "3gtm",
+                    json: {
+                      task: 3,
+                    },
+                  });
+                }}
+                state={{ hiddenVideo: true }}
+              >
                 ДРУГИЕ ИГРЫ
               </Link>
             </div>

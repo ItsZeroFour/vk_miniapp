@@ -5,6 +5,7 @@ import _1kanal from "../../assets/icons/logos/1kanal-2.svg";
 import kinopoisk from "../../assets/icons/logos/kinopoisk-2.svg";
 import Video from "../../components/video/Video";
 import { partners2 } from "../../data/partners-2";
+import bridge from "@vkontakte/vk-bridge";
 
 const About = React.memo(() => {
   return (
@@ -27,6 +28,17 @@ const About = React.memo(() => {
 
         <Link
           className={style.about__tickets}
+          onClick={async () => {
+            bridge.send("VKWebAppSendCustomEvent", {
+              type: "type_click",
+              event: "ticket_transition",
+              screen: "main",
+              timezone: "3gtm",
+              json: {
+                screen: "О фильме",
+              },
+            });
+          }}
           to="https://www.kinopoisk.ru/film/1234808"
           target="_blank"
         >
