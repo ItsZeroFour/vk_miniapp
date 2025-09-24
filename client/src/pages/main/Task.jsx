@@ -77,7 +77,7 @@ const Task = React.memo(({ user, finalUserId }) => {
       img: "/images/main/tasks/task-5.png",
       isDone: user?.targeted_actions?.subscribe || isSubscribe,
       title: "подписка на паблик",
-      path: "https://vk.com/club232395157",
+      path: "https://vk.com/centpart",
     },
     {
       bg: "/images/main/tasks/bg/bg-6.webp",

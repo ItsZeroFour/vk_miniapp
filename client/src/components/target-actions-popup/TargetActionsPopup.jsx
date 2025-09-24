@@ -199,13 +199,15 @@ const TargetActionsPopup = ({
             }}
           ></button>
 
-          <h3>Задание пока не доступно!</h3>
-          <p>Возвращайтесь сюда позже.</p>
-
-          {/* {!checkResult &&
-          ((targetAction === "comment" && !isCommented) ||
-            (targetAction === "subscribe" && !isSubscribe) ||
-            (targetAction === "share" && !isShared)) ? (
+          {!(targetAction === "subscribe" && !isSubscribe) ? (
+            <>
+              <h3>Задание пока не доступно!</h3>
+              <p>Возвращайтесь сюда позже.</p>
+            </>
+          ) : !checkResult &&
+            ((targetAction === "comment" && !isCommented) ||
+              (targetAction === "subscribe" && !isSubscribe) ||
+              (targetAction === "share" && !isShared)) ? (
             <>
               <p className={style.target_actions__text}>
                 {targetAction === "subscribe" ? (
@@ -335,7 +337,7 @@ const TargetActionsPopup = ({
                 </p>
               )}
             </>
-          )} */}
+          )}
         </div>
       </div>
     </section>
