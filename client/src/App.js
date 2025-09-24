@@ -6,6 +6,7 @@ import useVKAuth from "./hooks/useVKAuth";
 import useCommentStatus from "./hooks/useCommentStatus";
 import useSubscriptionStatus from "./hooks/useSubscriptionStatus";
 import useRepostStatus from "./hooks/useRepostStatus";
+import { useVKNotifications } from "./hooks/useVKNotifications";
 
 import Header from "./components/header/Header";
 // import ToggleVolume from "./components/toggle_volume/ToggleVolume";
@@ -76,6 +77,31 @@ function App() {
   const isShared = useRepostStatus(accessToken, finalUserId, userData);
 
   const { loading, userInfo, refresh } = useGetUserInfo(finalUserId);
+
+  // const { isAllowed, isLoading, error, requestPermission } =
+  //   useVKNotifications();
+
+  // const handleRequest = async () => {
+  //   const result = await requestPermission();
+
+  //   if (result.success) {
+  //     console.log("Можно отправлять уведомления!");
+  //   }
+  // };
+
+  useEffect(() => {
+    const requestPermission = async () => {
+      try {
+        const result = await bridge.send("VKWebAppAllowNotifications");
+
+        console.log(result.result);
+      } catch (error) {
+        console.error("Ошибка запроса:", error);
+      }
+    };
+
+    requestPermission();
+  }, []);
 
   usePreloadImages();
 
