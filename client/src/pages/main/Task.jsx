@@ -9,6 +9,7 @@ import TargetActionsPopup from "../../components/target-actions-popup/TargetActi
 import useCommentStatus from "../../hooks/useCommentStatus";
 import useSubscriptionStatus from "../../hooks/useSubscriptionStatus";
 import useRepostStatus from "../../hooks/useRepostStatus";
+import bridge from "@vkontakte/vk-bridge";
 
 const Task = React.memo(({ user, finalUserId }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -76,7 +77,7 @@ const Task = React.memo(({ user, finalUserId }) => {
       img: "/images/main/tasks/task-5.png",
       isDone: user?.targeted_actions?.subscribe || isSubscribe,
       title: "подписка на паблик",
-      path: "https://vk.com/club232395157",
+      path: "https://vk.com/centpart",
     },
     {
       bg: "/images/main/tasks/bg/bg-6.webp",
@@ -149,6 +150,16 @@ const Task = React.memo(({ user, finalUserId }) => {
                   cursor: "pointer",
                 }}
                 onClick={async (e) => {
+                  bridge.send("VKWebAppSendCustomEvent", {
+                    type: "type_click",
+                    event: "task_tap",
+                    screen: "main",
+                    timezone: "3gtm",
+                    json: {
+                      task: index + 1,
+                    },
+                  });
+
                   if (index < 3) {
                     setNavigateItemClick(path);
                     handleItemClick({ path }, e);

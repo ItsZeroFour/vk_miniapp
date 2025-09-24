@@ -10,6 +10,7 @@ import {
   itemVariants,
   animationDelays,
 } from "../../animations/face-recognition-home";
+import bridge from "@vkontakte/vk-bridge";
 
 const FaceRecognitionHome = React.memo(() => {
   const images = [
@@ -112,6 +113,15 @@ const FaceRecognitionHome = React.memo(() => {
             <Link
               to="/face-recognition/game"
               onClick={async () => {
+                bridge.send("VKWebAppSendCustomEvent", {
+                  type: "type_click",
+                  event: "task_click",
+                  screen: "main",
+                  timezone: "3gtm",
+                  json: {
+                    task: 1,
+                  },
+                });
                 if (window.ym) {
                   await window.ym(103806192, "reachGoal", "game1_start");
                 }

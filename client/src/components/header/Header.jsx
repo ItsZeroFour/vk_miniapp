@@ -49,6 +49,16 @@ const Header = ({ finalUserId, user }) => {
   const openLink = async () => {
     const url = "https://www.kinopoisk.ru/film/1234808";
 
+    bridge.send("VKWebAppSendCustomEvent", {
+      type: "type_click",
+      event: "ticket_transition",
+      screen: "main",
+      timezone: "3gtm",
+      json: {
+        screen: "Шапка",
+      },
+    });
+
     try {
       if (isMiniApp) {
         try {
@@ -67,6 +77,7 @@ const Header = ({ finalUserId, user }) => {
       window.location.href = url;
     }
   };
+
   return (
     <header className={style.header}>
       <TaskPopup

@@ -77,6 +77,16 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
   // YM
   useEffect(() => {
     if (isWon) {
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_action",
+        event: "task_done",
+        screen: "main",
+        timezone: "3gtm",
+        json: {
+          task: 1,
+        },
+      });
+
       if (window.ym) {
         window.ym(103806192, "reachGoal", "game1_success");
       }
@@ -149,6 +159,16 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
                 className={style.final__buttons__first}
                 to="/face-recognition"
                 onClick={async () => {
+                  await bridge.send("VKWebAppSendCustomEvent", {
+                    type: "type_click",
+                    event: "task_repeat",
+                    screen: "main",
+                    timezone: "3gtm",
+                    json: {
+                      task: 1,
+                    },
+                  });
+
                   if (window.ym) {
                     await window.ym(103806192, "reachGoal", "game1_replay");
                   }
@@ -160,6 +180,17 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
               <Link
                 className={style.final__buttons__last}
                 to="/"
+                onClick={async () => {
+                  bridge.send("VKWebAppSendCustomEvent", {
+                    type: "type_click",
+                    event: "task_other",
+                    screen: "main",
+                    timezone: "3gtm",
+                    json: {
+                      task: 1,
+                    },
+                  });
+                }}
                 state={{ hiddenVideo: true }}
               >
                 Другие игры
