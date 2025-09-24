@@ -199,7 +199,7 @@ const TargetActionsPopup = ({
             }}
           ></button>
 
-          {!(targetAction === "subscribe" && !isSubscribe) ? (
+          {!(targetAction === "subscribe") ? (
             <>
               <h3>Задание пока не доступно!</h3>
               <p>Возвращайтесь сюда позже.</p>
@@ -345,3 +345,5 @@ const TargetActionsPopup = ({
 };
 
 export default TargetActionsPopup;
+
+// 23900316
