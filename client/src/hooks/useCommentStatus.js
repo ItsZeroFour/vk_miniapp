@@ -27,27 +27,36 @@ export default function useCommentStatus(accessToken, userId, userData) {
         let userHasCommented = false;
 
         if (isMiniApp) {
-          const response = await bridge.send("VKWebAppCallAPIMethod", {
-            method: "wall.getComments",
-            params: {
-              owner_id: -Number(process.env.REACT_APP_GROUP_ID),
-              post_id: Number(process.env.REACT_APP_POST_ID_COMMENT),
-              count: 100,
-              v: "5.131",
-              access_token: accessToken,
-            },
-          });
+          try {
+            const response = await bridge.send("VKWebAppCallAPIMethod", {
+              method: "wall.getComments",
+              params: {
+                owner_id: -Number(process.env.REACT_APP_GROUP_ID),
+                post_id: Number(process.env.REACT_APP_POST_ID_COMMENT),
+                count: 100,
+                v: "5.131",
+                access_token: accessToken,
+              },
+            });
 
-          userHasCommented = response.response.items.some(
-            (c) => c.from_id === Number(userId)
-          );
+            userHasCommented = response.response.items.some(
+              (c) => c.from_id === Number(userId)
+            );
+          } catch (error) {
+            console.log("Bridge failed, using axios fallback:", error);
 
-          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+            try {
+              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+              const res = await axios.get(`/vk/check-comment`, {
+                params: launchParams,
+              });
 
-          const res = await axios.get(`/vk/check-comment`, {
-            params: launchParams,
-          });
-          userHasCommented = res.data.hasCommented;
+              userHasCommented = res.data.hasCommented;
+            } catch (axiosError) {
+              console.error("Both bridge and axios failed:", axiosError);
+              userHasCommented = false;
+            }
+          }
         } else {
           try {
             // const launchParams = await bridge.send("VKWebAppGetLaunchParams");

@@ -27,36 +27,38 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
         let subscribed = false;
 
         if (isMiniApp) {
-          console.log("test 1");
-
-          const res = await bridge.send("VKWebAppCallAPIMethod", {
-            method: "groups.isMember",
-            params: {
-              group_id: process.env.REACT_APP_GROUP_ID,
-              user_id: userId,
-              v: "5.131",
-              access_token: accessToken,
-            },
-          });
-
-          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-
-          console.log("test 3");
-
-          const response = await axios.get(`/vk/check-subscribe`, {
-            params: launchParams,
-          });
-
-          subscribed = response.data.isMember === 1;
-
-          subscribed = res.response === 1;
-        } else {
-          console.log("test 2");
+          let subscribed = false;
 
           try {
-            // const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+            const res = await bridge.send("VKWebAppCallAPIMethod", {
+              method: "groups.isMember",
+              params: {
+                group_id: process.env.REACT_APP_GROUP_ID,
+                user_id: userId,
+                v: "5.131",
+                access_token: accessToken,
+              },
+            });
 
-            console.log("test 3");
+            subscribed = res.response === 1;
+          } catch (error) {
+            console.log("Bridge failed, using axios fallback:", error);
+
+            try {
+              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+              const response = await axios.get(`/vk/check-subscribe`, {
+                params: launchParams,
+              });
+
+              subscribed = response.data.isMember === 1;
+            } catch (axiosError) {
+              console.error("Both bridge and axios failed:", axiosError);
+              subscribed = false;
+            }
+          }
+        } else {
+          try {
+            // const launchParams = await bridge.send("VKWebAppGetLaunchParams");
 
             const res = await axios.get(`/vk/check-subscribe`, {
               // params: launchParams,
@@ -64,7 +66,6 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
             subscribed = res.data.isMember === 1;
           } catch (error) {
             console.log(error);
-            console.log("test 4");
           }
         }
 

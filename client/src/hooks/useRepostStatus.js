@@ -27,39 +27,50 @@ export default function useRepostStatus(accessToken, userId, userData) {
         let reposted = false;
 
         if (isMiniApp) {
-          const userInfo = await bridge.send("VKWebAppGetUserInfo");
-          const auth = await bridge.send("VKWebAppGetAuthToken", {
-            app_id: Number(process.env.REACT_APP_APP_ID),
-            scope: "wall",
-          });
+          try {
+            const userInfo = await bridge.send("VKWebAppGetUserInfo");
+            const auth = await bridge.send("VKWebAppGetAuthToken", {
+              app_id: Number(process.env.REACT_APP_APP_ID),
+              scope: "wall",
+            });
 
-          const response = await bridge.send("VKWebAppCallAPIMethod", {
-            method: "wall.get",
-            params: {
-              owner_id: userInfo.id,
-              count: 100,
-              filter: "owner",
-              access_token: auth.access_token,
-              v: "5.131",
-            },
-          });
+            const response = await bridge.send("VKWebAppCallAPIMethod", {
+              method: "wall.get",
+              params: {
+                owner_id: userInfo.id,
+                count: 100,
+                filter: "owner",
+                access_token: auth.access_token,
+                v: "5.131",
+              },
+            });
 
-          const groupId = -Number(process.env.REACT_APP_GROUP_ID);
-          const postId = Number(process.env.REACT_APP_POST_ID);
+            const groupId = -Number(process.env.REACT_APP_GROUP_ID);
+            const postId = Number(process.env.REACT_APP_POST_ID);
 
-          reposted = response.response.items.some((item) => {
-            const original = item.copy_history?.[0];
-            return (
-              original && original.from_id === groupId && original.id === postId
-            );
-          });
+            reposted = response.response.items.some((item) => {
+              const original = item.copy_history?.[0];
+              return (
+                original &&
+                original.from_id === groupId &&
+                original.id === postId
+              );
+            });
+          } catch (error) {
+            console.log("Bridge failed, using axios fallback:", error);
 
-          // Получаем launchParams для авторизации
-          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-          const res = await axios.get(`/vk/check-repost`, {
-            params: launchParams, // ← ДОБАВЛЕНО: передаем параметры авторизации
-          });
-          reposted = res.data.shared;
+            try {
+              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+              const res = await axios.get(`/vk/check-repost`, {
+                params: launchParams,
+              });
+
+              reposted = res.data.shared;
+            } catch (axiosError) {
+              console.error("Both bridge and axios failed:", axiosError);
+              reposted = false;
+            }
+          }
         } else {
           try {
             // Получаем launchParams для авторизации
