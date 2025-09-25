@@ -61,7 +61,7 @@ app.use(
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      domain: '.augustmovie.ru',
+      domain: ".augustmovie.ru",
       maxAge: 14 * 24 * 60 * 60,
     },
   })
@@ -100,6 +100,21 @@ app.get("/auth/vk/callback", async (req, res) => {
 
     req.session.userId = tokens.userId;
     req.session.accessToken = tokens.accessToken;
+
+    req.session.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+        return res.redirect(
+          `${process.env.CLIENT_URL}?auth_error=session_error`
+        );
+      }
+
+      console.log("Successfully authenticated user:", tokens.userId);
+      console.log("Session saved:", req.session.userId);
+
+      const redirectUrl = `${process.env.CLIENT_URL}?userId=${tokens.userId}&token=${tokens.accessToken}&hide_video=true&auth_success=true`;
+      res.redirect(redirectUrl);
+    });
 
     console.log("Successfully authenticated user:", tokens.userId);
     console.log("Saved to session:", req.session.userId);
