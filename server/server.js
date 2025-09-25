@@ -61,7 +61,7 @@ app.use(
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      domain: ".augustmovie.ru",
+      domain: "augustmovie.ru",
       maxAge: 14 * 24 * 60 * 60,
     },
   })
