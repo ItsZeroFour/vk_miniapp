@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
-import useVkEnvironment from "../../hooks/useVkEnvironment";
+import useVkEnvironment from "./useVkEnvironment";
 
 export default function useCommentStatus(accessToken, userId, userData) {
   const [commentStatus, setCommentStatus] = useState(false);

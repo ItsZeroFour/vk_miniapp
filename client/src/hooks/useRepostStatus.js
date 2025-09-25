@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
-import useVkEnvironment from "../../hooks/useVkEnvironment";
+import useVkEnvironment from "./useVkEnvironment";
 
 export default function useRepostStatus(accessToken, userId, userData) {
   const [isShared, setIsShared] = useState(false);

@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
-import useVkEnvironment from "../../hooks/useVkEnvironment";
+import useVkEnvironment from "./useVkEnvironment";
 
 export default function useSubscriptionStatus(accessToken, userId, userData) {
   const [isSubscribe, setIsSubscribe] = useState(false);
