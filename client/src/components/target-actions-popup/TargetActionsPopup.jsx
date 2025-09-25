@@ -199,7 +199,11 @@ const TargetActionsPopup = ({
             }}
           ></button>
 
-          {!(targetAction === "subscribe" || targetAction === "comment" || targetAction === "share") ? (
+          {!(
+            targetAction === "subscribe" ||
+            targetAction === "comment" ||
+            targetAction === "share"
+          ) ? (
             <>
               <h3>Задание пока не доступно!</h3>
               <p>Возвращайтесь сюда позже.</p>
@@ -326,10 +330,17 @@ const TargetActionsPopup = ({
           ) : (
             <>
               {checkResult && !isDone ? (
-                <p className={style.target_actions__unsuccess}>
-                  <img src={unsuccess} alt="unsuccess" />
-                  Задание не выполнено
-                </p>
+                <div className={style.target_actions__unsuccess__wrapper}>
+                  <p className={style.target_actions__unsuccess}>
+                    <img src={unsuccess} alt="unsuccess" />
+                    Задание не выполнено.
+                  </p>
+
+                  <p>
+                    Если данные о выполнении пока не пришли – обновите страницу
+                    или подождите несколько минут
+                  </p>
+                </div>
               ) : (
                 <p className={style.target_actions__success}>
                   <img src={success} alt="success" />
