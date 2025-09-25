@@ -2,7 +2,7 @@ import User from "../models/User.js";
 
 export const authUser = async (req, res) => {
   try {
-    const user_id = req.userId;
+    const user_id = req.userId || req.body.userId;
     const sessionUserId = req.session.userId;
 
     if (!user_id) {
@@ -214,7 +214,10 @@ export const completeThirdGame = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const user_id = req.userId;
+    const user_id = req.userId || req.body.userId;
+    const sessionUserId = req.session.userId;
+
+    console.log(sessionUserId);
 
     if (!user_id) {
       return res.status(401).json({
