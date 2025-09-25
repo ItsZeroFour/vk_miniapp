@@ -30,8 +30,12 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
           let subscribed = false;
 
           try {
-            const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-            console.log(launchParams);
+            const auth = await bridge.send("VKWebAppGetAuthToken", {
+              app_id: Number(process.env.REACT_APP_APP_ID),
+              scope: "groups,wall,offline",
+            });
+
+            console.log(auth);
 
             const res = await bridge.send("VKWebAppCallAPIMethod", {
               method: "groups.isMember",
@@ -39,7 +43,7 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
                 group_id: process.env.REACT_APP_GROUP_ID,
                 user_id: userId,
                 v: "5.131",
-                access_token: accessToken,
+                access_token: auth.access_token,
               },
             });
 
