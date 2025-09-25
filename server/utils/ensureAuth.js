@@ -38,6 +38,7 @@ export default function ensureAuth(req, res, next) {
 
   if (req.session && req.session.userId) {
     req.userId = req.session.userId;
+    console.log('✅ Authenticated via session:', req.session.userId);
     return next();
   }
 
