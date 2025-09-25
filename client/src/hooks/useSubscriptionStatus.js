@@ -30,6 +30,9 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
           let subscribed = false;
 
           try {
+            const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+            console.log(launchParams);
+
             const res = await bridge.send("VKWebAppCallAPIMethod", {
               method: "groups.isMember",
               params: {
