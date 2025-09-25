@@ -43,9 +43,10 @@ export default function useCommentStatus(accessToken, userId, userData) {
           );
         } else {
           try {
-            const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+            // const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+
             const res = await axios.get(`/vk/check-comment`, {
-              params: launchParams,
+              // params: launchParams,
             });
             userHasCommented = res.data.hasCommented;
           } catch (error) {

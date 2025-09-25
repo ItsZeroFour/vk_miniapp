@@ -56,9 +56,9 @@ export default function useRepostStatus(accessToken, userId, userData) {
         } else {
           try {
             // Получаем launchParams для авторизации
-            const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+            // const launchParams = await bridge.send("VKWebAppGetLaunchParams");
             const res = await axios.get(`/vk/check-repost`, {
-              params: launchParams, // ← ДОБАВЛЕНО: передаем параметры авторизации
+              // params: launchParams, // ← ДОБАВЛЕНО: передаем параметры авторизации
             });
             reposted = res.data.shared;
           } catch (error) {
