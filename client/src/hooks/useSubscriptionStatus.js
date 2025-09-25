@@ -1,13 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
-import useVkEnvironment from "./useVkEnvironment";
+import { isVkMiniApp } from "../utils/isVkMiniApp";
 
 export default function useSubscriptionStatus(accessToken, userId, userData) {
   const [isSubscribe, setIsSubscribe] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-
-  const { isMiniApp } = useVkEnvironment();
 
   const refresh = useCallback(() => {
     setRefreshKey((prev) => prev + 1);
@@ -20,55 +18,28 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
   }, [userData]);
 
   useEffect(() => {
-    // if (!userId) return;
+    if (!userId) return;
 
     async function checkSubscription() {
       try {
         let subscribed = false;
 
-        if (isMiniApp) {
-          let subscribed = false;
-
-          try {
-            const auth = await bridge.send("VKWebAppGetAuthToken", {
-              app_id: Number(process.env.REACT_APP_APP_ID),
-              scope: "groups,wall,offline",
-            });
-
-            console.log(auth);
-
-            const res = await bridge.send("VKWebAppCallAPIMethod", {
-              method: "groups.isMember",
-              params: {
-                group_id: process.env.REACT_APP_GROUP_ID,
-                user_id: userId,
-                v: "5.131",
-                access_token: auth.access_token,
-              },
-            });
-
-            subscribed = res.response === 1;
-          } catch (error) {
-            console.log("Bridge failed, using axios fallback:", error);
-
-            try {
-              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-              const response = await axios.get(`/vk/check-subscribe`, {
-                params: launchParams,
-              });
-
-              subscribed = response.data.isMember === 1;
-            } catch (axiosError) {
-              console.error("Both bridge and axios failed:", axiosError);
-              subscribed = false;
-            }
-          }
+        if (isVkMiniApp()) {
+          const res = await bridge.send("VKWebAppCallAPIMethod", {
+            method: "groups.isMember",
+            params: {
+              group_id: process.env.REACT_APP_GROUP_ID,
+              user_id: userId,
+              v: "5.131",
+              access_token: accessToken,
+            },
+          });
+          subscribed = res.response === 1;
         } else {
           try {
-            // const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-
+            const launchParams = await bridge.send("VKWebAppGetLaunchParams");
             const res = await axios.get(`/vk/check-subscribe`, {
-              // params: launchParams,
+              params: launchParams,
             });
             subscribed = res.data.isMember === 1;
           } catch (error) {
@@ -81,8 +52,6 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.subscribe === false) {
             try {
-              console.log("test 5");
-
               const launchParams = await bridge.send("VKWebAppGetLaunchParams");
               await axios.post(
                 "/user/update-target",
@@ -97,7 +66,6 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
               );
             } catch (error) {
               console.log(error);
-              console.log("test 6");
             }
           }
         }

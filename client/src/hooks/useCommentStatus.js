@@ -1,13 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
-import useVkEnvironment from "./useVkEnvironment";
+import { isVkMiniApp } from "../utils/isVkMiniApp";
 
 export default function useCommentStatus(accessToken, userId, userData) {
   const [commentStatus, setCommentStatus] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-
-  const { isMiniApp } = useVkEnvironment();
 
   const refresh = useCallback(() => {
     setRefreshKey((prev) => prev + 1);
@@ -20,49 +18,32 @@ export default function useCommentStatus(accessToken, userId, userData) {
   }, [userData]);
 
   useEffect(() => {
-    // if (!userId) return;
+    if (!userId) return;
 
     async function checkComments() {
       try {
         let userHasCommented = false;
 
-        if (isMiniApp) {
-          try {
-            const response = await bridge.send("VKWebAppCallAPIMethod", {
-              method: "wall.getComments",
-              params: {
-                owner_id: -Number(process.env.REACT_APP_GROUP_ID),
-                post_id: Number(process.env.REACT_APP_POST_ID_COMMENT),
-                count: 100,
-                v: "5.131",
-                access_token: accessToken,
-              },
-            });
+        if (isVkMiniApp()) {
+          const response = await bridge.send("VKWebAppCallAPIMethod", {
+            method: "wall.getComments",
+            params: {
+              owner_id: -Number(process.env.REACT_APP_GROUP_ID),
+              post_id: Number(process.env.REACT_APP_POST_ID_COMMENT),
+              count: 100,
+              v: "5.131",
+              access_token: accessToken,
+            },
+          });
 
-            userHasCommented = response.response.items.some(
-              (c) => c.from_id === Number(userId)
-            );
-          } catch (error) {
-            console.log("Bridge failed, using axios fallback:", error);
-
-            try {
-              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-              const res = await axios.get(`/vk/check-comment`, {
-                params: launchParams,
-              });
-
-              userHasCommented = res.data.hasCommented;
-            } catch (axiosError) {
-              console.error("Both bridge and axios failed:", axiosError);
-              userHasCommented = false;
-            }
-          }
+          userHasCommented = response.response.items.some(
+            (c) => c.from_id === Number(userId)
+          );
         } else {
           try {
-            // const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-
+            const launchParams = await bridge.send("VKWebAppGetLaunchParams");
             const res = await axios.get(`/vk/check-comment`, {
-              // params: launchParams,
+              params: launchParams,
             });
             userHasCommented = res.data.hasCommented;
           } catch (error) {
