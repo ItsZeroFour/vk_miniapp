@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
-import { isVkMiniApp } from "../utils/isVkMiniApp";
+import useVkEnvironment from "./useVkEnvironment";
 
 export default function useCommentStatus(accessToken, userId, userData) {
   const [commentStatus, setCommentStatus] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const { isMiniApp } = useVkEnvironment();
 
   const refresh = useCallback(() => {
     setRefreshKey((prev) => prev + 1);
@@ -18,13 +20,13 @@ export default function useCommentStatus(accessToken, userId, userData) {
   }, [userData]);
 
   useEffect(() => {
-    if (!userId) return;
+    // if (!userId) return;
 
     async function checkComments() {
       try {
         let userHasCommented = false;
 
-        if (isVkMiniApp()) {
+        if (isMiniApp) {
           const response = await bridge.send("VKWebAppCallAPIMethod", {
             method: "wall.getComments",
             params: {

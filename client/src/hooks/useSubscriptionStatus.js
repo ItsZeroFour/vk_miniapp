@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
-import { isVkMiniApp } from "../utils/isVkMiniApp";
+import useVkEnvironment from "./useVkEnvironment";
 
 export default function useSubscriptionStatus(accessToken, userId, userData) {
   const [isSubscribe, setIsSubscribe] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const { isMiniApp } = useVkEnvironment();
 
   const refresh = useCallback(() => {
     setRefreshKey((prev) => prev + 1);
@@ -18,13 +20,14 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
   }, [userData]);
 
   useEffect(() => {
-    if (!userId) return;
+    // if (!userId) return;
 
     async function checkSubscription() {
       try {
         let subscribed = false;
 
-        if (isVkMiniApp()) {
+        if (isMiniApp) {
+          console.log(1234);
           const res = await bridge.send("VKWebAppCallAPIMethod", {
             method: "groups.isMember",
             params: {
@@ -38,6 +41,8 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
         } else {
           try {
             const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+            console.log(123);
+
             const res = await axios.get(`/vk/check-subscribe`, {
               params: launchParams,
             });

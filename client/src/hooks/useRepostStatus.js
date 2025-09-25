@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import bridge from "@vkontakte/vk-bridge";
 import axios from "../utils/axios";
-import { isVkMiniApp } from "../utils/isVkMiniApp";
+import useVkEnvironment from "./useVkEnvironment";
 
 export default function useRepostStatus(accessToken, userId, userData) {
   const [isShared, setIsShared] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+
+  const { isMiniApp } = useVkEnvironment();
 
   const refresh = useCallback(() => {
     setRefreshKey((prev) => prev + 1);
@@ -18,13 +20,13 @@ export default function useRepostStatus(accessToken, userId, userData) {
   }, [userData]);
 
   useEffect(() => {
-    if (!userId) return;
+    // if (!userId) return;
 
     async function checkRepost() {
       try {
         let reposted = false;
 
-        if (isVkMiniApp()) {
+        if (isMiniApp) {
           const userInfo = await bridge.send("VKWebAppGetUserInfo");
           const auth = await bridge.send("VKWebAppGetAuthToken", {
             app_id: Number(process.env.REACT_APP_APP_ID),
