@@ -54,10 +54,9 @@ app.use(
     }),
     cookie: {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      domain: ".augustmovie.ru",
-      maxAge: 14 * 24 * 60 * 60 * 1000,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 14 * 24 * 60 * 60,
     },
   })
 );
