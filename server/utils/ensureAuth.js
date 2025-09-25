@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import dotenv from "dotenv";
-import { isAuthenticated } from "./components/VKAuthControllers.js";
+import { isAuthenticated } from "../components/VKAuthControllers.js";
 
 dotenv.config();
 
