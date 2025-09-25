@@ -27,12 +27,14 @@ function verifyMiniAppSign(params) {
 export default function ensureAuth(req, res, next) {
   if (verifyMiniAppSign(req.query)) {
     req.userId = req.query.vk_user_id || req.query.user_id;
+    console.log('✅ Authenticated via session1:', req.session.userId);
 
     return next();
   }
 
   if (verifyMiniAppSign(req.body)) {
     req.userId = req.body.vk_user_id || req.query.user_id;
+    console.log('✅ Authenticated via session2:', req.session.userId);
     return next();
   }
 
@@ -42,6 +44,6 @@ export default function ensureAuth(req, res, next) {
     return next();
   }
 
-  console.log("❌ Unauthorized");
+  console.log("❌ Unauthorized", req.session);
   return res.status(401).json({ ok: false, error: "Unauthorized" });
 }
