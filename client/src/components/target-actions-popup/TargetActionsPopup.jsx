@@ -199,7 +199,7 @@ const TargetActionsPopup = ({
             }}
           ></button>
 
-          {!(targetAction === "subscribe" || targetAction === "comment") ? (
+          {!(targetAction === "subscribe" || targetAction === "comment" || targetAction === "share") ? (
             <>
               <h3>Задание пока не доступно!</h3>
               <p>Возвращайтесь сюда позже.</p>
