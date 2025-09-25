@@ -41,6 +41,13 @@ export default function useCommentStatus(accessToken, userId, userData) {
           userHasCommented = response.response.items.some(
             (c) => c.from_id === Number(userId)
           );
+
+          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+
+          const res = await axios.get(`/vk/check-comment`, {
+            params: launchParams,
+          });
+          userHasCommented = res.data.hasCommented;
         } else {
           try {
             // const launchParams = await bridge.send("VKWebAppGetLaunchParams");

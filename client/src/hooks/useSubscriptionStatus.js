@@ -38,6 +38,17 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
               access_token: accessToken,
             },
           });
+
+          const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+
+          console.log("test 3");
+
+          const response = await axios.get(`/vk/check-subscribe`, {
+            params: launchParams,
+          });
+
+          subscribed = response.data.isMember === 1;
+
           subscribed = res.response === 1;
         } else {
           console.log("test 2");
