@@ -28,12 +28,7 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 /* MIDDLEWARES */
-app.use(
-  cors({
-    origin: ["https://games.augustmovie.ru", "https://vkgames.augustmovie.ru"],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
@@ -59,9 +54,8 @@ app.use(
     }),
     cookie: {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      domain: "augustmovie.ru",
+      secure: false,
+      sameSite: "lax",
       maxAge: 14 * 24 * 60 * 60,
     },
   })
@@ -79,7 +73,7 @@ app.get("/auth/vk", async (req, res) => {
 
 app.get("/auth/vk/callback", async (req, res) => {
   try {
-    const { code, state, device_id, error, error_description } = req.query;
+    const { code, state, device_id, error, error_description } = req.query; // Добавлен device_id
 
     console.log("Callback received:", { code, state, device_id, error });
 
@@ -100,21 +94,6 @@ app.get("/auth/vk/callback", async (req, res) => {
 
     req.session.userId = tokens.userId;
     req.session.accessToken = tokens.accessToken;
-
-    await new Promise((resolve, reject) => {
-      req.session.save((err) => {
-        if (err) {
-          console.error('Session save error:', err);
-          reject(err);
-        } else {
-          console.log('Session saved successfully');
-          resolve();
-        }
-      });
-    });
-
-    console.log("Session after save:", req.session);
-    console.log("=== CALLBACK END ===");
 
     console.log("Successfully authenticated user:", tokens.userId);
     console.log("Saved to session:", req.session.userId);
