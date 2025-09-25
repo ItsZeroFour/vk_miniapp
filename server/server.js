@@ -28,12 +28,7 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 /* MIDDLEWARES */
-app.use(
-  cors({
-    origin: ["https://games.augustmovie.ru", "https://vkgames.augustmovie.ru"],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
@@ -59,10 +54,9 @@ app.use(
     }),
     cookie: {
       httpOnly: true,
-      secure: false,
-      sameSite: "none",
-      domain: ".augustmovie.ru",
-      path: "/",
+      secure: true,
+      sameSite: "lax",
+      maxAge: 14 * 24 * 60 * 60,
     },
   })
 );
