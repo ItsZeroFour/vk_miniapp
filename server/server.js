@@ -28,7 +28,12 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 /* MIDDLEWARES */
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://games.augustmovie.ru", "https://vkgames.augustmovie.ru"],
+    credentials: true,
+  })
+);
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan("common"));
@@ -54,8 +59,9 @@ app.use(
     }),
     cookie: {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: true,
+      sameSite: "none",
+      domain: '.augustmovie.ru',
       maxAge: 14 * 24 * 60 * 60,
     },
   })
@@ -73,7 +79,7 @@ app.get("/auth/vk", async (req, res) => {
 
 app.get("/auth/vk/callback", async (req, res) => {
   try {
-    const { code, state, device_id, error, error_description } = req.query; // Добавлен device_id
+    const { code, state, device_id, error, error_description } = req.query;
 
     console.log("Callback received:", { code, state, device_id, error });
 
