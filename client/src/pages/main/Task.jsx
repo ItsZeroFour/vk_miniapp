@@ -70,7 +70,7 @@ const Task = React.memo(({ user, finalUserId }) => {
       img: "/images/main/tasks/task-4.png",
       isDone: user?.targeted_actions?.comment || isCommented,
       title: "вопрос \\ на засыпку",
-      path: "https://vk.com/club232395157?from=groups&w=wall-232395157_1",
+      path: "https://vk.com/wall-23900316_87392",
     },
     {
       bg: "/images/main/tasks/bg/bg-5.webp",
