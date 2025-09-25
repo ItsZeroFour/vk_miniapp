@@ -95,6 +95,9 @@ export async function getToken(req, res) {
   try {
     const userId = req.userId;
 
+    console.log(`==========${req.session.userId}===========`);
+    
+
     if (!userId) {
       return res.status(401).json({ error: "Unauthorized" });
     }
