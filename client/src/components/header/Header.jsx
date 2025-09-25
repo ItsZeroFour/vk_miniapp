@@ -108,7 +108,7 @@ const Header = ({ finalUserId, user }) => {
 
         <Link className={style.header__logo} to="/">
           <img src={logo} alt="logo" />
-          <p>в кино с 25 сентября</p>
+          <p>уже в кино</p>
         </Link>
 
         <nav className={style.header__nav}>
