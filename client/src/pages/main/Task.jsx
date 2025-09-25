@@ -84,7 +84,7 @@ const Task = React.memo(({ user, finalUserId }) => {
       img: "/images/main/tasks/task-6.png",
       isDone: user?.targeted_actions?.share || isShared,
       title: "репост записи в группе",
-      path: "https://vk.com/club232395157?from=groups&w=wall-232395157_2",
+      path: "https://vk.com/wall-23900316_87409",
     },
   ];
 
