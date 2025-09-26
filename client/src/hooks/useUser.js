@@ -14,12 +14,14 @@ export default function useUser() {
         const launchParams = await bridge.send("VKWebAppGetLaunchParams");
         const { vk_user_id } = launchParams;
 
-        if (vk_user_id) {
-          setUserId(vk_user_id);
+        const userId = vk_user_id || +localStorage.getItem("user_id");
+
+        if (userId) {
+          setUserId(userId);
 
           const res = await axios.post(
             "/user/auth",
-            {},
+            { user_id: userId },
             { params: launchParams }
           );
 

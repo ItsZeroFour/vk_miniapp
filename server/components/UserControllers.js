@@ -2,7 +2,7 @@ import User from "../models/User.js";
 
 export const authUser = async (req, res) => {
   try {
-    const user_id = req.userId;
+    const user_id = req.userId || req.body.user_id;
     const sessionUserId = req.session.userId;
 
     if (!user_id) {

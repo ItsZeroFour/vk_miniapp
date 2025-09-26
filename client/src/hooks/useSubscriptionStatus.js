@@ -44,6 +44,9 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
           }
         }
 
+        console.log(subscribed);
+        console.log(userData);
+
         if (subscribed && !isSubscribe) {
           setIsSubscribe(true);
 
