@@ -44,15 +44,17 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
           }
         }
 
-        console.log(subscribed);
-        console.log(userData);
-
         if (subscribed && !isSubscribe) {
           setIsSubscribe(true);
 
           if (userData?.targeted_actions?.subscribe === false) {
+            console.log("1");
+
             try {
               const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+
+              console.log("2");
+
               await axios.post(
                 "/user/update-target",
                 {
@@ -64,6 +66,8 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
                   params: launchParams,
                 }
               );
+
+              console.log("3");
             } catch (error) {
               console.log(error);
             }
