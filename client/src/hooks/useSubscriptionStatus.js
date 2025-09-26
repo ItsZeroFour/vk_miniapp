@@ -49,18 +49,35 @@ export default function useSubscriptionStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.subscribe === false) {
             try {
-              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-              await axios.post(
-                "/user/update-target",
-                {
-                  user_id: userId,
-                  target_name: "subscribe",
-                  target_value: true,
-                },
-                {
-                  params: launchParams,
-                }
-              );
+              if (isMiniApp) {
+                const launchParams = await bridge.send(
+                  "VKWebAppGetLaunchParams"
+                );
+
+                await axios.post(
+                  "/user/update-target",
+                  {
+                    user_id: userId,
+                    target_name: "subscribe",
+                    target_value: true,
+                  },
+                  {
+                    params: launchParams,
+                  }
+                );
+              } else {
+                await axios.post(
+                  "/user/update-target",
+                  {
+                    user_id: userId,
+                    target_name: "subscribe",
+                    target_value: true,
+                  },
+                  {
+                    // params: launchParams,
+                  }
+                );
+              }
             } catch (error) {
               console.log(error);
             }

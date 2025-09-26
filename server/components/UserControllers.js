@@ -2,7 +2,7 @@ import User from "../models/User.js";
 
 export const authUser = async (req, res) => {
   try {
-    const user_id = req.userId;
+    const user_id = req.userId || req.body.user_id;
     const sessionUserId = req.session.userId;
 
     if (!user_id) {
@@ -34,6 +34,7 @@ export const authUser = async (req, res) => {
       const userData = user._doc;
       return res.status(200).json({ ...userData });
     } else {
+      req.session.userId = user_id;
       return res.status(200).json(findUser);
     }
   } catch (err) {
