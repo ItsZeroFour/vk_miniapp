@@ -4,6 +4,7 @@ const User = new mongoose.Schema({
   user_id: {
     type: Number,
     required: true,
+    unique: true,
   },
 
   targeted_actions: {

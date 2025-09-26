@@ -49,18 +49,32 @@ export default function useRepostStatus(accessToken, userId, userData) {
 
           if (userData?.targeted_actions?.share === false) {
             try {
-              const launchParams = await bridge.send("VKWebAppGetLaunchParams");
-              await axios.post(
-                "/user/update-target",
-                {
-                  user_id: userId,
-                  target_name: "share",
-                  target_value: true,
-                },
-                {
-                  params: launchParams,
-                }
-              );
+              if (isMiniApp) {
+                const launchParams = await bridge.send("VKWebAppGetLaunchParams");
+                await axios.post(
+                  "/user/update-target",
+                  {
+                    user_id: userId,
+                    target_name: "share",
+                    target_value: true,
+                  },
+                  {
+                    params: launchParams,
+                  }
+                );
+              } else {
+                await axios.post(
+                  "/user/update-target",
+                  {
+                    user_id: userId,
+                    target_name: "share",
+                    target_value: true,
+                  },
+                  {
+                    // params: launchParams,
+                  }
+                );
+              }
             } catch (error) {
               console.log(error);
             }
