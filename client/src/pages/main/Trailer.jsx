@@ -10,7 +10,7 @@ import bridge from "@vkontakte/vk-bridge";
 const TrailerBottom = React.memo(({ src }) => {
   return (
     <div className={style.trailer}>
-      <h3>«Август» в кино с 25 сентября</h3>
+      <h3>«Август». Уже в кино</h3>
 
       <div className={style.trailer__video}>
         <Video

@@ -20,7 +20,7 @@ const About = React.memo(() => {
           Предотвратить нападение могут только контрразведчики СМЕРШ.
         </p>
 
-        <h3>«Август» в кино с 25 сентября</h3>
+        <h3>«Август». Уже в кино</h3>
 
         <div className={style.about__video}>
           <Video src="https://vkvideo.ru/video_ext.php?oid=-217350474&id=456243968&hd=2&autoplay=1" />

@@ -134,7 +134,7 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
               {correct_item_count} из 3!
             </motion.span>{" "}
             <br /> Это была лишь тренировка. В настоящем деле всё намного
-            сложнее. Смотри «Август» в кино с 25 сентября.
+            сложнее. Смотри «Август». Уже в кино
           </motion.p>
 
           <div className={style.final__main}>
