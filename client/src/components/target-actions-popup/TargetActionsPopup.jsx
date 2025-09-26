@@ -7,6 +7,7 @@ import useRepostStatus from "../../hooks/useRepostStatus";
 import success from "../../assets/icons/success.svg";
 import unsuccess from "../../assets/icons/unsuccess.svg";
 import bridge from "@vkontakte/vk-bridge";
+import screen from "../../assets/images/main/screen.png";
 
 const TargetActionsPopup = ({
   targetAction,
@@ -340,6 +341,17 @@ const TargetActionsPopup = ({
                     Если данные о выполнении пока не пришли – обновите страницу
                     или подождите несколько минут
                   </p>
+
+                  {targetAction === "share" && (
+                    <div className={style.target_actions__unsuccess__share}>
+                      <p>
+                        Для проверки выполнения задачи в вашем профиле ВК должна
+                        быть включена видимость страницы всем пользователям.
+                      </p>
+
+                      <img src={screen} alt="screen" />
+                    </div>
+                  )}
                 </div>
               ) : (
                 <p className={style.target_actions__success}>

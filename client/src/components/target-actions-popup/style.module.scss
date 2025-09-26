@@ -200,3 +200,23 @@
     }
   }
 }
+
+.target_actions__unsuccess__share {
+  border-top: 1px solid rgba(95, 95, 95, 0.308);
+  padding-top: 5px;
+  img {
+    width: 100%;
+    margin-top: 5px;
+    border-radius: 5px;
+  }
+}
+
+.target_actions__unsuccess__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  p {
+    text-align: center;
+  }
+}
