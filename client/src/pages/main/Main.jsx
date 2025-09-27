@@ -167,6 +167,8 @@ const Main = React.memo(
       }
     }, []);
 
+    console.log(showPage);
+
     return (
       <main className={!showVideo ? style.main : ""}>
         <Header finalUserId={finalUserId} user={user} />
@@ -239,8 +241,8 @@ const Main = React.memo(
 
                     <motion.li variants={navButtonVariants}>
                       <motion.button
-                        onClick={async () => {
-                          await bridge.send("VKWebAppSendCustomEvent", {
+                        onClick={() => {
+                          bridge.send("VKWebAppSendCustomEvent", {
                             type: "type_click",
                             event: "movie_explore",
                             screen: "main",

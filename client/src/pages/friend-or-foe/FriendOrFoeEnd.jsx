@@ -121,8 +121,8 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
             <div className={style.end__buttons}>
               <Link
                 to="/friend-or-foe/start"
-                onClick={async () => {
-                  await bridge.send("VKWebAppSendCustomEvent", {
+                onClick={() => {
+                  bridge.send("VKWebAppSendCustomEvent", {
                     type: "type_click",
                     event: "task_repeat",
                     screen: "main",
@@ -133,7 +133,7 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
                   });
 
                   if (window.ym) {
-                    await window.ym(103806192, "reachGoal", "game3_replay");
+                    window.ym(103806192, "reachGoal", "game3_replay");
                   }
                 }}
               >
@@ -141,7 +141,7 @@ const FriendOrFoeEnd = React.memo(({ finalUserId }) => {
               </Link>
               <Link
                 to="/"
-                onClick={async () => {
+                onClick={() => {
                   bridge.send("VKWebAppSendCustomEvent", {
                     type: "type_click",
                     event: "task_other",

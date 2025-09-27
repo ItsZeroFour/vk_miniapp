@@ -99,8 +99,8 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
             <div className={style.contact_dots_end__buttons}>
               <Link
                 to="/contact-dots"
-                onClick={async () => {
-                  await bridge.send("VKWebAppSendCustomEvent", {
+                onClick={() => {
+                  bridge.send("VKWebAppSendCustomEvent", {
                     type: "type_click",
                     event: "task_repeat",
                     screen: "main",
@@ -111,7 +111,7 @@ const ContactDotsEnd = React.memo(({ finalUserId }) => {
                   });
 
                   if (window.ym) {
-                    await window.ym(103806192, "reachGoal", "game2_replay");
+                    window.ym(103806192, "reachGoal", "game2_replay");
                   }
 
                   localStorage.removeItem("progress");

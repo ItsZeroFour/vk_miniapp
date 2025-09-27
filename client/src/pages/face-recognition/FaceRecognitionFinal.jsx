@@ -158,8 +158,8 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
               <Link
                 className={style.final__buttons__first}
                 to="/face-recognition"
-                onClick={async () => {
-                  await bridge.send("VKWebAppSendCustomEvent", {
+                onClick={() => {
+                  bridge.send("VKWebAppSendCustomEvent", {
                     type: "type_click",
                     event: "task_repeat",
                     screen: "main",
@@ -170,7 +170,7 @@ const FaceRecognitionFinal = React.memo(({ finalUserId }) => {
                   });
 
                   if (window.ym) {
-                    await window.ym(103806192, "reachGoal", "game1_replay");
+                    window.ym(103806192, "reachGoal", "game1_replay");
                   }
                 }}
               >
