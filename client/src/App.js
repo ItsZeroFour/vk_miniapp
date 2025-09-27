@@ -79,23 +79,10 @@ function App() {
 
   const { loading, userInfo, refresh } = useGetUserInfo(finalUserId);
 
-  // const { isAllowed, isLoading, error, requestPermission } =
-  //   useVKNotifications();
-
-  // const handleRequest = async () => {
-  //   const result = await requestPermission();
-
-  //   if (result.success) {
-  //     console.log("Можно отправлять уведомления!");
-  //   }
-  // };
-
   useEffect(() => {
     const requestPermission = async () => {
       try {
         const result = await bridge.send("VKWebAppAllowNotifications");
-
-        console.log(result.result);
       } catch (error) {
         console.error("Ошибка запроса:", error);
       }
