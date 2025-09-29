@@ -5,6 +5,8 @@ export const authUser = async (req, res) => {
     const user_id = req.userId || req.body.user_id;
     const sessionUserId = req.session.userId;
 
+    const finalUserId = user_id || sessionUserId;
+
     if (!user_id) {
       return res.status(404).json({
         message: "Поле user_id обязательно",
@@ -23,11 +25,11 @@ export const authUser = async (req, res) => {
       });
     }
 
-    const findUser = await User.findOne({ user_id });
+    const findUser = await User.findOne({ user_id: finalUserId });
 
     if (!findUser) {
       const doc = new User({
-        user_id,
+        user_id: finalUserId,
       });
 
       const user = await doc.save();
