@@ -98,12 +98,16 @@ function App() {
   }, [location.pathname]);
 
   useEffect(() => {
-    bridge.send("VKWebAppSendCustomEvent", {
-      type: "type_view",
-      event: "launch",
-      screen: "main",
-      timezone: "3gtm",
-    });
+    try {
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_view",
+        event: "launch",
+        screen: "main",
+        timezone: "3gtm",
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
 
   return (
