@@ -25,20 +25,14 @@ export const authUser = async (req, res) => {
       });
     }
 
-    const findUser = await User.findOne({ user_id: finalUserId });
+    const user = await User.findOneAndUpdate(
+      { user_id: Number(finalUserId) },
+      { $setOnInsert: { user_id: Number(finalUserId) } },
+      { new: true, upsert: true }
+    );
 
-    if (!findUser) {
-      const doc = new User({
-        user_id: finalUserId,
-      });
-
-      const user = await doc.save();
-      const userData = user._doc;
-      return res.status(200).json({ ...userData });
-    } else {
-      req.session.userId = user_id;
-      return res.status(200).json(findUser);
-    }
+    req.session.userId = user.user_id;
+    return res.status(200).json(user);
   } catch (err) {
     console.log(err);
     res.status(500).json({

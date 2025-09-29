@@ -106,22 +106,15 @@ app.get("/auth/vk/callback", async (req, res) => {
         return res.redirect(`${process.env.CLIENT_URL}?hide_video=true`);
       }
 
-      const findUser = await User.findOne({ user_id });
+      const user = await User.findOneAndUpdate(
+        { user_id: Number(user_id) },
+        { $setOnInsert: { user_id: Number(user_id) } },
+        { new: true, upsert: true }
+      );
 
-      if (!findUser) {
-        const doc = new User({
-          user_id,
-        });
-
-        await doc.save();
-        return res.redirect(
-          `${process.env.CLIENT_URL}?userId=${user_id}&token=${tokens.accessToken}&hide_video=true`
-        );
-      } else {
-        return res.redirect(
-          `${process.env.CLIENT_URL}?userId=${user_id}&token=${tokens.accessToken}&hide_video=true`
-        );
-      }
+      return res.redirect(
+        `${process.env.CLIENT_URL}?userId=${user.user_id}&token=${tokens.accessToken}&hide_video=true`
+      );
     } catch (err) {
       console.log(err);
       res.status(500).json({
