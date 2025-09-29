@@ -97,19 +97,6 @@ function App() {
     refresh();
   }, [location.pathname]);
 
-  useEffect(() => {
-    try {
-      bridge.send("VKWebAppSendCustomEvent", {
-        type: "type_view",
-        event: "launch",
-        screen: "main",
-        timezone: "3gtm",
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-
   return (
     <div className="App">
       <Routes>

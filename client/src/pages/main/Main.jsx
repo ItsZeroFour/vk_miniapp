@@ -17,6 +17,7 @@ import {
   navButtonVariants,
 } from "../../animations/main";
 import bridge from "@vkontakte/vk-bridge";
+import useVkEnvironment from "../../hooks/useVkEnvironment";
 
 const Main = React.memo(
   ({ isSubscribe, isCommented, isShared, user, finalUserId, accessToken }) => {
@@ -29,6 +30,8 @@ const Main = React.memo(
     const [hideButton, setHideButton] = useState(false);
 
     const videoRef = useRef(null);
+
+    const { isMiniApp } = useVkEnvironment();
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -98,6 +101,12 @@ const Main = React.memo(
         setHideButton(false);
       }
     }, [user]);
+
+    useEffect(() => {
+      if (isMiniApp) {
+        setShowVideo(false);
+      }
+    }, []);
 
     const renderPage = () => {
       switch (showPage) {

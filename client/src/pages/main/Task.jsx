@@ -104,6 +104,19 @@ const Task = React.memo(({ user, finalUserId }) => {
     navigate(navigateItemClick);
   };
 
+  useEffect(() => {
+    try {
+      bridge.send("VKWebAppSendCustomEvent", {
+        type: "type_view",
+        event: "launch",
+        screen: "main",
+        timezone: "3gtm",
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   return (
     <section className={style.task}>
       <TaskPopup
