@@ -103,10 +103,11 @@ const Main = React.memo(
     }, [user]);
 
     useEffect(() => {
-      if (isMiniApp) {
+      if (isMiniApp !== undefined && isMiniApp) {
         setShowVideo(false);
+        localStorage.setItem("showVideo", "false");
       }
-    }, []);
+    }, [isMiniApp]);
 
     const renderPage = () => {
       switch (showPage) {
