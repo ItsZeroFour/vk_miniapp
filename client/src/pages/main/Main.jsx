@@ -108,32 +108,10 @@ const Main = React.memo(
       if (isMiniApp !== undefined && isMiniApp) {
         setShowVideo(false);
         localStorage.setItem("showVideo", "false");
+      } else {
+        setShowVideo(true);
       }
     }, [isMiniApp]);
-
-    useEffect(() => {
-      let shouldShowVideo = true;
-
-      if (isMiniApp) {
-        shouldShowVideo = false;
-      } else if (location.state?.hiddenVideo) {
-        shouldShowVideo = false;
-        navigate(location.pathname + location.search, {
-          replace: true,
-          state: {},
-        });
-      } else if (searchParams.get("hide_video") === "true") {
-        shouldShowVideo = false;
-        navigate(location.pathname, { replace: true });
-      } else {
-        const savedValue = localStorage.getItem("showVideo");
-        shouldShowVideo = savedValue !== null ? JSON.parse(savedValue) : true;
-      }
-
-      setShowVideo(shouldShowVideo);
-
-      localStorage.setItem("showVideo", JSON.stringify(shouldShowVideo));
-    }, [isMiniApp, location, navigate, searchParams]);
 
     const renderPage = () => {
       switch (showPage) {
