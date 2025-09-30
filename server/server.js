@@ -106,11 +106,34 @@ app.get("/auth/vk/callback", async (req, res) => {
         return res.redirect(`${process.env.CLIENT_URL}?hide_video=true`);
       }
 
-      const user = await User.findOneAndUpdate(
-        { user_id: Number(user_id) },
-        { $setOnInsert: { user_id: Number(user_id) } },
-        { new: true, upsert: true }
-      );
+      let user = await User.findOne({ user_id: Number(user_id) });
+
+      if (!user) {
+        try {
+          user = new User({
+            user_id: Number(user_id),
+            targeted_actions: {
+              subscribe: false,
+              comment: false,
+              share: false,
+            },
+            gamesComplete: {
+              first_game: false,
+              second_game: false,
+              third_game: false,
+            },
+            prize: false,
+            game_complete_count: 0,
+          });
+          await user.save();
+        } catch (error) {
+          if (error.code === 11000) {
+            user = await User.findOne({ user_id: Number(user_id) });
+          } else {
+            throw error;
+          }
+        }
+      }
 
       return res.redirect(
         `${process.env.CLIENT_URL}?userId=${user.user_id}&token=${tokens.accessToken}&hide_video=true`

@@ -25,11 +25,34 @@ export const authUser = async (req, res) => {
       });
     }
 
-    const user = await User.findOneAndUpdate(
-      { user_id: Number(finalUserId) },
-      { $setOnInsert: { user_id: Number(finalUserId) } },
-      { new: true, upsert: true }
-    );
+    let user = await User.findOne({ user_id: Number(finalUserId) });
+
+    if (!user) {
+      try {
+        user = new User({
+          user_id: Number(finalUserId),
+          targeted_actions: {
+            subscribe: false,
+            comment: false,
+            share: false,
+          },
+          gamesComplete: {
+            first_game: false,
+            second_game: false,
+            third_game: false,
+          },
+          prize: false,
+          game_complete_count: 0,
+        });
+        await user.save();
+      } catch (error) {
+        if (error.code === 11000) {
+          user = await User.findOne({ user_id: Number(finalUserId) });
+        } else {
+          throw error;
+        }
+      }
+    }
 
     req.session.userId = user.user_id;
     return res.status(200).json(user);

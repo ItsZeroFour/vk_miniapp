@@ -52,4 +52,6 @@ const User = new mongoose.Schema({
   },
 });
 
+User.index({ user_id: 1 }, { unique: true });
+
 export default mongoose.model("User", User);
