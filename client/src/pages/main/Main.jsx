@@ -22,8 +22,6 @@ import useVkEnvironment from "../../hooks/useVkEnvironment";
 const Main = React.memo(
   ({ isSubscribe, isCommented, isShared, user, finalUserId, accessToken }) => {
     const [showVideo, setShowVideo] = useState(() => {
-      if (isMiniApp) return false;
-
       const savedValue = localStorage.getItem("showVideo");
       return savedValue !== null ? JSON.parse(savedValue) : true;
     });
@@ -108,8 +106,6 @@ const Main = React.memo(
       if (isMiniApp !== undefined && isMiniApp) {
         setShowVideo(false);
         localStorage.setItem("showVideo", "false");
-      } else {
-        setShowVideo(true);
       }
     }, [isMiniApp]);
 
