@@ -22,6 +22,8 @@ import useVkEnvironment from "../../hooks/useVkEnvironment";
 const Main = React.memo(
   ({ isSubscribe, isCommented, isShared, user, finalUserId, accessToken }) => {
     const [showVideo, setShowVideo] = useState(() => {
+      if (isMiniApp) return false;
+
       const savedValue = localStorage.getItem("showVideo");
       return savedValue !== null ? JSON.parse(savedValue) : true;
     });
@@ -108,6 +110,30 @@ const Main = React.memo(
         localStorage.setItem("showVideo", "false");
       }
     }, [isMiniApp]);
+
+    useEffect(() => {
+      let shouldShowVideo = true;
+
+      if (isMiniApp) {
+        shouldShowVideo = false;
+      } else if (location.state?.hiddenVideo) {
+        shouldShowVideo = false;
+        navigate(location.pathname + location.search, {
+          replace: true,
+          state: {},
+        });
+      } else if (searchParams.get("hide_video") === "true") {
+        shouldShowVideo = false;
+        navigate(location.pathname, { replace: true });
+      } else {
+        const savedValue = localStorage.getItem("showVideo");
+        shouldShowVideo = savedValue !== null ? JSON.parse(savedValue) : true;
+      }
+
+      setShowVideo(shouldShowVideo);
+
+      localStorage.setItem("showVideo", JSON.stringify(shouldShowVideo));
+    }, [isMiniApp, location, navigate, searchParams]);
 
     const renderPage = () => {
       switch (showPage) {
