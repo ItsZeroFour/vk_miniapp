@@ -30,7 +30,7 @@ const Main = React.memo(
       }
 
       const savedValue = localStorage.getItem("showVideo");
-      return savedValue !== null ? JSON.parse(savedValue) : true;
+      return savedValue !== null ? JSON.parse(savedValue) : false;
     });
     const [isClosing, setIsClosing] = useState(false);
     const [showPage, setShowPage] = useState("main");
