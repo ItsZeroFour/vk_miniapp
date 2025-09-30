@@ -21,7 +21,14 @@ import useVkEnvironment from "../../hooks/useVkEnvironment";
 
 const Main = React.memo(
   ({ isSubscribe, isCommented, isShared, user, finalUserId, accessToken }) => {
+    const { isMiniApp } = useVkEnvironment();
+
     const [showVideo, setShowVideo] = useState(() => {
+      if (isMiniApp) {
+        localStorage.setItem("showVideo", "false");
+        return false;
+      }
+
       const savedValue = localStorage.getItem("showVideo");
       return savedValue !== null ? JSON.parse(savedValue) : true;
     });
@@ -30,8 +37,6 @@ const Main = React.memo(
     const [hideButton, setHideButton] = useState(false);
 
     const videoRef = useRef(null);
-
-    const { isMiniApp } = useVkEnvironment();
 
     const location = useLocation();
     const navigate = useNavigate();
