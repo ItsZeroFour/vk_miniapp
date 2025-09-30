@@ -23,23 +23,8 @@ const Main = React.memo(
   ({ isSubscribe, isCommented, isShared, user, finalUserId, accessToken }) => {
     const { isMiniApp } = useVkEnvironment();
 
-    const [isVkMiniApp, setIsVkMiniApp] = useState(false);
-
-    useEffect(() => {
-      async function checkIsVkMiniapp() {
-        try {
-          const params = await bridge.send("VKWebAppGetLaunchParams");
-          setIsVkMiniApp(!!params.vk_app_id);
-        } catch (e) {
-          console.log("Не удалось получить launch params:", e);
-        }
-      }
-
-      checkIsVkMiniapp();
-    }, []);
-
     const [showVideo, setShowVideo] = useState(() => {
-      if (isMiniApp || isVkMiniApp) {
+      if (isMiniApp) {
         localStorage.setItem("showVideo", "false");
         return false;
       }
