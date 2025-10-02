@@ -182,8 +182,6 @@ const Main = React.memo(
       }
     }, []);
 
-    console.log(showPage);
-
     return (
       <main className={!showVideo ? style.main : ""}>
         <Header finalUserId={finalUserId} user={user} />
