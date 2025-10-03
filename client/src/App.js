@@ -6,10 +6,8 @@ import useVKAuth from "./hooks/useVKAuth";
 import useCommentStatus from "./hooks/useCommentStatus";
 import useSubscriptionStatus from "./hooks/useSubscriptionStatus";
 import useRepostStatus from "./hooks/useRepostStatus";
-import { useVKNotifications } from "./hooks/useVKNotifications";
 
 import Header from "./components/header/Header";
-// import ToggleVolume from "./components/toggle_volume/ToggleVolume";
 import { useGetUserInfo } from "./hooks/useGetUserInfo";
 import { OBJECTS } from "./data/contact-dots";
 import bridge from "@vkontakte/vk-bridge";
